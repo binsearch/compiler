@@ -1,0 +1,92 @@
+
+                        cfglp : A CFG Language Processor
+                        --------------------------------
+
+.................................................................................
+           About:
+
+           Implemented by Tanu  Kanvar (tanu@cse.iitb.ac.in) and Uday
+           Khedker (http://www.cse.iitb.ac.in/~uday)  for the courses
+           cs302+cs306: Language  Processors (theory and lab)  at IIT
+           Bombay.
+
+           Release  date Jan  15, 2013.  Copyrights reserved  by Uday
+           Khedker. This implemenation has been made available purely
+           for academic purposes without any warranty of any kind.
+................................................................................
+
+    Details of CFGLP (Control Flow Graph Language Processor) tool can be
+    found at http://www.cse.iitb.ac.in/~uday/cfglp
+
+    This  version  is the  interpreter-only  version.  The version  with
+    compilation option will be made available soon. At the  moment cfglp  
+    accepts level 1  language that  defines simple cfg constructs. These 
+    have been specified on the website.
+
+    To generate test cases which can be used as input to cfglp Level-1
+    Interpreter:
+
+    -- Make your current directory as level-1-64bits/
+
+    -- To generate .cfg file for valid test.c file in test_files:
+         - Run
+              make -f Makefile.cfg FILE=test.c
+         - test.cs306.cfg file is generated in the test_files directory
+
+    To run the cfglp Level-1 Interpreter, follow the steps given below:
+
+    -- Make your current directory as level-1-64bits/
+
+    -- To test the cfglp Level-1 Interpreter using a valid test.cs306.cfg
+       (generated using the above steps) in test_files:
+         - Run
+              ./cfglp64 test_files/test.cs306.cfg [options]
+         - To see the command line options that cfglp64 executable accepts,
+           run
+              ./cfglp64 --help
+         - Observe the output
+
+    -- To test the cfglp Level-1 Interpreter using an invalid test.ecfg 
+       (pre-existing) in test_files:
+         - Run
+             ./cfglp64 test_files/test.ecfg [options]
+         - To see the command line options that cfglp64 executable accepts,
+           run
+             ./cfglp64 --help
+         - Observe the output
+
+    To restore the original files in level-1-64bits/ directory:
+
+    -- Run
+         make -f Makefile.cfglp clean
+
+    To restore the original files in test_files directory:
+
+    -- Run
+         make clean
+
+    cfglp help
+    ----------
+    The complete  functionality supported  by this  version of  cfglp is
+    best described by the usage printed by it:
+
+    Usage: cfglp [options] [file]
+    Options:
+        -help    Show this help
+        -tokens  Show the tokens in file.toks (or out.toks)
+        -ast     Show abstract syntax trees in file.ast (or out.ast)
+        -eval    Interpret the program and show a trace of the execution
+      	         in file.eval (or out.eval)
+        -d       Demo version. Use stdout for the outputs instead of files
+
+
+------------------------------------------------------------------------ 
+Dr. Uday Khedker
+Professor
+Department of Computer Science & Engg.
+IIT Bombay, Powai, Mumbai 400 076, India.
+Email   : 	uday@cse.iitb.ac.in
+Homepage: 	http://www.cse.iitb.ac.in/~uday
+Phone   : 	
+Office - 	91 (22) 2572 2545 x 7717, 91 (22) 2576 7717 (Direct)
+Res.   - 	91 (22) 2572 2545 x 8717, 91 (22) 2576 8717 (Direct)

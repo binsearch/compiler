@@ -1,0 +1,75 @@
+
+;; Function main (main)
+
+main ()
+{
+  int e;
+  int d;
+  int f;
+  int c;
+  int b.7;
+  int a.6;
+  int b.5;
+  int a.4;
+  int D.1249;
+  _Bool D.1246;
+  _Bool D.1245;
+  _Bool D.1244;
+  int D.1240;
+  int a.3;
+  int D.1238;
+  int b.2;
+  int b.1;
+  int a.0;
+
+<bb 2>:
+  c = 10;
+  f = 3;
+  d = 6;
+  e = 8;
+  a.0 = f < d;
+  a = a.0;
+  b.1 = d <= c;
+  b = b.1;
+  b.2 = b;
+  D.1238 = c > b.2;
+  a.3 = a;
+  D.1240 = D.1238 <= a.3;
+  if (D.1240 != e)
+    goto <bb 3>;
+  else
+    goto <bb 4>;
+
+<bb 3>:
+  c = e != d;
+  d = f > e;
+  goto <bb 7>;
+
+<bb 4>:
+  D.1244 = c < e;
+  D.1245 = d > 8;
+  D.1246 = D.1244 ^ D.1245;
+  if (D.1246 != 0)
+    goto <bb 5>;
+  else
+    goto <bb 6>;
+
+<bb 5>:
+  D.1249 = d >= e;
+  a.4 = D.1249 == f;
+  a = a.4;
+  b.5 = b;
+  a.6 = a;
+  b.7 = b.5 >= a.6;
+  b = b.7;
+  goto <bb 7>;
+
+<bb 6>:
+  a = 4;
+
+<bb 7>:
+  return;
+
+}
+
+

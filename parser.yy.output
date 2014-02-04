@@ -1,0 +1,1432 @@
+
+Production Rules
+(rule precedences determined from %prec or 1st terminal between parentheses):
+1: program ->  declaration_statement_list procedure_name #0001 procedure_body
+2: #0001 ->  <empty>
+3: program ->  procedure_name #0002 procedure_body
+4: #0002 ->  <empty>
+5: procedure_name (NAME) ->  NAME '(' ')'
+6: procedure_body ('{') ->  '{' declaration_statement_list #0003 basic_block_list '}'
+7: #0003 ->  <empty>
+8: procedure_body ('{') ->  '{' basic_block_list '}'
+9: declaration_statement_list ->  declaration_statement
+10: declaration_statement_list ->  declaration_statement_list declaration_statement
+11: declaration_statement (INTEGER) ->  INTEGER NAME ';'
+12: basic_block_list ->  basic_block_list basic_block
+13: basic_block_list ->  basic_block
+14: basic_block ('<') ->  '<' NAME INTEGER_NUMBER '>' ':' executable_statement_list
+15: executable_statement_list ->  assignment_statement_list
+16: executable_statement_list (RETURN) ->  assignment_statement_list RETURN ';'
+17: assignment_statement_list ->  <empty>
+18: assignment_statement_list ->  assignment_statement_list assignment_statement
+19: assignment_statement ('=') ->  variable '=' variable ';'
+20: assignment_statement ('=') ->  variable '=' constant ';'
+21: assignment_statement ('=') ->  variable '=' comparision_expression ';'
+22: assignment_statement ->  if_block
+23: assignment_statement ->  goto_statement
+24: if_block (IF) ->  IF '(' comparision_expression ')' goto_statement ELSE goto_statement
+25: goto_statement (GOTO) ->  GOTO '<' NAME INTEGER_NUMBER '>' ';'
+26: comparision_expression ('>') ->  variable '>' comparision_expression
+27: comparision_expression ('<') ->  variable '<' comparision_expression
+28: comparision_expression ('>') ->  variable '>' '=' comparision_expression
+29: comparision_expression ('<') ->  variable '<' '=' comparision_expression
+30: comparision_expression ('=') ->  variable '=' '=' comparision_expression
+31: comparision_expression ('!') ->  variable '!' '=' comparision_expression
+32: comparision_expression ('>') ->  variable '>' constant
+33: comparision_expression ('<') ->  variable '<' constant
+34: comparision_expression ('>') ->  variable '>' '=' constant
+35: comparision_expression ('<') ->  variable '<' '=' constant
+36: comparision_expression ('=') ->  variable '=' '=' constant
+37: comparision_expression ('!') ->  variable '!' '=' constant
+38: comparision_expression ('>') ->  variable '>' variable
+39: comparision_expression ('<') ->  variable '<' variable
+40: comparision_expression ('>') ->  variable '>' '=' variable
+41: comparision_expression ('<') ->  variable '<' '=' variable
+42: comparision_expression ('=') ->  variable '=' '=' variable
+43: comparision_expression ('!') ->  variable '!' '=' variable
+44: comparision_expression ('>') ->  constant '>' constant
+45: comparision_expression ('<') ->  constant '<' constant
+46: comparision_expression ('>') ->  constant '>' '=' constant
+47: comparision_expression ('<') ->  constant '<' '=' constant
+48: comparision_expression ('=') ->  constant '=' '=' constant
+49: comparision_expression ('!') ->  constant '!' '=' constant
+50: comparision_expression ('>') ->  constant '>' variable
+51: comparision_expression ('<') ->  constant '<' variable
+52: comparision_expression ('>') ->  constant '>' '=' variable
+53: comparision_expression ('<') ->  constant '<' '=' variable
+54: comparision_expression ('=') ->  constant '=' '=' variable
+55: comparision_expression ('!') ->  constant '!' '=' variable
+56: comparision_expression ('>') ->  constant '>' comparision_expression
+57: comparision_expression ('<') ->  constant '<' comparision_expression
+58: comparision_expression ('>') ->  constant '>' '=' comparision_expression
+59: comparision_expression ('<') ->  constant '<' '=' comparision_expression
+60: comparision_expression ('=') ->  constant '=' '=' comparision_expression
+61: comparision_expression ('!') ->  constant '!' '=' comparision_expression
+62: variable (NAME) ->  NAME
+63: constant (INTEGER_NUMBER) ->  INTEGER_NUMBER
+64: program_$ ->  program
+
+
+Symbolic Terminal tokens:
+       error
+       EOF
+   257: INTEGER_NUMBER
+   258: NAME
+   259: RETURN
+   260: INTEGER
+   261: IF
+   262: ELSE
+   263: GOTO
+    40: '('
+    41: ')'
+   123: '{'
+   125: '}'
+    59: ';'
+    60: '<'
+    62: '>'
+    58: ':'
+    61: '='
+    33: '!'
+
+
+Grammar States: 
+State 0:
+64: program_$ ->  . program 
+  0:   On program to state 1
+  1:   On declaration_statement_list to state 2
+  2:   On procedure_name to state 3
+  3:   On declaration_statement to state 4
+  4:   On NAME to state 5
+  5:   On INTEGER to state 6
+
+
+State 1:
+64: program_$ -> program  . 
+
+
+State 2:
+1: program -> declaration_statement_list  . procedure_name #0001 procedure_body 
+10: declaration_statement_list -> declaration_statement_list  . declaration_statement 
+  0:   On procedure_name to state 7
+  1:   On declaration_statement to state 8
+  2:   On NAME to state 5
+  3:   On INTEGER to state 6
+
+
+State 3:
+3: program -> procedure_name  . #0002 procedure_body 
+  0:   On #0002 to state 9
+  Reduce by 4: #0002 ->  . 
+
+
+State 4:
+9: declaration_statement_list -> declaration_statement  . 
+  Reduce by 9: declaration_statement_list -> declaration_statement  . 
+
+
+State 5:
+5: procedure_name -> NAME  . '(' ')' 
+  0:   On '(' to state 10
+
+
+State 6:
+11: declaration_statement -> INTEGER  . NAME ';' 
+  0:   On NAME to state 11
+
+
+State 7:
+1: program -> declaration_statement_list procedure_name  . #0001 procedure_body 
+  0:   On #0001 to state 12
+  Reduce by 2: #0001 ->  . 
+
+
+State 8:
+10: declaration_statement_list -> declaration_statement_list declaration_statement  . 
+  Reduce by 10: declaration_statement_list -> declaration_statement_list declaration_statement  . 
+
+
+State 9:
+3: program -> procedure_name #0002  . procedure_body 
+  0:   On procedure_body to state 13
+  1:   On '{' to state 14
+
+
+State 10:
+5: procedure_name -> NAME '('  . ')' 
+  0:   On ')' to state 15
+
+
+State 11:
+11: declaration_statement -> INTEGER NAME  . ';' 
+  0:   On ';' to state 16
+
+
+State 12:
+1: program -> declaration_statement_list procedure_name #0001  . procedure_body 
+  0:   On procedure_body to state 17
+  1:   On '{' to state 14
+
+
+State 13:
+3: program -> procedure_name #0002 procedure_body  . 
+  Reduce by 3: program -> procedure_name #0002 procedure_body  . 
+
+
+State 14:
+6: procedure_body -> '{'  . declaration_statement_list #0003 basic_block_list '}' 
+8: procedure_body -> '{'  . basic_block_list '}' 
+  0:   On declaration_statement_list to state 18
+  1:   On basic_block_list to state 19
+  2:   On declaration_statement to state 4
+  3:   On basic_block to state 20
+  4:   On INTEGER to state 6
+  5:   On '<' to state 21
+
+
+State 15:
+5: procedure_name -> NAME '(' ')'  . 
+  Reduce by 5: procedure_name -> NAME '(' ')'  . 
+
+
+State 16:
+11: declaration_statement -> INTEGER NAME ';'  . 
+  Reduce by 11: declaration_statement -> INTEGER NAME ';'  . 
+
+
+State 17:
+1: program -> declaration_statement_list procedure_name #0001 procedure_body  . 
+  Reduce by 1: program -> declaration_statement_list procedure_name #0001 procedure_body  . 
+
+
+State 18:
+6: procedure_body -> '{' declaration_statement_list  . #0003 basic_block_list '}' 
+10: declaration_statement_list -> declaration_statement_list  . declaration_statement 
+  0:   On #0003 to state 22
+  1:   On declaration_statement to state 8
+  2:   On INTEGER to state 6
+  Reduce by 7: #0003 ->  . 
+
+
+State 19:
+8: procedure_body -> '{' basic_block_list  . '}' 
+12: basic_block_list -> basic_block_list  . basic_block 
+  0:   On '}' to state 23
+  1:   On basic_block to state 24
+  2:   On '<' to state 21
+
+
+State 20:
+13: basic_block_list -> basic_block  . 
+  Reduce by 13: basic_block_list -> basic_block  . 
+
+
+State 21:
+14: basic_block -> '<'  . NAME INTEGER_NUMBER '>' ':' executable_statement_list 
+  0:   On NAME to state 25
+
+
+State 22:
+6: procedure_body -> '{' declaration_statement_list #0003  . basic_block_list '}' 
+  0:   On basic_block_list to state 26
+  1:   On basic_block to state 20
+  2:   On '<' to state 21
+
+
+State 23:
+8: procedure_body -> '{' basic_block_list '}'  . 
+  Reduce by 8: procedure_body -> '{' basic_block_list '}'  . 
+
+
+State 24:
+12: basic_block_list -> basic_block_list basic_block  . 
+  Reduce by 12: basic_block_list -> basic_block_list basic_block  . 
+
+
+State 25:
+14: basic_block -> '<' NAME  . INTEGER_NUMBER '>' ':' executable_statement_list 
+  0:   On INTEGER_NUMBER to state 27
+
+
+State 26:
+6: procedure_body -> '{' declaration_statement_list #0003 basic_block_list  . '}' 
+12: basic_block_list -> basic_block_list  . basic_block 
+  0:   On '}' to state 28
+  1:   On basic_block to state 24
+  2:   On '<' to state 21
+
+
+State 27:
+14: basic_block -> '<' NAME INTEGER_NUMBER  . '>' ':' executable_statement_list 
+  0:   On '>' to state 29
+
+
+State 28:
+6: procedure_body -> '{' declaration_statement_list #0003 basic_block_list '}'  . 
+  Reduce by 6: procedure_body -> '{' declaration_statement_list #0003 basic_block_list '}'  . 
+
+
+State 29:
+14: basic_block -> '<' NAME INTEGER_NUMBER '>'  . ':' executable_statement_list 
+  0:   On ':' to state 30
+
+
+State 30:
+14: basic_block -> '<' NAME INTEGER_NUMBER '>' ':'  . executable_statement_list 
+  0:   On executable_statement_list to state 31
+  1:   On assignment_statement_list to state 32
+  Reduce by 17: assignment_statement_list ->  . 
+
+
+State 31:
+14: basic_block -> '<' NAME INTEGER_NUMBER '>' ':' executable_statement_list  . 
+  Reduce by 14: basic_block -> '<' NAME INTEGER_NUMBER '>' ':' executable_statement_list  . 
+
+
+State 32:
+15: executable_statement_list -> assignment_statement_list  . 
+16: executable_statement_list -> assignment_statement_list  . RETURN ';' 
+18: assignment_statement_list -> assignment_statement_list  . assignment_statement 
+  0:   On RETURN to state 33
+  1:   On assignment_statement to state 34
+  2:   On variable to state 35
+  3:   On if_block to state 36
+  4:   On goto_statement to state 37
+  5:   On NAME to state 38
+  6:   On IF to state 39
+  7:   On GOTO to state 40
+  Reduce by 15: executable_statement_list -> assignment_statement_list  . 
+
+
+State 33:
+16: executable_statement_list -> assignment_statement_list RETURN  . ';' 
+  0:   On ';' to state 41
+
+
+State 34:
+18: assignment_statement_list -> assignment_statement_list assignment_statement  . 
+  Reduce by 18: assignment_statement_list -> assignment_statement_list assignment_statement  . 
+
+
+State 35:
+19: assignment_statement -> variable  . '=' variable ';' 
+20: assignment_statement -> variable  . '=' constant ';' 
+21: assignment_statement -> variable  . '=' comparision_expression ';' 
+  0:   On '=' to state 42
+
+
+State 36:
+22: assignment_statement -> if_block  . 
+  Reduce by 22: assignment_statement -> if_block  . 
+
+
+State 37:
+23: assignment_statement -> goto_statement  . 
+  Reduce by 23: assignment_statement -> goto_statement  . 
+
+
+State 38:
+62: variable -> NAME  . 
+  Reduce by 62: variable -> NAME  . 
+
+
+State 39:
+24: if_block -> IF  . '(' comparision_expression ')' goto_statement ELSE goto_statement 
+  0:   On '(' to state 43
+
+
+State 40:
+25: goto_statement -> GOTO  . '<' NAME INTEGER_NUMBER '>' ';' 
+  0:   On '<' to state 44
+
+
+State 41:
+16: executable_statement_list -> assignment_statement_list RETURN ';'  . 
+  Reduce by 16: executable_statement_list -> assignment_statement_list RETURN ';'  . 
+
+
+State 42:
+19: assignment_statement -> variable '='  . variable ';' 
+20: assignment_statement -> variable '='  . constant ';' 
+21: assignment_statement -> variable '='  . comparision_expression ';' 
+  0:   On variable to state 45
+  1:   On constant to state 46
+  2:   On comparision_expression to state 47
+  3:   On NAME to state 38
+  4:   On INTEGER_NUMBER to state 48
+
+
+State 43:
+24: if_block -> IF '('  . comparision_expression ')' goto_statement ELSE goto_statement 
+  0:   On comparision_expression to state 49
+  1:   On variable to state 50
+  2:   On constant to state 51
+  3:   On NAME to state 38
+  4:   On INTEGER_NUMBER to state 48
+
+
+State 44:
+25: goto_statement -> GOTO '<'  . NAME INTEGER_NUMBER '>' ';' 
+  0:   On NAME to state 52
+
+
+State 45:
+19: assignment_statement -> variable '=' variable  . ';' 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On ';' to state 53
+  1:   On '>' to state 54
+  2:   On '<' to state 55
+  3:   On '=' to state 56
+  4:   On '!' to state 57
+
+
+State 46:
+20: assignment_statement -> variable '=' constant  . ';' 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On ';' to state 58
+  1:   On '>' to state 59
+  2:   On '<' to state 60
+  3:   On '=' to state 61
+  4:   On '!' to state 62
+
+
+State 47:
+21: assignment_statement -> variable '=' comparision_expression  . ';' 
+  0:   On ';' to state 63
+
+
+State 48:
+63: constant -> INTEGER_NUMBER  . 
+  Reduce by 63: constant -> INTEGER_NUMBER  . 
+
+
+State 49:
+24: if_block -> IF '(' comparision_expression  . ')' goto_statement ELSE goto_statement 
+  0:   On ')' to state 64
+
+
+State 50:
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+
+
+State 51:
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+
+
+State 52:
+25: goto_statement -> GOTO '<' NAME  . INTEGER_NUMBER '>' ';' 
+  0:   On INTEGER_NUMBER to state 65
+
+
+State 53:
+19: assignment_statement -> variable '=' variable ';'  . 
+  Reduce by 19: assignment_statement -> variable '=' variable ';'  . 
+
+
+State 54:
+26: comparision_expression -> variable '>'  . comparision_expression 
+28: comparision_expression -> variable '>'  . '=' comparision_expression 
+32: comparision_expression -> variable '>'  . constant 
+34: comparision_expression -> variable '>'  . '=' constant 
+38: comparision_expression -> variable '>'  . variable 
+40: comparision_expression -> variable '>'  . '=' variable 
+  0:   On comparision_expression to state 66
+  1:   On '=' to state 67
+  2:   On constant to state 68
+  3:   On variable to state 69
+  4:   On INTEGER_NUMBER to state 48
+  5:   On NAME to state 38
+
+
+State 55:
+27: comparision_expression -> variable '<'  . comparision_expression 
+29: comparision_expression -> variable '<'  . '=' comparision_expression 
+33: comparision_expression -> variable '<'  . constant 
+35: comparision_expression -> variable '<'  . '=' constant 
+39: comparision_expression -> variable '<'  . variable 
+41: comparision_expression -> variable '<'  . '=' variable 
+  0:   On comparision_expression to state 70
+  1:   On '=' to state 71
+  2:   On constant to state 72
+  3:   On variable to state 73
+  4:   On INTEGER_NUMBER to state 48
+  5:   On NAME to state 38
+
+
+State 56:
+30: comparision_expression -> variable '='  . '=' comparision_expression 
+36: comparision_expression -> variable '='  . '=' constant 
+42: comparision_expression -> variable '='  . '=' variable 
+  0:   On '=' to state 74
+
+
+State 57:
+31: comparision_expression -> variable '!'  . '=' comparision_expression 
+37: comparision_expression -> variable '!'  . '=' constant 
+43: comparision_expression -> variable '!'  . '=' variable 
+  0:   On '=' to state 75
+
+
+State 58:
+20: assignment_statement -> variable '=' constant ';'  . 
+  Reduce by 20: assignment_statement -> variable '=' constant ';'  . 
+
+
+State 59:
+44: comparision_expression -> constant '>'  . constant 
+46: comparision_expression -> constant '>'  . '=' constant 
+50: comparision_expression -> constant '>'  . variable 
+52: comparision_expression -> constant '>'  . '=' variable 
+56: comparision_expression -> constant '>'  . comparision_expression 
+58: comparision_expression -> constant '>'  . '=' comparision_expression 
+  0:   On constant to state 76
+  1:   On '=' to state 77
+  2:   On variable to state 78
+  3:   On comparision_expression to state 79
+  4:   On INTEGER_NUMBER to state 48
+  5:   On NAME to state 38
+
+
+State 60:
+45: comparision_expression -> constant '<'  . constant 
+47: comparision_expression -> constant '<'  . '=' constant 
+51: comparision_expression -> constant '<'  . variable 
+53: comparision_expression -> constant '<'  . '=' variable 
+57: comparision_expression -> constant '<'  . comparision_expression 
+59: comparision_expression -> constant '<'  . '=' comparision_expression 
+  0:   On constant to state 80
+  1:   On '=' to state 81
+  2:   On variable to state 82
+  3:   On comparision_expression to state 83
+  4:   On INTEGER_NUMBER to state 48
+  5:   On NAME to state 38
+
+
+State 61:
+48: comparision_expression -> constant '='  . '=' constant 
+54: comparision_expression -> constant '='  . '=' variable 
+60: comparision_expression -> constant '='  . '=' comparision_expression 
+  0:   On '=' to state 84
+
+
+State 62:
+49: comparision_expression -> constant '!'  . '=' constant 
+55: comparision_expression -> constant '!'  . '=' variable 
+61: comparision_expression -> constant '!'  . '=' comparision_expression 
+  0:   On '=' to state 85
+
+
+State 63:
+21: assignment_statement -> variable '=' comparision_expression ';'  . 
+  Reduce by 21: assignment_statement -> variable '=' comparision_expression ';'  . 
+
+
+State 64:
+24: if_block -> IF '(' comparision_expression ')'  . goto_statement ELSE goto_statement 
+  0:   On goto_statement to state 86
+  1:   On GOTO to state 40
+
+
+State 65:
+25: goto_statement -> GOTO '<' NAME INTEGER_NUMBER  . '>' ';' 
+  0:   On '>' to state 87
+
+
+State 66:
+26: comparision_expression -> variable '>' comparision_expression  . 
+  Reduce by 26: comparision_expression -> variable '>' comparision_expression  . 
+
+
+State 67:
+28: comparision_expression -> variable '>' '='  . comparision_expression 
+34: comparision_expression -> variable '>' '='  . constant 
+40: comparision_expression -> variable '>' '='  . variable 
+  0:   On comparision_expression to state 88
+  1:   On constant to state 89
+  2:   On variable to state 90
+  3:   On INTEGER_NUMBER to state 48
+  4:   On NAME to state 38
+
+
+State 68:
+32: comparision_expression -> variable '>' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 32: comparision_expression -> variable '>' constant  . 
+
+
+State 69:
+38: comparision_expression -> variable '>' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 38: comparision_expression -> variable '>' variable  . 
+
+
+State 70:
+27: comparision_expression -> variable '<' comparision_expression  . 
+  Reduce by 27: comparision_expression -> variable '<' comparision_expression  . 
+
+
+State 71:
+29: comparision_expression -> variable '<' '='  . comparision_expression 
+35: comparision_expression -> variable '<' '='  . constant 
+41: comparision_expression -> variable '<' '='  . variable 
+  0:   On comparision_expression to state 91
+  1:   On constant to state 92
+  2:   On variable to state 93
+  3:   On INTEGER_NUMBER to state 48
+  4:   On NAME to state 38
+
+
+State 72:
+33: comparision_expression -> variable '<' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 33: comparision_expression -> variable '<' constant  . 
+
+
+State 73:
+39: comparision_expression -> variable '<' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 39: comparision_expression -> variable '<' variable  . 
+
+
+State 74:
+30: comparision_expression -> variable '=' '='  . comparision_expression 
+36: comparision_expression -> variable '=' '='  . constant 
+42: comparision_expression -> variable '=' '='  . variable 
+  0:   On comparision_expression to state 94
+  1:   On constant to state 95
+  2:   On variable to state 96
+  3:   On INTEGER_NUMBER to state 48
+  4:   On NAME to state 38
+
+
+State 75:
+31: comparision_expression -> variable '!' '='  . comparision_expression 
+37: comparision_expression -> variable '!' '='  . constant 
+43: comparision_expression -> variable '!' '='  . variable 
+  0:   On comparision_expression to state 97
+  1:   On constant to state 98
+  2:   On variable to state 99
+  3:   On INTEGER_NUMBER to state 48
+  4:   On NAME to state 38
+
+
+State 76:
+44: comparision_expression -> constant '>' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 44: comparision_expression -> constant '>' constant  . 
+
+
+State 77:
+46: comparision_expression -> constant '>' '='  . constant 
+52: comparision_expression -> constant '>' '='  . variable 
+58: comparision_expression -> constant '>' '='  . comparision_expression 
+  0:   On constant to state 100
+  1:   On variable to state 101
+  2:   On comparision_expression to state 102
+  3:   On INTEGER_NUMBER to state 48
+  4:   On NAME to state 38
+
+
+State 78:
+50: comparision_expression -> constant '>' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 50: comparision_expression -> constant '>' variable  . 
+
+
+State 79:
+56: comparision_expression -> constant '>' comparision_expression  . 
+  Reduce by 56: comparision_expression -> constant '>' comparision_expression  . 
+
+
+State 80:
+45: comparision_expression -> constant '<' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 45: comparision_expression -> constant '<' constant  . 
+
+
+State 81:
+47: comparision_expression -> constant '<' '='  . constant 
+53: comparision_expression -> constant '<' '='  . variable 
+59: comparision_expression -> constant '<' '='  . comparision_expression 
+  0:   On constant to state 103
+  1:   On variable to state 104
+  2:   On comparision_expression to state 105
+  3:   On INTEGER_NUMBER to state 48
+  4:   On NAME to state 38
+
+
+State 82:
+51: comparision_expression -> constant '<' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 51: comparision_expression -> constant '<' variable  . 
+
+
+State 83:
+57: comparision_expression -> constant '<' comparision_expression  . 
+  Reduce by 57: comparision_expression -> constant '<' comparision_expression  . 
+
+
+State 84:
+48: comparision_expression -> constant '=' '='  . constant 
+54: comparision_expression -> constant '=' '='  . variable 
+60: comparision_expression -> constant '=' '='  . comparision_expression 
+  0:   On constant to state 106
+  1:   On variable to state 107
+  2:   On comparision_expression to state 108
+  3:   On INTEGER_NUMBER to state 48
+  4:   On NAME to state 38
+
+
+State 85:
+49: comparision_expression -> constant '!' '='  . constant 
+55: comparision_expression -> constant '!' '='  . variable 
+61: comparision_expression -> constant '!' '='  . comparision_expression 
+  0:   On constant to state 109
+  1:   On variable to state 110
+  2:   On comparision_expression to state 111
+  3:   On INTEGER_NUMBER to state 48
+  4:   On NAME to state 38
+
+
+State 86:
+24: if_block -> IF '(' comparision_expression ')' goto_statement  . ELSE goto_statement 
+  0:   On ELSE to state 112
+
+
+State 87:
+25: goto_statement -> GOTO '<' NAME INTEGER_NUMBER '>'  . ';' 
+  0:   On ';' to state 113
+
+
+State 88:
+28: comparision_expression -> variable '>' '=' comparision_expression  . 
+  Reduce by 28: comparision_expression -> variable '>' '=' comparision_expression  . 
+
+
+State 89:
+34: comparision_expression -> variable '>' '=' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 34: comparision_expression -> variable '>' '=' constant  . 
+
+
+State 90:
+40: comparision_expression -> variable '>' '=' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 40: comparision_expression -> variable '>' '=' variable  . 
+
+
+State 91:
+29: comparision_expression -> variable '<' '=' comparision_expression  . 
+  Reduce by 29: comparision_expression -> variable '<' '=' comparision_expression  . 
+
+
+State 92:
+35: comparision_expression -> variable '<' '=' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 35: comparision_expression -> variable '<' '=' constant  . 
+
+
+State 93:
+41: comparision_expression -> variable '<' '=' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 41: comparision_expression -> variable '<' '=' variable  . 
+
+
+State 94:
+30: comparision_expression -> variable '=' '=' comparision_expression  . 
+  Reduce by 30: comparision_expression -> variable '=' '=' comparision_expression  . 
+
+
+State 95:
+36: comparision_expression -> variable '=' '=' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 36: comparision_expression -> variable '=' '=' constant  . 
+
+
+State 96:
+42: comparision_expression -> variable '=' '=' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 42: comparision_expression -> variable '=' '=' variable  . 
+
+
+State 97:
+31: comparision_expression -> variable '!' '=' comparision_expression  . 
+  Reduce by 31: comparision_expression -> variable '!' '=' comparision_expression  . 
+
+
+State 98:
+37: comparision_expression -> variable '!' '=' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 37: comparision_expression -> variable '!' '=' constant  . 
+
+
+State 99:
+43: comparision_expression -> variable '!' '=' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 43: comparision_expression -> variable '!' '=' variable  . 
+
+
+State 100:
+46: comparision_expression -> constant '>' '=' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 46: comparision_expression -> constant '>' '=' constant  . 
+
+
+State 101:
+52: comparision_expression -> constant '>' '=' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 52: comparision_expression -> constant '>' '=' variable  . 
+
+
+State 102:
+58: comparision_expression -> constant '>' '=' comparision_expression  . 
+  Reduce by 58: comparision_expression -> constant '>' '=' comparision_expression  . 
+
+
+State 103:
+47: comparision_expression -> constant '<' '=' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 47: comparision_expression -> constant '<' '=' constant  . 
+
+
+State 104:
+53: comparision_expression -> constant '<' '=' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 53: comparision_expression -> constant '<' '=' variable  . 
+
+
+State 105:
+59: comparision_expression -> constant '<' '=' comparision_expression  . 
+  Reduce by 59: comparision_expression -> constant '<' '=' comparision_expression  . 
+
+
+State 106:
+48: comparision_expression -> constant '=' '=' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 48: comparision_expression -> constant '=' '=' constant  . 
+
+
+State 107:
+54: comparision_expression -> constant '=' '=' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 54: comparision_expression -> constant '=' '=' variable  . 
+
+
+State 108:
+60: comparision_expression -> constant '=' '=' comparision_expression  . 
+  Reduce by 60: comparision_expression -> constant '=' '=' comparision_expression  . 
+
+
+State 109:
+49: comparision_expression -> constant '!' '=' constant  . 
+44: comparision_expression -> constant  . '>' constant 
+45: comparision_expression -> constant  . '<' constant 
+46: comparision_expression -> constant  . '>' '=' constant 
+47: comparision_expression -> constant  . '<' '=' constant 
+48: comparision_expression -> constant  . '=' '=' constant 
+49: comparision_expression -> constant  . '!' '=' constant 
+50: comparision_expression -> constant  . '>' variable 
+51: comparision_expression -> constant  . '<' variable 
+52: comparision_expression -> constant  . '>' '=' variable 
+53: comparision_expression -> constant  . '<' '=' variable 
+54: comparision_expression -> constant  . '=' '=' variable 
+55: comparision_expression -> constant  . '!' '=' variable 
+56: comparision_expression -> constant  . '>' comparision_expression 
+57: comparision_expression -> constant  . '<' comparision_expression 
+58: comparision_expression -> constant  . '>' '=' comparision_expression 
+59: comparision_expression -> constant  . '<' '=' comparision_expression 
+60: comparision_expression -> constant  . '=' '=' comparision_expression 
+61: comparision_expression -> constant  . '!' '=' comparision_expression 
+  0:   On '>' to state 59
+  1:   On '<' to state 60
+  2:   On '=' to state 61
+  3:   On '!' to state 62
+  Reduce by 49: comparision_expression -> constant '!' '=' constant  . 
+
+
+State 110:
+55: comparision_expression -> constant '!' '=' variable  . 
+26: comparision_expression -> variable  . '>' comparision_expression 
+27: comparision_expression -> variable  . '<' comparision_expression 
+28: comparision_expression -> variable  . '>' '=' comparision_expression 
+29: comparision_expression -> variable  . '<' '=' comparision_expression 
+30: comparision_expression -> variable  . '=' '=' comparision_expression 
+31: comparision_expression -> variable  . '!' '=' comparision_expression 
+32: comparision_expression -> variable  . '>' constant 
+33: comparision_expression -> variable  . '<' constant 
+34: comparision_expression -> variable  . '>' '=' constant 
+35: comparision_expression -> variable  . '<' '=' constant 
+36: comparision_expression -> variable  . '=' '=' constant 
+37: comparision_expression -> variable  . '!' '=' constant 
+38: comparision_expression -> variable  . '>' variable 
+39: comparision_expression -> variable  . '<' variable 
+40: comparision_expression -> variable  . '>' '=' variable 
+41: comparision_expression -> variable  . '<' '=' variable 
+42: comparision_expression -> variable  . '=' '=' variable 
+43: comparision_expression -> variable  . '!' '=' variable 
+  0:   On '>' to state 54
+  1:   On '<' to state 55
+  2:   On '=' to state 56
+  3:   On '!' to state 57
+  Reduce by 55: comparision_expression -> constant '!' '=' variable  . 
+
+
+State 111:
+61: comparision_expression -> constant '!' '=' comparision_expression  . 
+  Reduce by 61: comparision_expression -> constant '!' '=' comparision_expression  . 
+
+
+State 112:
+24: if_block -> IF '(' comparision_expression ')' goto_statement ELSE  . goto_statement 
+  0:   On goto_statement to state 114
+  1:   On GOTO to state 40
+
+
+State 113:
+25: goto_statement -> GOTO '<' NAME INTEGER_NUMBER '>' ';'  . 
+  Reduce by 25: goto_statement -> GOTO '<' NAME INTEGER_NUMBER '>' ';'  . 
+
+
+State 114:
+24: if_block -> IF '(' comparision_expression ')' goto_statement ELSE goto_statement  . 
+  Reduce by 24: if_block -> IF '(' comparision_expression ')' goto_statement ELSE goto_statement  . 
+
+
+
