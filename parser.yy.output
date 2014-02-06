@@ -14,54 +14,54 @@ Production Rules
 11: declaration_statement (INTEGER) ->  INTEGER NAME ';'
 12: basic_block_list ->  basic_block_list basic_block
 13: basic_block_list ->  basic_block
-14: basic_block ('<') ->  '<' NAME INTEGER_NUMBER '>' ':' executable_statement_list
+14: basic_block (BASIC_BLOCK) ->  BASIC_BLOCK ':' executable_statement_list
 15: executable_statement_list ->  assignment_statement_list
 16: executable_statement_list (RETURN) ->  assignment_statement_list RETURN ';'
 17: assignment_statement_list ->  <empty>
 18: assignment_statement_list ->  assignment_statement_list assignment_statement
-19: assignment_statement ('=') ->  variable '=' variable ';'
-20: assignment_statement ('=') ->  variable '=' constant ';'
-21: assignment_statement ('=') ->  variable '=' comparision_expression ';'
+19: assignment_statement (ASSIGN_OP) ->  variable ASSIGN_OP variable ';'
+20: assignment_statement (ASSIGN_OP) ->  variable ASSIGN_OP constant ';'
+21: assignment_statement (ASSIGN_OP) ->  variable ASSIGN_OP comparision_expression ';'
 22: assignment_statement ->  if_block
 23: assignment_statement ->  goto_statement
 24: if_block (IF) ->  IF '(' comparision_expression ')' goto_statement ELSE goto_statement
-25: goto_statement (GOTO) ->  GOTO '<' NAME INTEGER_NUMBER '>' ';'
-26: comparision_expression ('>') ->  variable '>' comparision_expression
-27: comparision_expression ('<') ->  variable '<' comparision_expression
-28: comparision_expression ('>') ->  variable '>' '=' comparision_expression
-29: comparision_expression ('<') ->  variable '<' '=' comparision_expression
-30: comparision_expression ('=') ->  variable '=' '=' comparision_expression
-31: comparision_expression ('!') ->  variable '!' '=' comparision_expression
-32: comparision_expression ('>') ->  variable '>' constant
-33: comparision_expression ('<') ->  variable '<' constant
-34: comparision_expression ('>') ->  variable '>' '=' constant
-35: comparision_expression ('<') ->  variable '<' '=' constant
-36: comparision_expression ('=') ->  variable '=' '=' constant
-37: comparision_expression ('!') ->  variable '!' '=' constant
-38: comparision_expression ('>') ->  variable '>' variable
-39: comparision_expression ('<') ->  variable '<' variable
-40: comparision_expression ('>') ->  variable '>' '=' variable
-41: comparision_expression ('<') ->  variable '<' '=' variable
-42: comparision_expression ('=') ->  variable '=' '=' variable
-43: comparision_expression ('!') ->  variable '!' '=' variable
-44: comparision_expression ('>') ->  constant '>' constant
-45: comparision_expression ('<') ->  constant '<' constant
-46: comparision_expression ('>') ->  constant '>' '=' constant
-47: comparision_expression ('<') ->  constant '<' '=' constant
-48: comparision_expression ('=') ->  constant '=' '=' constant
-49: comparision_expression ('!') ->  constant '!' '=' constant
-50: comparision_expression ('>') ->  constant '>' variable
-51: comparision_expression ('<') ->  constant '<' variable
-52: comparision_expression ('>') ->  constant '>' '=' variable
-53: comparision_expression ('<') ->  constant '<' '=' variable
-54: comparision_expression ('=') ->  constant '=' '=' variable
-55: comparision_expression ('!') ->  constant '!' '=' variable
-56: comparision_expression ('>') ->  constant '>' comparision_expression
-57: comparision_expression ('<') ->  constant '<' comparision_expression
-58: comparision_expression ('>') ->  constant '>' '=' comparision_expression
-59: comparision_expression ('<') ->  constant '<' '=' comparision_expression
-60: comparision_expression ('=') ->  constant '=' '=' comparision_expression
-61: comparision_expression ('!') ->  constant '!' '=' comparision_expression
+25: goto_statement (GOTO) ->  GOTO BASIC_BLOCK ';'
+26: comparision_expression (GT) ->  variable GT comparision_expression
+27: comparision_expression (LT) ->  variable LT comparision_expression
+28: comparision_expression (GE) ->  variable GE comparision_expression
+29: comparision_expression (LE) ->  variable LE comparision_expression
+30: comparision_expression (EQ) ->  variable EQ comparision_expression
+31: comparision_expression (NE) ->  variable NE comparision_expression
+32: comparision_expression (GT) ->  variable GT constant
+33: comparision_expression (LT) ->  variable LT constant
+34: comparision_expression (GE) ->  variable GE constant
+35: comparision_expression (LE) ->  variable LE constant
+36: comparision_expression (EQ) ->  variable EQ constant
+37: comparision_expression (NE) ->  variable NE constant
+38: comparision_expression (GT) ->  variable GT variable
+39: comparision_expression (LT) ->  variable LT variable
+40: comparision_expression (GE) ->  variable GE variable
+41: comparision_expression (LE) ->  variable LE variable
+42: comparision_expression (EQ) ->  variable EQ variable
+43: comparision_expression (NE) ->  variable NE variable
+44: comparision_expression (GT) ->  constant GT constant
+45: comparision_expression (LT) ->  constant LT constant
+46: comparision_expression (GE) ->  constant GE constant
+47: comparision_expression (LE) ->  constant LE constant
+48: comparision_expression (EQ) ->  constant EQ constant
+49: comparision_expression (NE) ->  constant NE constant
+50: comparision_expression (GT) ->  constant GT variable
+51: comparision_expression (LT) ->  constant LT variable
+52: comparision_expression (GE) ->  constant GE variable
+53: comparision_expression (LE) ->  constant LE variable
+54: comparision_expression (EQ) ->  constant EQ variable
+55: comparision_expression (NE) ->  constant NE variable
+56: comparision_expression (GT) ->  constant GT comparision_expression
+57: comparision_expression (LT) ->  constant LT comparision_expression
+58: comparision_expression (GE) ->  constant GE comparision_expression
+59: comparision_expression (LE) ->  constant LE comparision_expression
+60: comparision_expression (EQ) ->  constant EQ comparision_expression
+61: comparision_expression (NE) ->  constant NE comparision_expression
 62: variable (NAME) ->  NAME
 63: constant (INTEGER_NUMBER) ->  INTEGER_NUMBER
 64: program_$ ->  program
@@ -71,22 +71,26 @@ Symbolic Terminal tokens:
        error
        EOF
    257: INTEGER_NUMBER
-   258: NAME
-   259: RETURN
-   260: INTEGER
-   261: IF
-   262: ELSE
-   263: GOTO
+   258: BASIC_BLOCK
+   259: NAME
+   260: RETURN
+   261: INTEGER
+   262: IF
+   263: ELSE
+   264: GOTO
+   265: ASSIGN_OP
+   266: NE
+   267: EQ
+   268: LT
+   269: LE
+   270: GT
+   271: GE
     40: '('
     41: ')'
    123: '{'
    125: '}'
     59: ';'
-    60: '<'
-    62: '>'
     58: ':'
-    61: '='
-    33: '!'
 
 
 Grammar States: 
@@ -180,7 +184,7 @@ State 14:
   2:   On declaration_statement to state 4
   3:   On basic_block to state 20
   4:   On INTEGER to state 6
-  5:   On '<' to state 21
+  5:   On BASIC_BLOCK to state 21
 
 
 State 15:
@@ -212,7 +216,7 @@ State 19:
 12: basic_block_list -> basic_block_list  . basic_block 
   0:   On '}' to state 23
   1:   On basic_block to state 24
-  2:   On '<' to state 21
+  2:   On BASIC_BLOCK to state 21
 
 
 State 20:
@@ -221,15 +225,15 @@ State 20:
 
 
 State 21:
-14: basic_block -> '<'  . NAME INTEGER_NUMBER '>' ':' executable_statement_list 
-  0:   On NAME to state 25
+14: basic_block -> BASIC_BLOCK  . ':' executable_statement_list 
+  0:   On ':' to state 25
 
 
 State 22:
 6: procedure_body -> '{' declaration_statement_list #0003  . basic_block_list '}' 
   0:   On basic_block_list to state 26
   1:   On basic_block to state 20
-  2:   On '<' to state 21
+  2:   On BASIC_BLOCK to state 21
 
 
 State 23:
@@ -243,1188 +247,1170 @@ State 24:
 
 
 State 25:
-14: basic_block -> '<' NAME  . INTEGER_NUMBER '>' ':' executable_statement_list 
-  0:   On INTEGER_NUMBER to state 27
+14: basic_block -> BASIC_BLOCK ':'  . executable_statement_list 
+  0:   On executable_statement_list to state 27
+  1:   On assignment_statement_list to state 28
+  Reduce by 17: assignment_statement_list ->  . 
 
 
 State 26:
 6: procedure_body -> '{' declaration_statement_list #0003 basic_block_list  . '}' 
 12: basic_block_list -> basic_block_list  . basic_block 
-  0:   On '}' to state 28
+  0:   On '}' to state 29
   1:   On basic_block to state 24
-  2:   On '<' to state 21
+  2:   On BASIC_BLOCK to state 21
 
 
 State 27:
-14: basic_block -> '<' NAME INTEGER_NUMBER  . '>' ':' executable_statement_list 
-  0:   On '>' to state 29
+14: basic_block -> BASIC_BLOCK ':' executable_statement_list  . 
+  Reduce by 14: basic_block -> BASIC_BLOCK ':' executable_statement_list  . 
 
 
 State 28:
+15: executable_statement_list -> assignment_statement_list  . 
+16: executable_statement_list -> assignment_statement_list  . RETURN ';' 
+18: assignment_statement_list -> assignment_statement_list  . assignment_statement 
+  0:   On RETURN to state 30
+  1:   On assignment_statement to state 31
+  2:   On variable to state 32
+  3:   On if_block to state 33
+  4:   On goto_statement to state 34
+  5:   On NAME to state 35
+  6:   On IF to state 36
+  7:   On GOTO to state 37
+  Reduce by 15: executable_statement_list -> assignment_statement_list  . 
+
+
+State 29:
 6: procedure_body -> '{' declaration_statement_list #0003 basic_block_list '}'  . 
   Reduce by 6: procedure_body -> '{' declaration_statement_list #0003 basic_block_list '}'  . 
 
 
-State 29:
-14: basic_block -> '<' NAME INTEGER_NUMBER '>'  . ':' executable_statement_list 
-  0:   On ':' to state 30
-
-
 State 30:
-14: basic_block -> '<' NAME INTEGER_NUMBER '>' ':'  . executable_statement_list 
-  0:   On executable_statement_list to state 31
-  1:   On assignment_statement_list to state 32
-  Reduce by 17: assignment_statement_list ->  . 
+16: executable_statement_list -> assignment_statement_list RETURN  . ';' 
+  0:   On ';' to state 38
 
 
 State 31:
-14: basic_block -> '<' NAME INTEGER_NUMBER '>' ':' executable_statement_list  . 
-  Reduce by 14: basic_block -> '<' NAME INTEGER_NUMBER '>' ':' executable_statement_list  . 
-
-
-State 32:
-15: executable_statement_list -> assignment_statement_list  . 
-16: executable_statement_list -> assignment_statement_list  . RETURN ';' 
-18: assignment_statement_list -> assignment_statement_list  . assignment_statement 
-  0:   On RETURN to state 33
-  1:   On assignment_statement to state 34
-  2:   On variable to state 35
-  3:   On if_block to state 36
-  4:   On goto_statement to state 37
-  5:   On NAME to state 38
-  6:   On IF to state 39
-  7:   On GOTO to state 40
-  Reduce by 15: executable_statement_list -> assignment_statement_list  . 
-
-
-State 33:
-16: executable_statement_list -> assignment_statement_list RETURN  . ';' 
-  0:   On ';' to state 41
-
-
-State 34:
 18: assignment_statement_list -> assignment_statement_list assignment_statement  . 
   Reduce by 18: assignment_statement_list -> assignment_statement_list assignment_statement  . 
 
 
-State 35:
-19: assignment_statement -> variable  . '=' variable ';' 
-20: assignment_statement -> variable  . '=' constant ';' 
-21: assignment_statement -> variable  . '=' comparision_expression ';' 
-  0:   On '=' to state 42
+State 32:
+19: assignment_statement -> variable  . ASSIGN_OP variable ';' 
+20: assignment_statement -> variable  . ASSIGN_OP constant ';' 
+21: assignment_statement -> variable  . ASSIGN_OP comparision_expression ';' 
+  0:   On ASSIGN_OP to state 39
 
 
-State 36:
+State 33:
 22: assignment_statement -> if_block  . 
   Reduce by 22: assignment_statement -> if_block  . 
 
 
-State 37:
+State 34:
 23: assignment_statement -> goto_statement  . 
   Reduce by 23: assignment_statement -> goto_statement  . 
 
 
-State 38:
+State 35:
 62: variable -> NAME  . 
   Reduce by 62: variable -> NAME  . 
 
 
-State 39:
+State 36:
 24: if_block -> IF  . '(' comparision_expression ')' goto_statement ELSE goto_statement 
-  0:   On '(' to state 43
+  0:   On '(' to state 40
 
 
-State 40:
-25: goto_statement -> GOTO  . '<' NAME INTEGER_NUMBER '>' ';' 
-  0:   On '<' to state 44
+State 37:
+25: goto_statement -> GOTO  . BASIC_BLOCK ';' 
+  0:   On BASIC_BLOCK to state 41
 
 
-State 41:
+State 38:
 16: executable_statement_list -> assignment_statement_list RETURN ';'  . 
   Reduce by 16: executable_statement_list -> assignment_statement_list RETURN ';'  . 
 
 
+State 39:
+19: assignment_statement -> variable ASSIGN_OP  . variable ';' 
+20: assignment_statement -> variable ASSIGN_OP  . constant ';' 
+21: assignment_statement -> variable ASSIGN_OP  . comparision_expression ';' 
+  0:   On variable to state 42
+  1:   On constant to state 43
+  2:   On comparision_expression to state 44
+  3:   On NAME to state 35
+  4:   On INTEGER_NUMBER to state 45
+
+
+State 40:
+24: if_block -> IF '('  . comparision_expression ')' goto_statement ELSE goto_statement 
+  0:   On comparision_expression to state 46
+  1:   On variable to state 47
+  2:   On constant to state 48
+  3:   On NAME to state 35
+  4:   On INTEGER_NUMBER to state 45
+
+
+State 41:
+25: goto_statement -> GOTO BASIC_BLOCK  . ';' 
+  0:   On ';' to state 49
+
+
 State 42:
-19: assignment_statement -> variable '='  . variable ';' 
-20: assignment_statement -> variable '='  . constant ';' 
-21: assignment_statement -> variable '='  . comparision_expression ';' 
-  0:   On variable to state 45
-  1:   On constant to state 46
-  2:   On comparision_expression to state 47
-  3:   On NAME to state 38
-  4:   On INTEGER_NUMBER to state 48
+19: assignment_statement -> variable ASSIGN_OP variable  . ';' 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On ';' to state 50
+  1:   On GT to state 51
+  2:   On LT to state 52
+  3:   On GE to state 53
+  4:   On LE to state 54
+  5:   On EQ to state 55
+  6:   On NE to state 56
 
 
 State 43:
-24: if_block -> IF '('  . comparision_expression ')' goto_statement ELSE goto_statement 
-  0:   On comparision_expression to state 49
-  1:   On variable to state 50
-  2:   On constant to state 51
-  3:   On NAME to state 38
-  4:   On INTEGER_NUMBER to state 48
+20: assignment_statement -> variable ASSIGN_OP constant  . ';' 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On ';' to state 57
+  1:   On GT to state 58
+  2:   On LT to state 59
+  3:   On GE to state 60
+  4:   On LE to state 61
+  5:   On EQ to state 62
+  6:   On NE to state 63
 
 
 State 44:
-25: goto_statement -> GOTO '<'  . NAME INTEGER_NUMBER '>' ';' 
-  0:   On NAME to state 52
+21: assignment_statement -> variable ASSIGN_OP comparision_expression  . ';' 
+  0:   On ';' to state 64
 
 
 State 45:
-19: assignment_statement -> variable '=' variable  . ';' 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On ';' to state 53
-  1:   On '>' to state 54
-  2:   On '<' to state 55
-  3:   On '=' to state 56
-  4:   On '!' to state 57
-
-
-State 46:
-20: assignment_statement -> variable '=' constant  . ';' 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On ';' to state 58
-  1:   On '>' to state 59
-  2:   On '<' to state 60
-  3:   On '=' to state 61
-  4:   On '!' to state 62
-
-
-State 47:
-21: assignment_statement -> variable '=' comparision_expression  . ';' 
-  0:   On ';' to state 63
-
-
-State 48:
 63: constant -> INTEGER_NUMBER  . 
   Reduce by 63: constant -> INTEGER_NUMBER  . 
 
 
-State 49:
+State 46:
 24: if_block -> IF '(' comparision_expression  . ')' goto_statement ELSE goto_statement 
-  0:   On ')' to state 64
+  0:   On ')' to state 65
+
+
+State 47:
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+
+
+State 48:
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+
+
+State 49:
+25: goto_statement -> GOTO BASIC_BLOCK ';'  . 
+  Reduce by 25: goto_statement -> GOTO BASIC_BLOCK ';'  . 
 
 
 State 50:
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
+19: assignment_statement -> variable ASSIGN_OP variable ';'  . 
+  Reduce by 19: assignment_statement -> variable ASSIGN_OP variable ';'  . 
 
 
 State 51:
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
+26: comparision_expression -> variable GT  . comparision_expression 
+32: comparision_expression -> variable GT  . constant 
+38: comparision_expression -> variable GT  . variable 
+  0:   On comparision_expression to state 66
+  1:   On constant to state 67
+  2:   On variable to state 68
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 52:
-25: goto_statement -> GOTO '<' NAME  . INTEGER_NUMBER '>' ';' 
-  0:   On INTEGER_NUMBER to state 65
+27: comparision_expression -> variable LT  . comparision_expression 
+33: comparision_expression -> variable LT  . constant 
+39: comparision_expression -> variable LT  . variable 
+  0:   On comparision_expression to state 69
+  1:   On constant to state 70
+  2:   On variable to state 71
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 53:
-19: assignment_statement -> variable '=' variable ';'  . 
-  Reduce by 19: assignment_statement -> variable '=' variable ';'  . 
+28: comparision_expression -> variable GE  . comparision_expression 
+34: comparision_expression -> variable GE  . constant 
+40: comparision_expression -> variable GE  . variable 
+  0:   On comparision_expression to state 72
+  1:   On constant to state 73
+  2:   On variable to state 74
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 54:
-26: comparision_expression -> variable '>'  . comparision_expression 
-28: comparision_expression -> variable '>'  . '=' comparision_expression 
-32: comparision_expression -> variable '>'  . constant 
-34: comparision_expression -> variable '>'  . '=' constant 
-38: comparision_expression -> variable '>'  . variable 
-40: comparision_expression -> variable '>'  . '=' variable 
-  0:   On comparision_expression to state 66
-  1:   On '=' to state 67
-  2:   On constant to state 68
-  3:   On variable to state 69
-  4:   On INTEGER_NUMBER to state 48
-  5:   On NAME to state 38
+29: comparision_expression -> variable LE  . comparision_expression 
+35: comparision_expression -> variable LE  . constant 
+41: comparision_expression -> variable LE  . variable 
+  0:   On comparision_expression to state 75
+  1:   On constant to state 76
+  2:   On variable to state 77
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 55:
-27: comparision_expression -> variable '<'  . comparision_expression 
-29: comparision_expression -> variable '<'  . '=' comparision_expression 
-33: comparision_expression -> variable '<'  . constant 
-35: comparision_expression -> variable '<'  . '=' constant 
-39: comparision_expression -> variable '<'  . variable 
-41: comparision_expression -> variable '<'  . '=' variable 
-  0:   On comparision_expression to state 70
-  1:   On '=' to state 71
-  2:   On constant to state 72
-  3:   On variable to state 73
-  4:   On INTEGER_NUMBER to state 48
-  5:   On NAME to state 38
+30: comparision_expression -> variable EQ  . comparision_expression 
+36: comparision_expression -> variable EQ  . constant 
+42: comparision_expression -> variable EQ  . variable 
+  0:   On comparision_expression to state 78
+  1:   On constant to state 79
+  2:   On variable to state 80
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 56:
-30: comparision_expression -> variable '='  . '=' comparision_expression 
-36: comparision_expression -> variable '='  . '=' constant 
-42: comparision_expression -> variable '='  . '=' variable 
-  0:   On '=' to state 74
+31: comparision_expression -> variable NE  . comparision_expression 
+37: comparision_expression -> variable NE  . constant 
+43: comparision_expression -> variable NE  . variable 
+  0:   On comparision_expression to state 81
+  1:   On constant to state 82
+  2:   On variable to state 83
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 57:
-31: comparision_expression -> variable '!'  . '=' comparision_expression 
-37: comparision_expression -> variable '!'  . '=' constant 
-43: comparision_expression -> variable '!'  . '=' variable 
-  0:   On '=' to state 75
+20: assignment_statement -> variable ASSIGN_OP constant ';'  . 
+  Reduce by 20: assignment_statement -> variable ASSIGN_OP constant ';'  . 
 
 
 State 58:
-20: assignment_statement -> variable '=' constant ';'  . 
-  Reduce by 20: assignment_statement -> variable '=' constant ';'  . 
+44: comparision_expression -> constant GT  . constant 
+50: comparision_expression -> constant GT  . variable 
+56: comparision_expression -> constant GT  . comparision_expression 
+  0:   On constant to state 84
+  1:   On variable to state 85
+  2:   On comparision_expression to state 86
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 59:
-44: comparision_expression -> constant '>'  . constant 
-46: comparision_expression -> constant '>'  . '=' constant 
-50: comparision_expression -> constant '>'  . variable 
-52: comparision_expression -> constant '>'  . '=' variable 
-56: comparision_expression -> constant '>'  . comparision_expression 
-58: comparision_expression -> constant '>'  . '=' comparision_expression 
-  0:   On constant to state 76
-  1:   On '=' to state 77
-  2:   On variable to state 78
-  3:   On comparision_expression to state 79
-  4:   On INTEGER_NUMBER to state 48
-  5:   On NAME to state 38
+45: comparision_expression -> constant LT  . constant 
+51: comparision_expression -> constant LT  . variable 
+57: comparision_expression -> constant LT  . comparision_expression 
+  0:   On constant to state 87
+  1:   On variable to state 88
+  2:   On comparision_expression to state 89
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 60:
-45: comparision_expression -> constant '<'  . constant 
-47: comparision_expression -> constant '<'  . '=' constant 
-51: comparision_expression -> constant '<'  . variable 
-53: comparision_expression -> constant '<'  . '=' variable 
-57: comparision_expression -> constant '<'  . comparision_expression 
-59: comparision_expression -> constant '<'  . '=' comparision_expression 
-  0:   On constant to state 80
-  1:   On '=' to state 81
-  2:   On variable to state 82
-  3:   On comparision_expression to state 83
-  4:   On INTEGER_NUMBER to state 48
-  5:   On NAME to state 38
+46: comparision_expression -> constant GE  . constant 
+52: comparision_expression -> constant GE  . variable 
+58: comparision_expression -> constant GE  . comparision_expression 
+  0:   On constant to state 90
+  1:   On variable to state 91
+  2:   On comparision_expression to state 92
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 61:
-48: comparision_expression -> constant '='  . '=' constant 
-54: comparision_expression -> constant '='  . '=' variable 
-60: comparision_expression -> constant '='  . '=' comparision_expression 
-  0:   On '=' to state 84
+47: comparision_expression -> constant LE  . constant 
+53: comparision_expression -> constant LE  . variable 
+59: comparision_expression -> constant LE  . comparision_expression 
+  0:   On constant to state 93
+  1:   On variable to state 94
+  2:   On comparision_expression to state 95
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 62:
-49: comparision_expression -> constant '!'  . '=' constant 
-55: comparision_expression -> constant '!'  . '=' variable 
-61: comparision_expression -> constant '!'  . '=' comparision_expression 
-  0:   On '=' to state 85
+48: comparision_expression -> constant EQ  . constant 
+54: comparision_expression -> constant EQ  . variable 
+60: comparision_expression -> constant EQ  . comparision_expression 
+  0:   On constant to state 96
+  1:   On variable to state 97
+  2:   On comparision_expression to state 98
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 63:
-21: assignment_statement -> variable '=' comparision_expression ';'  . 
-  Reduce by 21: assignment_statement -> variable '=' comparision_expression ';'  . 
+49: comparision_expression -> constant NE  . constant 
+55: comparision_expression -> constant NE  . variable 
+61: comparision_expression -> constant NE  . comparision_expression 
+  0:   On constant to state 99
+  1:   On variable to state 100
+  2:   On comparision_expression to state 101
+  3:   On INTEGER_NUMBER to state 45
+  4:   On NAME to state 35
 
 
 State 64:
-24: if_block -> IF '(' comparision_expression ')'  . goto_statement ELSE goto_statement 
-  0:   On goto_statement to state 86
-  1:   On GOTO to state 40
+21: assignment_statement -> variable ASSIGN_OP comparision_expression ';'  . 
+  Reduce by 21: assignment_statement -> variable ASSIGN_OP comparision_expression ';'  . 
 
 
 State 65:
-25: goto_statement -> GOTO '<' NAME INTEGER_NUMBER  . '>' ';' 
-  0:   On '>' to state 87
+24: if_block -> IF '(' comparision_expression ')'  . goto_statement ELSE goto_statement 
+  0:   On goto_statement to state 102
+  1:   On GOTO to state 37
 
 
 State 66:
-26: comparision_expression -> variable '>' comparision_expression  . 
-  Reduce by 26: comparision_expression -> variable '>' comparision_expression  . 
+26: comparision_expression -> variable GT comparision_expression  . 
+  Reduce by 26: comparision_expression -> variable GT comparision_expression  . 
 
 
 State 67:
-28: comparision_expression -> variable '>' '='  . comparision_expression 
-34: comparision_expression -> variable '>' '='  . constant 
-40: comparision_expression -> variable '>' '='  . variable 
-  0:   On comparision_expression to state 88
-  1:   On constant to state 89
-  2:   On variable to state 90
-  3:   On INTEGER_NUMBER to state 48
-  4:   On NAME to state 38
+32: comparision_expression -> variable GT constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 32: comparision_expression -> variable GT constant  . 
 
 
 State 68:
-32: comparision_expression -> variable '>' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 32: comparision_expression -> variable '>' constant  . 
+38: comparision_expression -> variable GT variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 38: comparision_expression -> variable GT variable  . 
 
 
 State 69:
-38: comparision_expression -> variable '>' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 38: comparision_expression -> variable '>' variable  . 
+27: comparision_expression -> variable LT comparision_expression  . 
+  Reduce by 27: comparision_expression -> variable LT comparision_expression  . 
 
 
 State 70:
-27: comparision_expression -> variable '<' comparision_expression  . 
-  Reduce by 27: comparision_expression -> variable '<' comparision_expression  . 
+33: comparision_expression -> variable LT constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 33: comparision_expression -> variable LT constant  . 
 
 
 State 71:
-29: comparision_expression -> variable '<' '='  . comparision_expression 
-35: comparision_expression -> variable '<' '='  . constant 
-41: comparision_expression -> variable '<' '='  . variable 
-  0:   On comparision_expression to state 91
-  1:   On constant to state 92
-  2:   On variable to state 93
-  3:   On INTEGER_NUMBER to state 48
-  4:   On NAME to state 38
+39: comparision_expression -> variable LT variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 39: comparision_expression -> variable LT variable  . 
 
 
 State 72:
-33: comparision_expression -> variable '<' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 33: comparision_expression -> variable '<' constant  . 
+28: comparision_expression -> variable GE comparision_expression  . 
+  Reduce by 28: comparision_expression -> variable GE comparision_expression  . 
 
 
 State 73:
-39: comparision_expression -> variable '<' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 39: comparision_expression -> variable '<' variable  . 
+34: comparision_expression -> variable GE constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 34: comparision_expression -> variable GE constant  . 
 
 
 State 74:
-30: comparision_expression -> variable '=' '='  . comparision_expression 
-36: comparision_expression -> variable '=' '='  . constant 
-42: comparision_expression -> variable '=' '='  . variable 
-  0:   On comparision_expression to state 94
-  1:   On constant to state 95
-  2:   On variable to state 96
-  3:   On INTEGER_NUMBER to state 48
-  4:   On NAME to state 38
+40: comparision_expression -> variable GE variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 40: comparision_expression -> variable GE variable  . 
 
 
 State 75:
-31: comparision_expression -> variable '!' '='  . comparision_expression 
-37: comparision_expression -> variable '!' '='  . constant 
-43: comparision_expression -> variable '!' '='  . variable 
-  0:   On comparision_expression to state 97
-  1:   On constant to state 98
-  2:   On variable to state 99
-  3:   On INTEGER_NUMBER to state 48
-  4:   On NAME to state 38
+29: comparision_expression -> variable LE comparision_expression  . 
+  Reduce by 29: comparision_expression -> variable LE comparision_expression  . 
 
 
 State 76:
-44: comparision_expression -> constant '>' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 44: comparision_expression -> constant '>' constant  . 
+35: comparision_expression -> variable LE constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 35: comparision_expression -> variable LE constant  . 
 
 
 State 77:
-46: comparision_expression -> constant '>' '='  . constant 
-52: comparision_expression -> constant '>' '='  . variable 
-58: comparision_expression -> constant '>' '='  . comparision_expression 
-  0:   On constant to state 100
-  1:   On variable to state 101
-  2:   On comparision_expression to state 102
-  3:   On INTEGER_NUMBER to state 48
-  4:   On NAME to state 38
+41: comparision_expression -> variable LE variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 41: comparision_expression -> variable LE variable  . 
 
 
 State 78:
-50: comparision_expression -> constant '>' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 50: comparision_expression -> constant '>' variable  . 
+30: comparision_expression -> variable EQ comparision_expression  . 
+  Reduce by 30: comparision_expression -> variable EQ comparision_expression  . 
 
 
 State 79:
-56: comparision_expression -> constant '>' comparision_expression  . 
-  Reduce by 56: comparision_expression -> constant '>' comparision_expression  . 
+36: comparision_expression -> variable EQ constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 36: comparision_expression -> variable EQ constant  . 
 
 
 State 80:
-45: comparision_expression -> constant '<' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 45: comparision_expression -> constant '<' constant  . 
+42: comparision_expression -> variable EQ variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 42: comparision_expression -> variable EQ variable  . 
 
 
 State 81:
-47: comparision_expression -> constant '<' '='  . constant 
-53: comparision_expression -> constant '<' '='  . variable 
-59: comparision_expression -> constant '<' '='  . comparision_expression 
-  0:   On constant to state 103
-  1:   On variable to state 104
-  2:   On comparision_expression to state 105
-  3:   On INTEGER_NUMBER to state 48
-  4:   On NAME to state 38
+31: comparision_expression -> variable NE comparision_expression  . 
+  Reduce by 31: comparision_expression -> variable NE comparision_expression  . 
 
 
 State 82:
-51: comparision_expression -> constant '<' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 51: comparision_expression -> constant '<' variable  . 
+37: comparision_expression -> variable NE constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 37: comparision_expression -> variable NE constant  . 
 
 
 State 83:
-57: comparision_expression -> constant '<' comparision_expression  . 
-  Reduce by 57: comparision_expression -> constant '<' comparision_expression  . 
+43: comparision_expression -> variable NE variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 43: comparision_expression -> variable NE variable  . 
 
 
 State 84:
-48: comparision_expression -> constant '=' '='  . constant 
-54: comparision_expression -> constant '=' '='  . variable 
-60: comparision_expression -> constant '=' '='  . comparision_expression 
-  0:   On constant to state 106
-  1:   On variable to state 107
-  2:   On comparision_expression to state 108
-  3:   On INTEGER_NUMBER to state 48
-  4:   On NAME to state 38
+44: comparision_expression -> constant GT constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 44: comparision_expression -> constant GT constant  . 
 
 
 State 85:
-49: comparision_expression -> constant '!' '='  . constant 
-55: comparision_expression -> constant '!' '='  . variable 
-61: comparision_expression -> constant '!' '='  . comparision_expression 
-  0:   On constant to state 109
-  1:   On variable to state 110
-  2:   On comparision_expression to state 111
-  3:   On INTEGER_NUMBER to state 48
-  4:   On NAME to state 38
+50: comparision_expression -> constant GT variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 50: comparision_expression -> constant GT variable  . 
 
 
 State 86:
-24: if_block -> IF '(' comparision_expression ')' goto_statement  . ELSE goto_statement 
-  0:   On ELSE to state 112
+56: comparision_expression -> constant GT comparision_expression  . 
+  Reduce by 56: comparision_expression -> constant GT comparision_expression  . 
 
 
 State 87:
-25: goto_statement -> GOTO '<' NAME INTEGER_NUMBER '>'  . ';' 
-  0:   On ';' to state 113
+45: comparision_expression -> constant LT constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 45: comparision_expression -> constant LT constant  . 
 
 
 State 88:
-28: comparision_expression -> variable '>' '=' comparision_expression  . 
-  Reduce by 28: comparision_expression -> variable '>' '=' comparision_expression  . 
+51: comparision_expression -> constant LT variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 51: comparision_expression -> constant LT variable  . 
 
 
 State 89:
-34: comparision_expression -> variable '>' '=' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 34: comparision_expression -> variable '>' '=' constant  . 
+57: comparision_expression -> constant LT comparision_expression  . 
+  Reduce by 57: comparision_expression -> constant LT comparision_expression  . 
 
 
 State 90:
-40: comparision_expression -> variable '>' '=' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 40: comparision_expression -> variable '>' '=' variable  . 
+46: comparision_expression -> constant GE constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 46: comparision_expression -> constant GE constant  . 
 
 
 State 91:
-29: comparision_expression -> variable '<' '=' comparision_expression  . 
-  Reduce by 29: comparision_expression -> variable '<' '=' comparision_expression  . 
+52: comparision_expression -> constant GE variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 52: comparision_expression -> constant GE variable  . 
 
 
 State 92:
-35: comparision_expression -> variable '<' '=' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 35: comparision_expression -> variable '<' '=' constant  . 
+58: comparision_expression -> constant GE comparision_expression  . 
+  Reduce by 58: comparision_expression -> constant GE comparision_expression  . 
 
 
 State 93:
-41: comparision_expression -> variable '<' '=' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 41: comparision_expression -> variable '<' '=' variable  . 
+47: comparision_expression -> constant LE constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 47: comparision_expression -> constant LE constant  . 
 
 
 State 94:
-30: comparision_expression -> variable '=' '=' comparision_expression  . 
-  Reduce by 30: comparision_expression -> variable '=' '=' comparision_expression  . 
+53: comparision_expression -> constant LE variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 53: comparision_expression -> constant LE variable  . 
 
 
 State 95:
-36: comparision_expression -> variable '=' '=' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 36: comparision_expression -> variable '=' '=' constant  . 
+59: comparision_expression -> constant LE comparision_expression  . 
+  Reduce by 59: comparision_expression -> constant LE comparision_expression  . 
 
 
 State 96:
-42: comparision_expression -> variable '=' '=' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 42: comparision_expression -> variable '=' '=' variable  . 
+48: comparision_expression -> constant EQ constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 48: comparision_expression -> constant EQ constant  . 
 
 
 State 97:
-31: comparision_expression -> variable '!' '=' comparision_expression  . 
-  Reduce by 31: comparision_expression -> variable '!' '=' comparision_expression  . 
+54: comparision_expression -> constant EQ variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 54: comparision_expression -> constant EQ variable  . 
 
 
 State 98:
-37: comparision_expression -> variable '!' '=' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 37: comparision_expression -> variable '!' '=' constant  . 
+60: comparision_expression -> constant EQ comparision_expression  . 
+  Reduce by 60: comparision_expression -> constant EQ comparision_expression  . 
 
 
 State 99:
-43: comparision_expression -> variable '!' '=' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 43: comparision_expression -> variable '!' '=' variable  . 
+49: comparision_expression -> constant NE constant  . 
+44: comparision_expression -> constant  . GT constant 
+45: comparision_expression -> constant  . LT constant 
+46: comparision_expression -> constant  . GE constant 
+47: comparision_expression -> constant  . LE constant 
+48: comparision_expression -> constant  . EQ constant 
+49: comparision_expression -> constant  . NE constant 
+50: comparision_expression -> constant  . GT variable 
+51: comparision_expression -> constant  . LT variable 
+52: comparision_expression -> constant  . GE variable 
+53: comparision_expression -> constant  . LE variable 
+54: comparision_expression -> constant  . EQ variable 
+55: comparision_expression -> constant  . NE variable 
+56: comparision_expression -> constant  . GT comparision_expression 
+57: comparision_expression -> constant  . LT comparision_expression 
+58: comparision_expression -> constant  . GE comparision_expression 
+59: comparision_expression -> constant  . LE comparision_expression 
+60: comparision_expression -> constant  . EQ comparision_expression 
+61: comparision_expression -> constant  . NE comparision_expression 
+  0:   On GT to state 58
+  1:   On LT to state 59
+  2:   On GE to state 60
+  3:   On LE to state 61
+  4:   On EQ to state 62
+  5:   On NE to state 63
+  Reduce by 49: comparision_expression -> constant NE constant  . 
 
 
 State 100:
-46: comparision_expression -> constant '>' '=' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 46: comparision_expression -> constant '>' '=' constant  . 
+55: comparision_expression -> constant NE variable  . 
+26: comparision_expression -> variable  . GT comparision_expression 
+27: comparision_expression -> variable  . LT comparision_expression 
+28: comparision_expression -> variable  . GE comparision_expression 
+29: comparision_expression -> variable  . LE comparision_expression 
+30: comparision_expression -> variable  . EQ comparision_expression 
+31: comparision_expression -> variable  . NE comparision_expression 
+32: comparision_expression -> variable  . GT constant 
+33: comparision_expression -> variable  . LT constant 
+34: comparision_expression -> variable  . GE constant 
+35: comparision_expression -> variable  . LE constant 
+36: comparision_expression -> variable  . EQ constant 
+37: comparision_expression -> variable  . NE constant 
+38: comparision_expression -> variable  . GT variable 
+39: comparision_expression -> variable  . LT variable 
+40: comparision_expression -> variable  . GE variable 
+41: comparision_expression -> variable  . LE variable 
+42: comparision_expression -> variable  . EQ variable 
+43: comparision_expression -> variable  . NE variable 
+  0:   On GT to state 51
+  1:   On LT to state 52
+  2:   On GE to state 53
+  3:   On LE to state 54
+  4:   On EQ to state 55
+  5:   On NE to state 56
+  Reduce by 55: comparision_expression -> constant NE variable  . 
 
 
 State 101:
-52: comparision_expression -> constant '>' '=' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 52: comparision_expression -> constant '>' '=' variable  . 
+61: comparision_expression -> constant NE comparision_expression  . 
+  Reduce by 61: comparision_expression -> constant NE comparision_expression  . 
 
 
 State 102:
-58: comparision_expression -> constant '>' '=' comparision_expression  . 
-  Reduce by 58: comparision_expression -> constant '>' '=' comparision_expression  . 
+24: if_block -> IF '(' comparision_expression ')' goto_statement  . ELSE goto_statement 
+  0:   On ELSE to state 103
 
 
 State 103:
-47: comparision_expression -> constant '<' '=' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 47: comparision_expression -> constant '<' '=' constant  . 
+24: if_block -> IF '(' comparision_expression ')' goto_statement ELSE  . goto_statement 
+  0:   On goto_statement to state 104
+  1:   On GOTO to state 37
 
 
 State 104:
-53: comparision_expression -> constant '<' '=' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 53: comparision_expression -> constant '<' '=' variable  . 
-
-
-State 105:
-59: comparision_expression -> constant '<' '=' comparision_expression  . 
-  Reduce by 59: comparision_expression -> constant '<' '=' comparision_expression  . 
-
-
-State 106:
-48: comparision_expression -> constant '=' '=' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 48: comparision_expression -> constant '=' '=' constant  . 
-
-
-State 107:
-54: comparision_expression -> constant '=' '=' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 54: comparision_expression -> constant '=' '=' variable  . 
-
-
-State 108:
-60: comparision_expression -> constant '=' '=' comparision_expression  . 
-  Reduce by 60: comparision_expression -> constant '=' '=' comparision_expression  . 
-
-
-State 109:
-49: comparision_expression -> constant '!' '=' constant  . 
-44: comparision_expression -> constant  . '>' constant 
-45: comparision_expression -> constant  . '<' constant 
-46: comparision_expression -> constant  . '>' '=' constant 
-47: comparision_expression -> constant  . '<' '=' constant 
-48: comparision_expression -> constant  . '=' '=' constant 
-49: comparision_expression -> constant  . '!' '=' constant 
-50: comparision_expression -> constant  . '>' variable 
-51: comparision_expression -> constant  . '<' variable 
-52: comparision_expression -> constant  . '>' '=' variable 
-53: comparision_expression -> constant  . '<' '=' variable 
-54: comparision_expression -> constant  . '=' '=' variable 
-55: comparision_expression -> constant  . '!' '=' variable 
-56: comparision_expression -> constant  . '>' comparision_expression 
-57: comparision_expression -> constant  . '<' comparision_expression 
-58: comparision_expression -> constant  . '>' '=' comparision_expression 
-59: comparision_expression -> constant  . '<' '=' comparision_expression 
-60: comparision_expression -> constant  . '=' '=' comparision_expression 
-61: comparision_expression -> constant  . '!' '=' comparision_expression 
-  0:   On '>' to state 59
-  1:   On '<' to state 60
-  2:   On '=' to state 61
-  3:   On '!' to state 62
-  Reduce by 49: comparision_expression -> constant '!' '=' constant  . 
-
-
-State 110:
-55: comparision_expression -> constant '!' '=' variable  . 
-26: comparision_expression -> variable  . '>' comparision_expression 
-27: comparision_expression -> variable  . '<' comparision_expression 
-28: comparision_expression -> variable  . '>' '=' comparision_expression 
-29: comparision_expression -> variable  . '<' '=' comparision_expression 
-30: comparision_expression -> variable  . '=' '=' comparision_expression 
-31: comparision_expression -> variable  . '!' '=' comparision_expression 
-32: comparision_expression -> variable  . '>' constant 
-33: comparision_expression -> variable  . '<' constant 
-34: comparision_expression -> variable  . '>' '=' constant 
-35: comparision_expression -> variable  . '<' '=' constant 
-36: comparision_expression -> variable  . '=' '=' constant 
-37: comparision_expression -> variable  . '!' '=' constant 
-38: comparision_expression -> variable  . '>' variable 
-39: comparision_expression -> variable  . '<' variable 
-40: comparision_expression -> variable  . '>' '=' variable 
-41: comparision_expression -> variable  . '<' '=' variable 
-42: comparision_expression -> variable  . '=' '=' variable 
-43: comparision_expression -> variable  . '!' '=' variable 
-  0:   On '>' to state 54
-  1:   On '<' to state 55
-  2:   On '=' to state 56
-  3:   On '!' to state 57
-  Reduce by 55: comparision_expression -> constant '!' '=' variable  . 
-
-
-State 111:
-61: comparision_expression -> constant '!' '=' comparision_expression  . 
-  Reduce by 61: comparision_expression -> constant '!' '=' comparision_expression  . 
-
-
-State 112:
-24: if_block -> IF '(' comparision_expression ')' goto_statement ELSE  . goto_statement 
-  0:   On goto_statement to state 114
-  1:   On GOTO to state 40
-
-
-State 113:
-25: goto_statement -> GOTO '<' NAME INTEGER_NUMBER '>' ';'  . 
-  Reduce by 25: goto_statement -> GOTO '<' NAME INTEGER_NUMBER '>' ';'  . 
-
-
-State 114:
 24: if_block -> IF '(' comparision_expression ')' goto_statement ELSE goto_statement  . 
   Reduce by 24: if_block -> IF '(' comparision_expression ')' goto_statement ELSE goto_statement  . 
 

@@ -1,14 +1,10 @@
 #!/bin/bash
 
 make -f Makefile.cfglp clean
-echo Please, enter your file name ....
-read name
-name1="$name.cs306.cfg"
+name1="$1.cs306.cfg"
 # echo $name
 
-name="$name.c"
-echo $name
-echo $name1
+name="$1.c"
 # cat test_files/$name
 make FILE=$name -f Makefile.cfg
 make -f Makefile.cfglp

@@ -1,0 +1,12 @@
+basic block code :
+
+if ($6 != NULL)
+	$$ = new Basic_Block($3, *$6);
+else
+{
+	list<Ast *> * ast_list = new list<Ast *>;
+	$$ = new Basic_Block($3, *ast_list);
+}
+
+delete $6;
+delete $2;
