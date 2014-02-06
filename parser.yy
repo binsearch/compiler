@@ -48,12 +48,12 @@
 %token ELSE
 %token GOTO
 %token ASSIGN_OP
-%token NE
-%token EQ
-%token LT
-%token LE
-%token GT
-%token GE 
+%token <string_value> NE
+%token <string_value> EQ
+%token <string_value> LT
+%token <string_value> LE
+%token <string_value> GT
+%token <string_value> GE 
 
 %type <symbol_table> declaration_statement_list
 %type <symbol_entry> declaration_statement
@@ -72,14 +72,14 @@
 program:
 	declaration_statement_list procedure_name
 	{
-		#if 0
+		#if 1
 		program_object.set_global_table(*$1);
 		return_statement_used_flag = false;				// No return statement in the current procedure till now
 		#endif
 	}
 	procedure_body
 	{
-		#if 0
+		#if 1
 		program_object.set_procedure_map(*current_procedure);
 
 		if ($1)
@@ -91,13 +91,13 @@ program:
 |
 	procedure_name
 	{
-		#if 0
+		#if 1
 		return_statement_used_flag = false;				// No return statement in the current procedure till now
 		#endif
 	}
 	procedure_body
 	{	
-		#if 0
+		#if 1
 		
 		program_object.set_procedure_map(*current_procedure);
 		#endif
@@ -107,7 +107,7 @@ program:
 procedure_name:
 	NAME '(' ')'
 	{	
-		#if 0
+		#if 1
 		current_procedure = new Procedure(void_data_type, *$1);
 		#endif
 	}
@@ -116,14 +116,14 @@ procedure_name:
 procedure_body:
 	'{' declaration_statement_list
 	{	
-		#if 0
+		#if 1
 		current_procedure->set_local_list(*$2);
 		delete $2;
 		#endif
 	}
 	basic_block_list '}'
 	{
-		#if 0
+		#if 1
 		
 		if (return_statement_used_flag == false)
 		{
@@ -139,7 +139,7 @@ procedure_body:
 |
 	'{' basic_block_list '}'
 	{
-		#if 0
+		#if 1
 		if (return_statement_used_flag == false)
 		{
 			int line = get_line_number();
@@ -156,7 +156,7 @@ procedure_body:
 declaration_statement_list:
 	declaration_statement
 	{
-		#if 0
+		#if 1
 		int line = get_line_number();
 		program_object.variable_in_proc_map_check($1->get_variable_name(), line);
 
@@ -174,7 +174,7 @@ declaration_statement_list:
 |
 	declaration_statement_list declaration_statement
 	{
-		#if 0
+		#if 1
 		// if declaration is local then no need to check in global list
 		// if declaration is global then this list is global list
 
@@ -210,7 +210,7 @@ declaration_statement_list:
 declaration_statement:
 	INTEGER NAME ';'
 	{
-		#if 0
+		#if 1
 		$$ = new Symbol_Table_Entry(*$2, int_data_type);
 
 		delete $2;
@@ -221,7 +221,7 @@ declaration_statement:
 basic_block_list:
 	basic_block_list basic_block
 	{
-		#if 0
+		#if 1
 		if (!$2)
 		{
 			int line = get_line_number();
@@ -237,7 +237,7 @@ basic_block_list:
 |
 	basic_block
 	{
-		#if 0
+		#if 1
 		if (!$1)
 		{
 			int line = get_line_number();
@@ -254,8 +254,16 @@ basic_block_list:
 basic_block:
 	BASIC_BLOCK ':' executable_statement_list
 	{
-		#if 0
+		#if 1
+		if ($3 != NULL)
+		$$ = new Basic_Block($1, *$3);
+		else
+		{
+			list<Ast *> * ast_list = new list<Ast *>;
+			$$ = new Basic_Block($1, *ast_list);
+		}
 
+		delete $3;
 				
 		#endif
 	}
@@ -264,14 +272,14 @@ basic_block:
 executable_statement_list:
 	assignment_statement_list
 	{
-		#if 0
+		#if 1
 		$$ = $1;
 		#endif
 	}
 |
 	assignment_statement_list RETURN ';'
 	{
-		#if 0
+		#if 1
 		Ast * ret = new Return_Ast();
 
 		return_statement_used_flag = true;					// Current procedure has an occurrence of return statement
@@ -289,14 +297,14 @@ executable_statement_list:
 
 assignment_statement_list:
 	{
-		#if 0
+		#if 1
 		$$ = NULL;
 		#endif
 	}
 |
 	assignment_statement_list assignment_statement
 	{
-		#if 0
+		#if 1
 		if ($1 == NULL)
 			$$ = new list<Ast *>;
 
@@ -313,7 +321,7 @@ assignment_statement_list:
 assignment_statement:
 	variable ASSIGN_OP variable ';'
 	{
-		#if 0
+		#if 1
 		$$ = new Assignment_Ast($1, $3);
 
 		int line = get_line_number();
@@ -323,7 +331,7 @@ assignment_statement:
 |
 	variable ASSIGN_OP constant ';'
 	{
-		#if 0
+		#if 1
 		$$ = new Assignment_Ast($1, $3);
 
 		int line = get_line_number();
@@ -474,7 +482,7 @@ comparision_expression:
 variable:
 	NAME
 	{
-		#if 0
+		#if 1
 		Symbol_Table_Entry var_table_entry;
 
 		if (current_procedure->variable_in_symbol_list_check(*$1))
@@ -499,7 +507,7 @@ variable:
 constant:
 	INTEGER_NUMBER
 	{
-		#if 0
+		#if 1
 		$$ = new Number_Ast<int>($1, int_data_type);
 		#endif
 	}
