@@ -40,7 +40,7 @@
 };
 
 %token <integer_value> INTEGER_NUMBER
-%token BASIC_BLOCK
+%token <integer_value> BASIC_BLOCK
 %token <string_value> NAME
 %token RETURN
 %token INTEGER

@@ -87,15 +87,13 @@ goto	{
 
 
 
-"<bb"[\ ]+[[:digit:]]+">" {
+"<bb "[[:digit:]]+">" {
 	store_token_name("BASIC BLOCK");
+	
 	ParserBase::STYPE__ * val = getSval();
-	String s = matched();
-	int i = 3;
-	while(s[i] == ' '){
-		i++;
-	}
-	s = s.substr(i, s.size()-i-1);
+	string s = matched();
+	
+	s = s.substr(4, s.size()-5);
 	val->integer_value = atoi(s.c_str());
 	return Parser::BASIC_BLOCK;
 }
