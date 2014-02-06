@@ -39,6 +39,11 @@
 	Procedure * procedure;
 };
 
+%left <string_value> NE EQ
+%left <string_value> GE GT LE LT
+
+
+
 %token <integer_value> INTEGER_NUMBER
 %token <integer_value> BASIC_BLOCK
 %token <string_value> NAME
@@ -48,12 +53,8 @@
 %token ELSE
 %token GOTO
 %token ASSIGN_OP
-%token <string_value> NE
-%token <string_value> EQ
-%token <string_value> LT
-%token <string_value> LE
-%token <string_value> GT
-%token <string_value> GE 
+
+
 
 %type <symbol_table> declaration_statement_list
 %type <symbol_entry> declaration_statement
@@ -322,27 +323,6 @@ assignment_statement_list:
 /*assignment statements and if clauses*/
 
 assignment_statement:
-	variable ASSIGN_OP variable ';'
-	{
-		#if 1
-		$$ = new Assignment_Ast($1, $3);
-
-		int line = get_line_number();
-		$$->check_ast(line);
-		#endif
-	}
-|
-	variable ASSIGN_OP constant ';'
-	{
-		#if 1
-		$$ = new Assignment_Ast($1, $3);
-
-		int line = get_line_number();
-		$$->check_ast(line);
-		#endif
-	}
-	
-|
 	variable ASSIGN_OP comparision_expression ';'
 	{
 		$$=new Assignment_Ast($1,$3);
@@ -382,184 +362,43 @@ goto_statement:
 ;
 
 comparision_expression:
-
-	comparision_expression GT variable
+	
+	variable
+	{
+		$$ = $1;
+	}
+|
+	constant
+	{
+		$$ = $1;
+	}
+|
+	comparision_expression GT comparision_expression
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	comparision_expression LT variable
+	comparision_expression LT comparision_expression
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	comparision_expression GE variable
+	comparision_expression GE comparision_expression
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	comparision_expression LE variable
+	comparision_expression LE comparision_expression
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	comparision_expression EQ variable
+	comparision_expression EQ comparision_expression
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	comparision_expression NE variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-
-	variable GT constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable LT constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable GE constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable LE constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable EQ constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable NE constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable GT variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable LT variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable GE variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable LE variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable EQ variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	variable NE variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant GT constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant LT constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant GE constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant LE constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant EQ constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant NE constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant GT variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant LT variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant GE variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant LE variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant EQ variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant NE variable
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	comparision_expression GT  constant 	
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	comparision_expression LT constant 	
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	comparision_expression GE constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	comparision_expression LE constant
- 	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	comparision_expression EQ constant
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	comparision_expression NE constant
+	comparision_expression NE comparision_expression
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
