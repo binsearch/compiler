@@ -34,7 +34,8 @@ using namespace std;
 typedef enum
 {
 	int_result,
-	void_result
+	void_result,
+	bb_result
 } Result_Enum;
 
 class Eval_Result;

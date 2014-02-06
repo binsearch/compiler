@@ -128,11 +128,11 @@ procedure_body:
 	{
 		#if 1
 		
-		if (return_statement_used_flag == false)
-		{
-			int line = get_line_number();
-			report_error("Atleast 1 basic block should have a return statement", line);
-		}
+		// if (return_statement_used_flag == false)
+		// {
+		// 	int line = get_line_number();
+		// 	report_error("Atleast 1 basic block should have a return statement", line);
+		// }
 
 		current_procedure->set_basic_block_list(*$4);
 
@@ -143,11 +143,11 @@ procedure_body:
 	'{' basic_block_list '}'
 	{
 		#if 1
-		if (return_statement_used_flag == false)
-		{
-			int line = get_line_number();
-			report_error("Atleast 1 basic block should have a return statement", line);
-		}
+		// if (return_statement_used_flag == false)
+		// {
+		// 	int line = get_line_number();
+		// 	report_error("Atleast 1 basic block should have a return statement", line);
+		// }
 
 		current_procedure->set_basic_block_list(*$2);
 
@@ -383,32 +383,32 @@ goto_statement:
 
 comparision_expression:
 
-	variable GT comparision_expression
+	comparision_expression GT variable
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	variable LT comparision_expression
+	comparision_expression LT variable
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	variable GE comparision_expression
+	comparision_expression GE variable
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	variable LE comparision_expression
+	comparision_expression LE variable
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	variable EQ comparision_expression
+	comparision_expression EQ variable
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	variable NE comparision_expression
+	comparision_expression NE variable
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
@@ -534,32 +534,32 @@ comparision_expression:
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	constant GT comparision_expression
+	comparision_expression GT  constant 	
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	constant LT comparision_expression
+	comparision_expression LT constant 	
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	constant GE comparision_expression
+	comparision_expression GE constant
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	constant LE comparision_expression
+	comparision_expression LE constant
+ 	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
+|
+	comparision_expression EQ constant
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}
 |
-	constant EQ comparision_expression
-	{
-		$$=new Relational_Expr_Ast($1,$3,*$2);
-	}
-|
-	constant NE comparision_expression
+	comparision_expression NE constant
 	{
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 	}

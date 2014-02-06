@@ -263,6 +263,7 @@ void Return_Ast::print_ast(ostream & file_buffer)
 Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
 	Eval_Result & result = *new Eval_Result_Value_Int();
+	file_buffer<< AST_SPACE << "Return <NOTHING>\n";
 	return result;
 }
 
@@ -299,18 +300,39 @@ void Relational_Expr_Ast::print_ast(ostream & file_buffer)
 
 Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
-	Eval_Result & result = rhs->evaluate(eval_env, file_buffer);
+	Eval_Result & result1 = rhs->evaluate(eval_env, file_buffer);
+	Eval_Result & result2 = lhs->evaluate(eval_env, file_buffer);
 
-	if (result.is_variable_defined() == false)
-		report_error("Variable should be defined to be on rhs", NOLINE);
+	Eval_Result & result = *new Eval_Result_Value_Int();
 
-	lhs->set_value_of_evaluation(eval_env, result);
+	if(op.compare("GT")==0) {
+		result.set_value(result1.get_value()>result2.get_value());
+	}
+	else if(op.compare("GE")==0) {
+		result.set_value(result1.get_value()>=result2.get_value());
+	}
+	else if(op.compare("EQ")==0) {
+		result.set_value(result1.get_value()==result2.get_value());
+	}
+	else if(op.compare("NE")==0) {
+		result.set_value(result1.get_value()!=result2.get_value());
+	}
+	else if(op.compare("LT")==0) {
+		result.set_value(result1.get_value()<result2.get_value());
+	}
+	else if(op.compare("LE")==0) {
+		result.set_value(result1.get_value()<=result2.get_value());
+	}
+	else {
+		;
+	}
+	// lhs->set_value_of_evaluation(eval_env, result);
 
-	// Print the result
+	// // Print the result
 
-	print_ast(file_buffer);
+	// print_ast(file_buffer);
 
-	lhs->print_value(eval_env, file_buffer);
+	// lhs->print_value(eval_env, file_buffer);
 
 	return result;
 }
@@ -378,9 +400,9 @@ If_Ast::~If_Ast()
 
 void If_Ast::print_ast(ostream & file_buffer)
 {
-	file_buffer<< AST_SPACE << "If_Else statement:\n";
+	file_buffer<< AST_SPACE << "If_Else statement:";
 	comp_exp->print_ast(file_buffer);
-	file_buffer << AST_NODE_SPACE<<"True Successor: "<<true_bb<<endl;
+	file_buffer <<endl<< AST_NODE_SPACE<<"True Successor: "<<true_bb<<endl;
 	file_buffer << AST_NODE_SPACE<<"False Successor: "<<false_bb<<endl;
 }
 
