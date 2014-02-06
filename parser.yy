@@ -63,6 +63,7 @@
 %type <ast_list> assignment_statement_list
 %type <ast> assignment_statement
 %type <ast> comparision_expression
+%type <ast> goto_statement
 %type <ast> variable
 %type <ast> constant
 
@@ -351,7 +352,9 @@ assignment_statement:
 	{}
 |
 	goto_statement	
-	{}
+	{
+		$$ = $1;
+	}
 ;
 
 /* if clause */
@@ -368,7 +371,9 @@ if_block:
 goto_statement:
 	
 	GOTO BASIC_BLOCK ';'
-	{}
+	{
+		$$ = new Goto_Ast($2);
+	}
 ;
 
 comparision_expression:
