@@ -53,7 +53,7 @@ goto	{
 "==" {
 	store_token_name("EQ");
 	ParserBase::STYPE__ * val = getSval();
-	val->string_value = new std::string(matched());
+	val->string_value = new std::string("EQ");
 
 	return Parser::EQ;
 }
@@ -61,7 +61,7 @@ goto	{
 "!=" {
 	store_token_name("NE");
 	ParserBase::STYPE__ * val = getSval();
-	val->string_value = new std::string(matched());
+	val->string_value = new std::string("NE");
 
 	return Parser::NE;
 }
@@ -82,7 +82,7 @@ goto	{
 [<] {
 	store_token_name("LT");
 	ParserBase::STYPE__ * val = getSval();
-	val->string_value = new std::string(matched());
+	val->string_value = new std::string("LT");
 	return Parser::LT;
 }
 
@@ -96,7 +96,7 @@ goto	{
 "<=" {
 	store_token_name("LE");
 	ParserBase::STYPE__ * val = getSval();
-	val->string_value = new std::string(matched());
+	val->string_value = new std::string("LE");
 	return Parser::LE;
 }
 

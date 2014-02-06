@@ -335,6 +335,7 @@ void Goto_Ast::print_ast(ostream & file_buffer)
 	file_buffer << AST_NODE_SPACE<<"Successor: "<<bb_num<<endl;
 }
 
+
 Eval_Result & Goto_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
 	Eval_Result & result = *new Eval_Result_Value_Int();
@@ -358,4 +359,51 @@ Eval_Result & Goto_Ast::evaluate(Local_Environment & eval_env, ostream & file_bu
 	// return result;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+If_Ast::If_Ast(Ast* temp_comp,int temp_true,int temp_false)
+{
+	comp_exp=temp_comp;
+	true_bb=temp_true;
+	false_bb=temp_false;
+}
+
+If_Ast::~If_Ast()
+{
+	delete comp_exp;
+	delete &true_bb;
+	delete &false_bb;
+}
+
+
+void If_Ast::print_ast(ostream & file_buffer)
+{
+	file_buffer<< AST_SPACE << "If_Else statement:\n";
+	comp_exp->print_ast(file_buffer);
+	file_buffer << AST_NODE_SPACE<<"True Successor: "<<true_bb<<endl;
+	file_buffer << AST_NODE_SPACE<<"False Successor: "<<false_bb<<endl;
+}
+
+Eval_Result & If_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+	Eval_Result & result = *new Eval_Result_Value_Int();
+	result.set_value(10);
+
+	return result;
+
+	// Eval_Result & result = rhs->evaluate(eval_env, file_buffer);
+
+	// if (result.is_variable_defined() == false)
+	// 	report_error("Variable should be defined to be on rhs", NOLINE);
+
+	// lhs->set_value_of_evaluation(eval_env, result);
+
+	// // Print the result
+
+	// print_ast(file_buffer);
+
+	// lhs->print_value(eval_env, file_buffer);
+
+	// return result;
+}
 

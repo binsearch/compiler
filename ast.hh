@@ -52,6 +52,7 @@ public:
 	virtual Eval_Result & get_value_of_evaluation(Local_Environment & eval_env);
 	virtual void set_value_of_evaluation(Local_Environment & eval_env, Eval_Result & result);
 	virtual Eval_Result & evaluate(Local_Environment & eval_env, ostream & file_buffer) = 0;
+	// virtual int get_bbnum();
 };
 
 class Assignment_Ast:public Ast
@@ -146,6 +147,21 @@ public:
 
 	void print_ast(ostream & file_buffer);
 	Eval_Result & evaluate(Local_Environment & eval_env, ostream & file_buffer);		
+};
+
+class If_Ast:public Ast
+{
+	Ast* comp_exp;
+	int true_bb;
+	int false_bb;
+
+public:
+	If_Ast(Ast* temp_comp,int temp_true,int temp_false);
+	~If_Ast();
+
+	void print_ast(ostream & file_buffer);
+	Eval_Result & evaluate(Local_Environment & eval_env,ostream & file_buffer);
+
 };
 
 #endif
