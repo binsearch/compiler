@@ -30,7 +30,7 @@
 #define AST_NODE_SPACE "            "
 #define COND_SPACE "            "
 #define COND_NODE_SPACE "               "
-           
+
 using namespace std;
 
 class Ast;
@@ -135,6 +135,17 @@ public:
 	void print_ast(ostream & file_buffer);
 
 	Eval_Result & evaluate(Local_Environment & eval_env, ostream & file_buffer);
+};
+
+class Goto_Ast:public Ast
+{
+	int bb_num;
+public:
+	Goto_Ast(int num);
+	~Goto_Ast();
+
+	void print_ast(ostream & file_buffer);
+	Eval_Result & evaluate(Local_Environment & eval_env, ostream & file_buffer);		
 };
 
 #endif

@@ -280,7 +280,7 @@ Relational_Expr_Ast::~Relational_Expr_Ast()
 {
 	delete lhs;
 	delete rhs;
-	op.clear();
+	delete &op;
 }
 
 
@@ -314,3 +314,48 @@ Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostrea
 
 	return result;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+Goto_Ast::Goto_Ast(int num)
+{
+	bb_num=num;
+}
+
+Goto_Ast::~Goto_Ast()
+{
+	delete &bb_num;
+}
+
+
+void Goto_Ast::print_ast(ostream & file_buffer)
+{
+	file_buffer<< AST_SPACE << "Goto statement:\n";
+
+	file_buffer << AST_NODE_SPACE<<"Successor: "<<bb_num<<endl;
+}
+
+Eval_Result & Goto_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+	Eval_Result & result = *new Eval_Result_Value_Int();
+	result.set_value(bb_num);
+
+	return result;
+
+	// Eval_Result & result = rhs->evaluate(eval_env, file_buffer);
+
+	// if (result.is_variable_defined() == false)
+	// 	report_error("Variable should be defined to be on rhs", NOLINE);
+
+	// lhs->set_value_of_evaluation(eval_env, result);
+
+	// // Print the result
+
+	// print_ast(file_buffer);
+
+	// lhs->print_value(eval_env, file_buffer);
+
+	// return result;
+}
+
+
