@@ -52,11 +52,17 @@ goto	{
 		}
 "==" {
 	store_token_name("EQ");
+	ParserBase::STYPE__ * val = getSval();
+	val->string_value = new std::string(matched());
+
 	return Parser::EQ;
 }
 
 "!=" {
 	store_token_name("NE");
+	ParserBase::STYPE__ * val = getSval();
+	val->string_value = new std::string(matched());
+
 	return Parser::NE;
 }
 
@@ -67,21 +73,30 @@ goto	{
 
 [>] {
 	store_token_name("GT");
+	ParserBase::STYPE__ * val = getSval();
+	val->string_value = new::string("GT");
+
 	return Parser::GT;
 }
 
 [<] {
 	store_token_name("LT");
+	ParserBase::STYPE__ * val = getSval();
+	val->string_value = new std::string(matched());
 	return Parser::LT;
 }
 
 ">=" {
 	store_token_name("GE");
+	ParserBase::STYPE__ * val = getSval();
+	val->string_value = new::string("GE");
 	return Parser::GE;
 }
 
 "<=" {
 	store_token_name("LE");
+	ParserBase::STYPE__ * val = getSval();
+	val->string_value = new std::string(matched());
 	return Parser::LE;
 }
 

@@ -62,6 +62,7 @@
 %type <ast_list> executable_statement_list
 %type <ast_list> assignment_statement_list
 %type <ast> assignment_statement
+%type <ast> comparision_expression
 %type <ast> variable
 %type <ast> constant
 
@@ -341,7 +342,10 @@ assignment_statement:
 	
 |
 	variable ASSIGN_OP comparision_expression ';'
-	{}
+	{
+		$$=new Assignment_Ast($1,$3);
+
+	}
 |
 	if_block
 	{}
@@ -370,113 +374,185 @@ goto_statement:
 comparision_expression:
 
 	variable GT comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable LT comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable GE comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable LE comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable EQ comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable NE comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 
 	variable GT constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable LT constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable GE constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable LE constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable EQ constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable NE constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable GT variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable LT variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable GE variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable LE variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable EQ variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	variable NE variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant GT constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant LT constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant GE constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant LE constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant EQ constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant NE constant
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant GT variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant LT variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant GE variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant LE variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant EQ variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant NE variable
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant GT comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant LT comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant GE comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant LE comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant EQ comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 |
 	constant NE comparision_expression
-	{}
+	{
+		$$=new Relational_Expr_Ast($1,$3,*$2);
+	}
 ;
 
 variable:

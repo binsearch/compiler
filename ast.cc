@@ -267,3 +267,50 @@ Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_
 }
 
 template class Number_Ast<int>;
+
+///////////////////////////////////////////////////////////////////////////////
+Relational_Expr_Ast::Relational_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,string temp_op)
+{
+	lhs = temp_lhs;
+	rhs = temp_rhs;
+	op=temp_op;
+}
+
+Relational_Expr_Ast::~Relational_Expr_Ast()
+{
+	delete lhs;
+	delete rhs;
+	op.clear();
+}
+
+
+void Relational_Expr_Ast::print_ast(ostream & file_buffer)
+{
+	file_buffer <<"\n"<< COND_SPACE << "Condition: "<<op<<"\n";
+
+	file_buffer << COND_NODE_SPACE<<"LHS (";
+	lhs->print_ast(file_buffer);
+	file_buffer << ")\n";
+
+	file_buffer << COND_NODE_SPACE << "RHS (";
+	rhs->print_ast(file_buffer);
+	file_buffer << ")";
+}
+
+Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+	Eval_Result & result = rhs->evaluate(eval_env, file_buffer);
+
+	if (result.is_variable_defined() == false)
+		report_error("Variable should be defined to be on rhs", NOLINE);
+
+	lhs->set_value_of_evaluation(eval_env, result);
+
+	// Print the result
+
+	print_ast(file_buffer);
+
+	lhs->print_value(eval_env, file_buffer);
+
+	return result;
+}

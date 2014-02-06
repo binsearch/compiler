@@ -28,7 +28,9 @@
 
 #define AST_SPACE "         "
 #define AST_NODE_SPACE "            "
-
+#define COND_SPACE "            "
+#define COND_NODE_SPACE "               "
+           
 using namespace std;
 
 class Ast;
@@ -110,6 +112,25 @@ class Return_Ast:public Ast
 public:
 	Return_Ast();
 	~Return_Ast();
+
+	void print_ast(ostream & file_buffer);
+
+	Eval_Result & evaluate(Local_Environment & eval_env, ostream & file_buffer);
+};
+
+
+class Relational_Expr_Ast:public Ast
+{
+	Ast * lhs;
+	Ast * rhs;
+	string op;
+
+public:
+	Relational_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,string temp_op);
+	~Relational_Expr_Ast();
+
+	// Data_Type get_data_type();
+	// bool check_ast(int line);
 
 	void print_ast(ostream & file_buffer);
 
