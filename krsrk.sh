@@ -10,7 +10,7 @@ name="$1c"
 make -f Makefile.cfglp
 echo "krish"
 echo $name1
-./cfglp -d -ast $name1 > out
-./cfglp32 -d -ast $name1 > eout
+./cfglp -d -eval $name1 > out
+./cfglp32 -d -eval $name1 > eout
 
 diff -b -B out eout

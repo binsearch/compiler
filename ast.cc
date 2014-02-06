@@ -300,8 +300,8 @@ void Relational_Expr_Ast::print_ast(ostream & file_buffer)
 
 Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
-	Eval_Result & result1 = rhs->evaluate(eval_env, file_buffer);
-	Eval_Result & result2 = lhs->evaluate(eval_env, file_buffer);
+	Eval_Result & result1 = lhs->evaluate(eval_env, file_buffer);
+	Eval_Result & result2 = rhs->evaluate(eval_env, file_buffer);
 
 	Eval_Result & result = *new Eval_Result_Value_Int();
 
@@ -360,25 +360,14 @@ void Goto_Ast::print_ast(ostream & file_buffer)
 
 Eval_Result & Goto_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
-	Eval_Result & result = *new Eval_Result_Value_Int();
+	Eval_Result & result = *new Eval_Result_Value_BB();
 	result.set_value(bb_num);
+	print_ast(file_buffer);
+	file_buffer<< AST_SPACE << "GOTO (BB "<<bb_num<<")\n";
 
+	// file_buffer << AST_SPACE << "GOTO  "
 	return result;
 
-	// Eval_Result & result = rhs->evaluate(eval_env, file_buffer);
-
-	// if (result.is_variable_defined() == false)
-	// 	report_error("Variable should be defined to be on rhs", NOLINE);
-
-	// lhs->set_value_of_evaluation(eval_env, result);
-
-	// // Print the result
-
-	// print_ast(file_buffer);
-
-	// lhs->print_value(eval_env, file_buffer);
-
-	// return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -408,10 +397,29 @@ void If_Ast::print_ast(ostream & file_buffer)
 
 Eval_Result & If_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
-	Eval_Result & result = *new Eval_Result_Value_Int();
-	result.set_value(10);
 
-	return result;
+	Eval_Result & result = comp_exp->evaluate(eval_env, file_buffer);
+
+	int ret = result.get_value();
+
+	int ans;
+	print_ast(file_buffer);
+	
+	if(ret){
+		file_buffer<<AST_SPACE<<"Condition True : Goto (BB "<<true_bb<<")\n";
+		ans = true_bb;
+	}
+	else{
+		file_buffer<<AST_SPACE<<"Condition False : Goto (BB "<<false_bb<<")\n";
+		ans = false_bb;
+	}
+	
+	Eval_Result & result1 = *new Eval_Result_Value_BB();
+	result1.set_value(ans);
+
+
+	// Condition True : Goto (BB 3)	
+	return result1;
 
 	// Eval_Result & result = rhs->evaluate(eval_env, file_buffer);
 
