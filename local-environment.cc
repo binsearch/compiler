@@ -50,6 +50,53 @@ void Eval_Result::set_variable_status(bool def)
 	report_internal_error("Should not reach, Eval_Result : set_variable_status");
 }
 
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+Eval_Result_Value_BB::Eval_Result_Value_BB()
+{
+	value = 0;
+	defined = false;
+	result_type = bb_result;
+}
+
+Eval_Result_Value_BB::~Eval_Result_Value_BB()
+{ }
+
+void Eval_Result_Value_BB::set_value(int number)
+{
+	value = number;
+	defined = true;
+}
+
+int Eval_Result_Value_BB::get_value()
+{
+	return value;
+}
+
+void Eval_Result_Value_BB::set_variable_status(bool def)
+{
+	defined = def;
+}
+
+bool Eval_Result_Value_BB::is_variable_defined()
+{
+	return defined;
+}
+
+void Eval_Result_Value_BB::set_result_enum(Result_Enum res)
+{
+	result_type = res;
+}
+
+Result_Enum Eval_Result_Value_BB::get_result_enum()
+{
+	return result_type;
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 Eval_Result_Value_Int::Eval_Result_Value_Int()

@@ -39,21 +39,23 @@
 	Procedure * procedure;
 };
 
-%left <string_value> NE EQ
-%left <string_value> GE GT LE LT
-
 
 
 %token <integer_value> INTEGER_NUMBER
 %token <integer_value> BASIC_BLOCK
+%token <float_value> FNUM
 %token <string_value> NAME
 %token RETURN
 %token INTEGER
+%token FLOAT DOUBLE
 %token IF
 %token ELSE
 %token GOTO
 %token ASSIGN_OP
-
+%left <string_value> NE EQ
+%left <string_value> LT LE GT GE
+%left '+' '-'
+%left '*' '/'
 
 
 %type <symbol_table> declaration_statement_list
@@ -76,14 +78,14 @@
 program:
 	declaration_statement_list procedure_name
 	{
-		#if 1
+		#if 0
 		program_object.set_global_table(*$1);
 		return_statement_used_flag = false;				// No return statement in the current procedure till now
 		#endif
 	}
 	procedure_body
 	{
-		#if 1
+		#if 0
 		program_object.set_procedure_map(*current_procedure);
 
 		if ($1)
@@ -95,13 +97,13 @@ program:
 |
 	procedure_name
 	{
-		#if 1
+		#if 0
 		return_statement_used_flag = false;				// No return statement in the current procedure till now
 		#endif
 	}
 	procedure_body
 	{	
-		#if 1
+		#if 0
 		
 		program_object.set_procedure_map(*current_procedure);
 		#endif
@@ -111,7 +113,7 @@ program:
 procedure_name:
 	NAME '(' ')'
 	{	
-		#if 1
+		#if 0
 		current_procedure = new Procedure(void_data_type, *$1);
 		#endif
 	}
@@ -120,14 +122,14 @@ procedure_name:
 procedure_body:
 	'{' declaration_statement_list
 	{	
-		#if 1
+		#if 0
 		current_procedure->set_local_list(*$2);
 		delete $2;
 		#endif
 	}
 	basic_block_list '}'
 	{
-		#if 1
+		#if 0
 		
 		// if (return_statement_used_flag == false)
 		// {
@@ -143,7 +145,7 @@ procedure_body:
 |
 	'{' basic_block_list '}'
 	{
-		#if 1
+		#if 0
 		// if (return_statement_used_flag == false)
 		// {
 		// 	int line = get_line_number();
@@ -160,7 +162,7 @@ procedure_body:
 declaration_statement_list:
 	declaration_statement
 	{
-		#if 1
+		#if 0
 		int line = get_line_number();
 		program_object.variable_in_proc_map_check($1->get_variable_name(), line);
 
@@ -178,7 +180,7 @@ declaration_statement_list:
 |
 	declaration_statement_list declaration_statement
 	{
-		#if 1
+		#if 0
 		// if declaration is local then no need to check in global list
 		// if declaration is global then this list is global list
 
@@ -214,18 +216,23 @@ declaration_statement_list:
 declaration_statement:
 	INTEGER NAME ';'
 	{
-		#if 1
+		#if 0
 		$$ = new Symbol_Table_Entry(*$2, int_data_type);
 
 		delete $2;
 		#endif
 	}
+|
+	FLOAT NAME ';'
+	{}
+|
+	DOUBLE NAME ';'
 ;
 
 basic_block_list:
 	basic_block_list basic_block
 	{
-		#if 1
+		#if 0
 		if (!$2)
 		{
 			int line = get_line_number();
@@ -241,7 +248,7 @@ basic_block_list:
 |
 	basic_block
 	{
-		#if 1
+		#if 0
 		if (!$1)
 		{
 			int line = get_line_number();
@@ -258,7 +265,7 @@ basic_block_list:
 basic_block:
 	BASIC_BLOCK ':' executable_statement_list
 	{
-		#if 1
+		#if 0
 		if ($3 != NULL)
 		$$ = new Basic_Block($1, *$3);
 		else
@@ -276,14 +283,14 @@ basic_block:
 executable_statement_list:
 	assignment_statement_list
 	{
-		#if 1
+		#if 0
 		$$ = $1;
 		#endif
 	}
 |
 	assignment_statement_list RETURN ';'
 	{
-		#if 1
+		#if 0
 		Ast * ret = new Return_Ast();
 
 		return_statement_used_flag = true;					// Current procedure has an occurrence of return statement
@@ -301,14 +308,14 @@ executable_statement_list:
 
 assignment_statement_list:
 	{
-		#if 1
+		#if 0
 		$$ = NULL;
 		#endif
 	}
 |
 	assignment_statement_list assignment_statement
 	{
-		#if 1
+		#if 0
 		if ($1 == NULL)
 			$$ = new list<Ast *>;
 
@@ -325,18 +332,24 @@ assignment_statement_list:
 assignment_statement:
 	variable ASSIGN_OP comparision_expression ';'
 	{
+		#if 0
 		$$=new Assignment_Ast($1,$3);
+		#endif
 
 	}
 |
 	if_block
 	{
+		#if 0
 		$$ = $1;
+		#endif
 	}
 |
 	goto_statement	
 	{
+		#if 0
 		$$ = $1;
+		#endif
 	}
 ;
 
@@ -349,65 +362,133 @@ if_block:
 	ELSE
 	GOTO BASIC_BLOCK ';'
 	{
+		#if 0
 		$$ = new If_Ast($3, $6, $10);
+		#endif
 	}
 ;
 
 goto_statement:
 	
 	GOTO BASIC_BLOCK ';'
-	{
+	{	
+		#if 0
 		$$ = new Goto_Ast($2);
+		#endif
 	}
 ;
 
 comparision_expression:
 	
-	variable
-	{
-		$$ = $1;
-	}
-|
-	constant
-	{
-		$$ = $1;
-	}
-|
+	arith_expression
+	{}
+|	
+	
 	comparision_expression GT comparision_expression
 	{
+		#if 0
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		#endif
 	}
 |
 	comparision_expression LT comparision_expression
 	{
+		#if 0
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		#endif
 	}
 |
 	comparision_expression GE comparision_expression
-	{
+	{	
+		#if 0
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		#endif
 	}
 |
 	comparision_expression LE comparision_expression
 	{
+		#if 0
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		#endif
 	}
 |
 	comparision_expression EQ comparision_expression
 	{
+		#if 0
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		#endif
 	}
 |
 	comparision_expression NE comparision_expression
 	{
+		#if 0
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		#endif
 	}
 ;
+
+arith_expression:
+	
+	'-' variable
+|
+	'-' constant
+|
+	'-' '(' comparision_expression ')'
+|
+	'(' FLOAT ')' variable
+|
+	'(' FLOAT ')' constant
+|
+	'(' FLOAT ')' '(' comparision_expression ')'
+	{}
+|
+	'(' INTEGER ')' variable
+|
+	'(' INTEGER ')' constant
+|
+	'(' INTEGER ')' '(' comparision_expression ')'
+|
+	'(' DOUBLE ')' variable
+|
+	'(' DOUBLE ')' constant
+|
+	'(' DOUBLE ')' '(' comparision_expression ')'	
+|
+	'(' comparision_expression ')'
+	{}	
+|
+	variable
+	{	
+		#if 0
+		$$ = $1;
+		#endif
+	}
+|
+	constant
+	{	
+		#if 0
+		$$ = $1;
+		#endif
+	}
+|
+	arith_expression '*' arith_expression
+	{}
+| 
+	arith_expression '/' arith_expression
+	{}
+|
+	arith_expression '+' arith_expression
+	{}
+|
+	arith_expression '-' arith_expression
+	{}
+;
+
 
 variable:
 	NAME
 	{
-		#if 1
+		#if 0
 		Symbol_Table_Entry var_table_entry;
 
 		if (current_procedure->variable_in_symbol_list_check(*$1))
@@ -432,8 +513,11 @@ variable:
 constant:
 	INTEGER_NUMBER
 	{
-		#if 1
+		#if 0
 		$$ = new Number_Ast<int>($1, int_data_type);
 		#endif
 	}
+|
+	FNUM
+	{}
 ;

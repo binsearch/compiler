@@ -31,6 +31,20 @@ int		{
 			return Parser::INTEGER; 
 		}
 
+float {
+	store_token_name("FLOAT");
+	return Parser::FLOAT;
+}
+double {
+	store_token_name("DOUBLE");
+	return Parser::DOUBLE;
+}
+
+[-]?[[:digit:]]*\.[[:digit:]]+	{
+	store_token_name("FNUM");
+	return Parser::FNUM;
+}
+
 return		{ 
 			store_token_name("RETURN");
 			return Parser::RETURN; 
@@ -113,7 +127,10 @@ goto	{
 	return Parser::BASIC_BLOCK;
 }
 
-
+[/+-/*//] {
+	store_token_name("ARITHOP");
+	return matched()[0];
+}
 [<>:{}();!]	{
 			store_token_name("META CHAR");
 			return matched()[0];

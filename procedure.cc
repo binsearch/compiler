@@ -131,7 +131,23 @@ Eval_Result & Procedure::evaluate(ostream & file_buffer)
 	while (current_bb)
 	{
 		result = &(current_bb->evaluate(eval_env, file_buffer));
-		current_bb = get_next_bb(*current_bb);		
+		int ret = result->get_value();
+		// cout<<current_bb->get_bb_number()<<" "<<ret<<endl; 
+		if(result->get_result_enum() == bb_result){
+			list<Basic_Block *>::iterator i;
+			for(i = basic_block_list.begin(); i != basic_block_list.end(); i++)
+			{	
+				if((*i)->get_bb_number() == ret){
+					// cout<<ret<<" yo "<<(*i)->get_bb_number()<<endl;
+					current_bb = *i;
+					break;
+				}
+			}
+		}
+		else{
+			current_bb = get_next_bb(*current_bb);
+		}
+
 	}
 
 	file_buffer << "\n\n";

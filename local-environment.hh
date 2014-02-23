@@ -103,6 +103,26 @@ public:
 	bool does_variable_exist(string name);
 };
 
+
+class Eval_Result_Value_BB:public Eval_Result_Value
+{
+	int value;
+	bool defined;
+public:
+	Eval_Result_Value_BB();
+	~Eval_Result_Value_BB();
+
+	void set_value(int number);
+	int get_value();
+
+	void set_variable_status(bool def);
+	bool is_variable_defined();
+
+	void set_result_enum(Result_Enum res);
+	Result_Enum get_result_enum();
+};
+
+
 extern Local_Environment interpreter_global_table;
 
 #endif
