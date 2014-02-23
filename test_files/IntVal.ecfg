@@ -1,0 +1,8 @@
+main()
+{
+	int a;
+	float b;
+<bb 2>:
+	a = 2.3;
+	return;
+}
