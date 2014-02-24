@@ -257,13 +257,13 @@ Return_Ast::~Return_Ast()
 
 void Return_Ast::print_ast(ostream & file_buffer)
 {
-	file_buffer << AST_SPACE << "Return <NOTHING>\n";
+	file_buffer << AST_SPACE << "RETURN <NOTHING>\n";
 }
 
 Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
 	Eval_Result & result = *new Eval_Result_Value_Int();
-	file_buffer<< AST_SPACE << "Return <NOTHING>\n";
+	file_buffer<< AST_SPACE << "RETURN <NOTHING>\n";
 	return result;
 }
 
@@ -339,6 +339,98 @@ Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostrea
 
 ///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
+// Arithmetic_Expr_Ast::Arithmetic_Expr_Ast(Ast * temp_lhs,int temp_op)
+// {
+// 	lhs = temp_lhs;
+// 	op='*';
+// 	op+=temp_op;
+// 	rhs=NULL;
+// }
+
+Arithmetic_Expr_Ast::Arithmetic_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,int temp_op)
+{
+	lhs = temp_lhs;
+	rhs = temp_rhs;
+	op='*';
+	op+=temp_op;
+}
+
+Arithmetic_Expr_Ast::~Arithmetic_Expr_Ast()
+{
+	delete lhs;
+	delete rhs;
+	delete &op;
+}
+
+
+void Arithmetic_Expr_Ast::print_ast(ostream & file_buffer)
+{
+	file_buffer <<"\n"<< ARITH_SPACE << "Arith: ";
+
+	if(op=='*')
+		file_buffer<<"MULT";
+	else if(op=='+')
+		file_buffer<<"PLUS";
+	else if(op=='-')
+		file_buffer<<"MINUS";
+	else
+		file_buffer<<"DIV";
+
+	file_buffer<<"\n";
+
+	if(rhs!=NULL) {
+		file_buffer << ARITH_NODE_SPACE<<"LHS (";
+		lhs->print_ast(file_buffer);
+		file_buffer << ")\n";
+
+		file_buffer << ARITH_NODE_SPACE << "RHS (";
+		rhs->print_ast(file_buffer);
+		file_buffer << ")";
+	}
+
+}
+
+Eval_Result & Arithmetic_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+	Eval_Result & result1 = lhs->evaluate(eval_env, file_buffer);
+	// Eval_Result & result2 = rhs->evaluate(eval_env, file_buffer);
+
+	// Eval_Result & result = *new Eval_Result_Value_Int();
+
+	// if(op.compare("GT")==0) {
+	// 	result.set_value(result1.get_value()>result2.get_value());
+	// }
+	// else if(op.compare("GE")==0) {
+	// 	result.set_value(result1.get_value()>=result2.get_value());
+	// }
+	// else if(op.compare("EQ")==0) {
+	// 	result.set_value(result1.get_value()==result2.get_value());
+	// }
+	// else if(op.compare("NE")==0) {
+	// 	result.set_value(result1.get_value()!=result2.get_value());
+	// }
+	// else if(op.compare("LT")==0) {
+	// 	result.set_value(result1.get_value()<result2.get_value());
+	// }
+	// else if(op.compare("LE")==0) {
+	// 	result.set_value(result1.get_value()<=result2.get_value());
+	// }
+	// else {
+	// 	;
+	// }
+	// lhs->set_value_of_evaluation(eval_env, result);
+
+	// // Print the result
+
+	// print_ast(file_buffer);
+
+	// lhs->print_value(eval_env, file_buffer);
+
+	return result1;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 Goto_Ast::Goto_Ast(int num)
 {
 	bb_num=num;
