@@ -35,9 +35,19 @@ int Eval_Result::get_value()
 	report_internal_error("Should not reach, Eval_Result : get_value");
 }
 
+float Eval_Result::float_get_value()
+{
+	report_internal_error("Should not reach, Eval_Result : float_get_value");
+}
+
 void Eval_Result::set_value(int number)
 {
 	report_internal_error("Should not reach, Eval_Result : set_value");
+}
+
+void Eval_Result::float_set_value(float number)
+{
+	report_internal_error("Should not reach, Eval_Result : float_set_value");
 }
 
 bool Eval_Result::is_variable_defined()
@@ -71,6 +81,17 @@ void Eval_Result_Value_BB::set_value(int number)
 }
 
 int Eval_Result_Value_BB::get_value()
+{
+	return value;
+}
+
+void Eval_Result_Value_BB::float_set_value(float number)
+{
+	value = number;
+	defined = true;
+}
+
+float Eval_Result_Value_BB::float_get_value()
 {
 	return value;
 }
@@ -120,6 +141,17 @@ int Eval_Result_Value_Int::get_value()
 	return value;
 }
 
+void Eval_Result_Value_Int::float_set_value(float number)
+{
+	value = number;
+	defined = true;
+}
+
+float Eval_Result_Value_Int::float_get_value()
+{
+	return value;
+}
+
 void Eval_Result_Value_Int::set_variable_status(bool def)
 {
 	defined = def;
@@ -136,6 +168,62 @@ void Eval_Result_Value_Int::set_result_enum(Result_Enum res)
 }
 
 Result_Enum Eval_Result_Value_Int::get_result_enum()
+{
+	return result_type;
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+
+Eval_Result_Value_Float::Eval_Result_Value_Float()
+{
+	value = 0;
+	defined = false;
+	result_type = float_result;
+}
+
+Eval_Result_Value_Float::~Eval_Result_Value_Float()
+{ }
+
+void Eval_Result_Value_Float::set_value(int number)
+{
+	value = number;
+	defined = true;
+}
+
+int Eval_Result_Value_Float::get_value()
+{
+	return value;
+}
+
+void Eval_Result_Value_Float::float_set_value(float number)
+{
+	value = number;
+	defined = true;
+}
+
+float Eval_Result_Value_Float::float_get_value()
+{
+	return value;
+}
+
+void Eval_Result_Value_Float::set_variable_status(bool def)
+{
+	defined = def;
+}
+
+bool Eval_Result_Value_Float::is_variable_defined()
+{
+	return defined;
+}
+
+void Eval_Result_Value_Float::set_result_enum(Result_Enum res)
+{
+	result_type = res;
+}
+
+Result_Enum Eval_Result_Value_Float::get_result_enum()
 {
 	return result_type;
 }

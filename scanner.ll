@@ -41,9 +41,13 @@ double {
 }
 
 [-]?[[:digit:]]*\.[[:digit:]]+	{
-	store_token_name("FNUM");
-	return Parser::FNUM;
-}
+				store_token_name("FNUM");
+
+				ParserBase::STYPE__ * val = getSval();
+				val->float_value = atof(matched().c_str());
+
+				return Parser::FLOAT_NUMBER; 
+			}
 
 return		{ 
 			store_token_name("RETURN");

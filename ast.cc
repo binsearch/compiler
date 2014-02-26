@@ -23,6 +23,7 @@
 
 #include<iostream>
 #include<fstream>
+#include<iomanip>
 
 using namespace std;
 
@@ -159,6 +160,8 @@ void Name_Ast::print_value(Local_Environment & eval_env, ostream & file_buffer)
 	{
 		if (loc_var_val->get_result_enum() == int_result)
 			file_buffer << loc_var_val->get_value() << "\n";
+		else if (loc_var_val->get_result_enum() == float_result)
+			file_buffer << loc_var_val->float_get_value() << "\n";
 		else
 			report_internal_error("Result type can only be int and float");
 	}
@@ -171,6 +174,13 @@ void Name_Ast::print_value(Local_Environment & eval_env, ostream & file_buffer)
 				file_buffer << "0\n";
 			else
 				file_buffer << glob_var_val->get_value() << "\n";
+		}
+		else if (glob_var_val->get_result_enum() == float_result)
+		{
+			if (glob_var_val == NULL)
+				file_buffer << "0\n";
+			else
+				file_buffer << glob_var_val->float_get_value() << "\n";
 		}
 		else
 			report_internal_error("Result type can only be int and float");
@@ -197,6 +207,12 @@ void Name_Ast::set_value_of_evaluation(Local_Environment & eval_env, Eval_Result
 	{
 		i = new Eval_Result_Value_Int();
 	 	i->set_value(result.get_value());
+	}
+
+	if (result.get_result_enum() == float_result)
+	{
+		i = new Eval_Result_Value_Float();
+	 	i->set_value(result.float_get_value());
 	}
 
 	if (eval_env.does_variable_exist(variable_name))
@@ -232,7 +248,12 @@ Data_Type Number_Ast<DATA_TYPE>::get_data_type()
 template <class DATA_TYPE>
 void Number_Ast<DATA_TYPE>::print_ast(ostream & file_buffer)
 {
-	file_buffer << "Num : " << constant;
+	file_buffer << "Num : ";
+
+	if(node_data_type==float_data_type)
+		file_buffer<<fixed<<setprecision(2)<<constant;
+	else
+		file_buffer<<constant;
 }
 
 template <class DATA_TYPE>
@@ -244,6 +265,13 @@ Eval_Result & Number_Ast<DATA_TYPE>::evaluate(Local_Environment & eval_env, ostr
 		result.set_value(constant);
 
 		return result;
+	}
+	if(node_data_type==float_data_type)
+	{
+		Eval_Result & result = *new Eval_Result_Value_Float();
+		result.float_set_value(constant);
+
+		return result;		
 	}
 }
 
@@ -257,18 +285,18 @@ Return_Ast::~Return_Ast()
 
 void Return_Ast::print_ast(ostream & file_buffer)
 {
-	file_buffer << AST_SPACE << "RETURN <NOTHING>\n";
+	file_buffer << AST_SPACE << "Return <NOTHING>\n";
 }
 
 Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
 	Eval_Result & result = *new Eval_Result_Value_Int();
-	file_buffer<< AST_SPACE << "RETURN <NOTHING>\n";
+	file_buffer<< AST_SPACE << "Return <NOTHING>\n";
 	return result;
 }
 
 template class Number_Ast<int>;
-
+template class Number_Ast<float>;
 ///////////////////////////////////////////////////////////////////////////////
 Relational_Expr_Ast::Relational_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,string temp_op)
 {
@@ -352,8 +380,8 @@ Arithmetic_Expr_Ast::Arithmetic_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,int temp
 {
 	lhs = temp_lhs;
 	rhs = temp_rhs;
-	op='*';
-	op+=temp_op;
+	// op='*';
+	op=temp_op;
 }
 
 Arithmetic_Expr_Ast::~Arithmetic_Expr_Ast()
@@ -366,20 +394,32 @@ Arithmetic_Expr_Ast::~Arithmetic_Expr_Ast()
 
 void Arithmetic_Expr_Ast::print_ast(ostream & file_buffer)
 {
-	file_buffer <<"\n"<< ARITH_SPACE << "Arith: ";
+	if(rhs==NULL) {
+		if(op==0) {
+			file_buffer <<"\n"<< ARITH_SPACE << "Arith: UMINUS\n";
+			file_buffer << ARITH_NODE_SPACE<<"LHS (";
+			lhs->print_ast(file_buffer);
+			file_buffer << ")";
+		}
+		else {
+			lhs->print_ast(file_buffer);
+		}
+	}
+	else {
+		file_buffer <<"\n"<< ARITH_SPACE << "Arith: ";
 
-	if(op=='*')
-		file_buffer<<"MULT";
-	else if(op=='+')
-		file_buffer<<"PLUS";
-	else if(op=='-')
-		file_buffer<<"MINUS";
-	else
-		file_buffer<<"DIV";
+		if(op==0)
+			file_buffer<<"MULT";
+		else if(op==2)
+			file_buffer<<"PLUS";
+		else if(op==3)
+			file_buffer<<"MINUS";
+		else if(op==1)
+			file_buffer<<"DIV";
+		else
+			;
+		file_buffer<<"\n";
 
-	file_buffer<<"\n";
-
-	if(rhs!=NULL) {
 		file_buffer << ARITH_NODE_SPACE<<"LHS (";
 		lhs->print_ast(file_buffer);
 		file_buffer << ")\n";
@@ -393,33 +433,56 @@ void Arithmetic_Expr_Ast::print_ast(ostream & file_buffer)
 
 Eval_Result & Arithmetic_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
-	Eval_Result & result1 = lhs->evaluate(eval_env, file_buffer);
-	// Eval_Result & result2 = rhs->evaluate(eval_env, file_buffer);
+	if(rhs==NULL) {
+		if(op==0) {
+			Eval_Result & result=lhs->evaluate(eval_env,file_buffer);
+			if(result.get_result_enum()==int_result)
+				result.set_value(-result.get_value());
+			else if(result.get_result_enum()==float_result)
+				result.float_set_value(-result.float_get_value());
+			else
+				;
+			return result;
+		}
+	}
+	else {
+		Eval_Result & result1 = lhs->evaluate(eval_env, file_buffer);
+		Eval_Result & result2 = rhs->evaluate(eval_env, file_buffer);
+		Eval_Result & result = *new Eval_Result_Value_Int();
+		
+		if(result1.get_result_enum()==int_result && result2.get_result_enum()==int_result) {
+			Eval_Result & result = *new Eval_Result_Value_Int();
+			if(op==0)
+				result.set_value(result1.get_value() * result2.get_value());
+			else if(op==1)
+				result.set_value(result1.get_value() / result2.get_value());
+			else if(op==2)
+				result.set_value(result1.get_value() + result2.get_value());
+			else if(op==3)
+				result.set_value(result1.get_value() - result2.get_value());
+			else
+				;
+			return result;
+		}
+		else if(result1.get_result_enum()==float_result && result2.get_result_enum()==float_result) {
+			Eval_Result & result = *new Eval_Result_Value_Float();
+			if(op==0)
+				result.float_set_value(result1.float_get_value() * result2.float_get_value());
+			else if(op==1)
+				result.float_set_value(result1.float_get_value() / result2.float_get_value());
+			else if(op==2)
+				result.float_set_value(result1.float_get_value() + result2.float_get_value());
+			else if(op==3)
+				result.float_set_value(result1.float_get_value() - result2.float_get_value());
+			else
+				;
+			return result;
+		}
+		else {
+			report_internal_error("The operands should be of the same type.");		
+		}
+	}
 
-	// Eval_Result & result = *new Eval_Result_Value_Int();
-
-	// if(op.compare("GT")==0) {
-	// 	result.set_value(result1.get_value()>result2.get_value());
-	// }
-	// else if(op.compare("GE")==0) {
-	// 	result.set_value(result1.get_value()>=result2.get_value());
-	// }
-	// else if(op.compare("EQ")==0) {
-	// 	result.set_value(result1.get_value()==result2.get_value());
-	// }
-	// else if(op.compare("NE")==0) {
-	// 	result.set_value(result1.get_value()!=result2.get_value());
-	// }
-	// else if(op.compare("LT")==0) {
-	// 	result.set_value(result1.get_value()<result2.get_value());
-	// }
-	// else if(op.compare("LE")==0) {
-	// 	result.set_value(result1.get_value()<=result2.get_value());
-	// }
-	// else {
-	// 	;
-	// }
-	// lhs->set_value_of_evaluation(eval_env, result);
 
 	// // Print the result
 
@@ -427,7 +490,7 @@ Eval_Result & Arithmetic_Expr_Ast::evaluate(Local_Environment & eval_env, ostrea
 
 	// lhs->print_value(eval_env, file_buffer);
 
-	return result1;
+	// return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

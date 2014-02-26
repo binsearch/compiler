@@ -54,7 +54,7 @@ Production Rules
 51: arith_expression ('-') ->  arith_expression '-' arith_expression
 52: variable (NAME) ->  NAME
 53: constant (INTEGER_NUMBER) ->  INTEGER_NUMBER
-54: constant (FNUM) ->  FNUM
+54: constant (FLOAT_NUMBER) ->  FLOAT_NUMBER
 55: program_$ ->  program
 
 
@@ -63,7 +63,7 @@ Symbolic Terminal tokens:
        EOF
    257: INTEGER_NUMBER
    258: BASIC_BLOCK
-   259: FNUM
+   259: FLOAT_NUMBER
    260: NAME
    261: RETURN
    262: INTEGER
@@ -377,7 +377,7 @@ State 45:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 46:
@@ -390,7 +390,7 @@ State 46:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 47:
@@ -437,7 +437,7 @@ State 50:
   2:   On '(' to state 71
   3:   On NAME to state 41
   4:   On INTEGER_NUMBER to state 54
-  5:   On FNUM to state 55
+  5:   On FLOAT_NUMBER to state 55
 
 
 State 51:
@@ -462,7 +462,7 @@ State 51:
   8:   On constant to state 53
   9:   On NAME to state 41
   10:   On INTEGER_NUMBER to state 54
-  11:   On FNUM to state 55
+  11:   On FLOAT_NUMBER to state 55
 
 
 State 52:
@@ -481,8 +481,8 @@ State 54:
 
 
 State 55:
-54: constant -> FNUM  . 
-  Reduce by 54: constant -> FNUM  . 
+54: constant -> FLOAT_NUMBER  . 
+  Reduce by 54: constant -> FLOAT_NUMBER  . 
 
 
 State 56:
@@ -522,7 +522,7 @@ State 59:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 60:
@@ -535,7 +535,7 @@ State 60:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 61:
@@ -548,7 +548,7 @@ State 61:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 62:
@@ -561,7 +561,7 @@ State 62:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 63:
@@ -574,7 +574,7 @@ State 63:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 64:
@@ -587,7 +587,7 @@ State 64:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 65:
@@ -599,7 +599,7 @@ State 65:
   4:   On constant to state 53
   5:   On NAME to state 41
   6:   On INTEGER_NUMBER to state 54
-  7:   On FNUM to state 55
+  7:   On FLOAT_NUMBER to state 55
 
 
 State 66:
@@ -611,7 +611,7 @@ State 66:
   4:   On constant to state 53
   5:   On NAME to state 41
   6:   On INTEGER_NUMBER to state 54
-  7:   On FNUM to state 55
+  7:   On FLOAT_NUMBER to state 55
 
 
 State 67:
@@ -623,7 +623,7 @@ State 67:
   4:   On constant to state 53
   5:   On NAME to state 41
   6:   On INTEGER_NUMBER to state 54
-  7:   On FNUM to state 55
+  7:   On FLOAT_NUMBER to state 55
 
 
 State 68:
@@ -635,7 +635,7 @@ State 68:
   4:   On constant to state 53
   5:   On NAME to state 41
   6:   On INTEGER_NUMBER to state 54
-  7:   On FNUM to state 55
+  7:   On FLOAT_NUMBER to state 55
 
 
 State 69:
@@ -658,7 +658,7 @@ State 71:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 72:
@@ -884,7 +884,7 @@ State 88:
   2:   On '(' to state 96
   3:   On NAME to state 41
   4:   On INTEGER_NUMBER to state 54
-  5:   On FNUM to state 55
+  5:   On FLOAT_NUMBER to state 55
 
 
 State 89:
@@ -896,7 +896,7 @@ State 89:
   2:   On '(' to state 99
   3:   On NAME to state 41
   4:   On INTEGER_NUMBER to state 54
-  5:   On FNUM to state 55
+  5:   On FLOAT_NUMBER to state 55
 
 
 State 90:
@@ -908,7 +908,7 @@ State 90:
   2:   On '(' to state 102
   3:   On NAME to state 41
   4:   On INTEGER_NUMBER to state 54
-  5:   On FNUM to state 55
+  5:   On FLOAT_NUMBER to state 55
 
 
 State 91:
@@ -946,7 +946,7 @@ State 96:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 97:
@@ -969,7 +969,7 @@ State 99:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 100:
@@ -992,7 +992,7 @@ State 102:
   5:   On constant to state 53
   6:   On NAME to state 41
   7:   On INTEGER_NUMBER to state 54
-  8:   On FNUM to state 55
+  8:   On FLOAT_NUMBER to state 55
 
 
 State 103:

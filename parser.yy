@@ -29,6 +29,7 @@
 %union 
 {
 	int integer_value;
+	float float_value;
 	std::string * string_value;
 	list<Ast *> * ast_list;
 	Ast * ast;
@@ -43,7 +44,7 @@
 
 %token <integer_value> INTEGER_NUMBER
 %token <integer_value> BASIC_BLOCK
-%token <float_value> FNUM
+%token <float_value> FLOAT_NUMBER
 %token <string_value> NAME
 %token RETURN
 %token INTEGER
@@ -233,7 +234,7 @@ declaration_statement:
 |
 	DOUBLE NAME ';'
 	{
-		#if 1
+		#if 0
 		$$=new Symbol_Table_Entry(*$2,double_data_type);
 		#endif
 	}
@@ -445,85 +446,85 @@ arith_expression:
 	
 	'-' variable
 	{
-		#if 0
-		$$=new Arithmetic_Expr_Ast($2,3);
+		#if 1
+		$$=new Arithmetic_Expr_Ast($2,NULL,0);
 		#endif
 	}
 |
 	'-' constant
 	{
-		#if 0
-		$$=new Arithmetic_Expr_Ast($2,3);
+		#if 1
+		$$=new Arithmetic_Expr_Ast($2,NULL,0);
 		#endif
 	}
 |
 	'-' '(' comparision_expression ')'
 	{
-		#if 0
-		$$=new Arithmetic_Expr_Ast(*$1,$3);
+		#if 1
+		$$=new Arithmetic_Expr_Ast($3,NULL,0);
 		#endif
 	}
 |
 	'(' FLOAT ')' variable 
 	{
 		#if 1
-
+		$$=new Arithmetic_Expr_Ast($4,NULL,1);
 		#endif
 	}
 |
 	'(' FLOAT ')' constant
 	{
 		#if 1
-
+		$$=new Arithmetic_Expr_Ast($4,NULL,1);
 		#endif
 	}
 |
 	'(' FLOAT ')' '(' comparision_expression ')'
 	{
 		#if 1
-
+		$$=new Arithmetic_Expr_Ast($5,NULL,1);
 		#endif
 	}
 |
 	'(' INTEGER ')' variable
 	{
 		#if 1
-
+		$$=new Arithmetic_Expr_Ast($4,NULL,2);
 		#endif
 	}
 |
 	'(' INTEGER ')' constant
 	{
 		#if 1
-
+		$$=new Arithmetic_Expr_Ast($4,NULL,2);
 		#endif
 	}
 |
 	'(' INTEGER ')' '(' comparision_expression ')'
 	{
 		#if 1
-
+		$$=new Arithmetic_Expr_Ast($5,NULL,2);
 		#endif
 	}
 |
 	'(' DOUBLE ')' variable
 	{
 		#if 1
-
+		$$=new Arithmetic_Expr_Ast($4,NULL,1);
 		#endif
 	}
 |
 	'(' DOUBLE ')' constant
 	{
 		#if 1
-
+		$$=new Arithmetic_Expr_Ast($4,NULL,1);
 		#endif
 	}
 |
 	'(' DOUBLE ')' '(' comparision_expression ')'	
 	{
 		#if 1
-
+		$$=new Arithmetic_Expr_Ast($5,NULL,1);
 		#endif
 	}
 |
@@ -560,7 +561,7 @@ arith_expression:
 	arith_expression '/' arith_expression
 	{
 		#if 1
-		$$=new Arithmetic_Expr_Ast($1,$3,5);
+		$$=new Arithmetic_Expr_Ast($1,$3,1);
 		#endif
 	}
 
@@ -568,7 +569,7 @@ arith_expression:
 	arith_expression '+' arith_expression
 	{
 		#if 1
-		$$=new Arithmetic_Expr_Ast($1,$3,1);
+		$$=new Arithmetic_Expr_Ast($1,$3,2);
 		#endif
 	}
 
@@ -616,6 +617,10 @@ constant:
 		#endif
 	}
 |
-	FNUM
-	{}
+	FLOAT_NUMBER
+	{
+		#if 1
+		$$= new Number_Ast<float> ($1,float_data_type);
+		#endif
+	}
 ;

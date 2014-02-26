@@ -3,68 +3,28 @@ Program:
       Basic_Block 2
          Asgn:
             LHS (Name : a)
-            RHS (Num : 3)
+            RHS (Num : 2)
          Asgn:
             LHS (Name : b)
             RHS (Num : 4)
          Asgn:
-            LHS (Name : c)
-            RHS (Num : 5)
-         Asgn:
-            LHS (Name : d)
-            RHS (
-            Arith: DIV
+            LHS (Name : iftmp0)
+            RHS (Num : 2)
+         If_Else statement:
+            Condition: NE
                LHS (Name : a)
-               RHS (
-            Arith: PLUS
-               LHS (Name : b)
-               RHS (Name : c)))
+               RHS (Num : 0)
+            True Successor: 3
+            False Successor: 4
+      Basic_Block 3
          Asgn:
-            LHS (Name : e)
-            RHS (
-            Arith: PLUS
-               LHS (
-            Arith: DIV
-               LHS (Name : a)
-               RHS (Name : b))
-               RHS (Name : c))
+            LHS (Name : iftmp3)
+            RHS (Name : b)
+         Goto statement:
+            Successor: 5
+      Basic_Block 4
          Asgn:
-            LHS (Name : f)
-            RHS (
-            Arith: DIV
-               LHS (
-            Arith: PLUS
-               LHS (Name : a)
-               RHS (Name : b))
-               RHS (Name : c))
-         Asgn:
-            LHS (Name : g)
-            RHS (
-            Arith: PLUS
-               LHS (
-            Arith: MINUS
-               LHS (Name : b)
-               RHS (Name : c))
-               RHS (Name : a))
-         Asgn:
-            LHS (Name : h)
-            RHS (
-            Arith: DIV
-               LHS (
-            Arith: MULT
-               LHS (
-            Arith: PLUS
-               LHS (Name : a)
-               RHS (Name : b))
-               RHS (Name : c))
-               RHS (
-            Condition: GT
-               LHS (
-            Arith: MINUS
-               LHS (Name : e)
-               RHS (Name : f))
-               RHS (
-            Arith: MINUS
-               LHS (Name : a)
-               RHS (Name : b))))
-         RETURN <NOTHING>
+            LHS (Name : iftmp3)
+            RHS (Name : iftmp0)
+      Basic_Block 5
+         Return <NOTHING>

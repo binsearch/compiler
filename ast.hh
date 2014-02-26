@@ -144,7 +144,7 @@ class Arithmetic_Expr_Ast:public Ast
 {
 	Ast * lhs;
 	Ast * rhs;
-	char op;
+	int op;
 
 public:
 	// Arithmetic_Expr_Ast(Ast * temp_lhs,int temp_op);
