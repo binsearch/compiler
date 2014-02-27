@@ -307,7 +307,8 @@ void Local_Environment::print(ostream & file_buffer)
 				if(vi->get_result_enum()==int_result)
 					file_buffer << VAR_SPACE << (*i).first << " : " << vi->get_value() << "\n";
 				else
-					file_buffer << VAR_SPACE << (*i).first << " : " << fixed << setprecision(2)<<vi->float_get_value() << "\n";
+					file_buffer << VAR_SPACE << (*i).first << " : " <<vi->float_get_value() << "\n";
+					// file_buffer << VAR_SPACE << (*i).first << " : " << fixed << setprecision(2)<<vi->float_get_value() << "\n";
 			}
 		}
 	}

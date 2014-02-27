@@ -406,6 +406,7 @@ comparision_expression:
 	{
 		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -413,6 +414,7 @@ comparision_expression:
 	{
 		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -420,6 +422,7 @@ comparision_expression:
 	{	
 		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -427,6 +430,7 @@ comparision_expression:
 	{
 		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -434,6 +438,7 @@ comparision_expression:
 	{
 		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -441,6 +446,7 @@ comparision_expression:
 	{
 		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 ;
@@ -523,6 +529,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -530,6 +537,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -537,6 +545,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($5,NULL,1);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |

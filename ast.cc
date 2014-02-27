@@ -91,7 +91,21 @@ bool Assignment_Ast::check_ast(int line)
 		node_data_type = lhs->get_data_type();
 		return true;
 	}
-
+	// lhs->print_ast(cout);
+	// if(lhs->get_data_type()==int_data_type)
+	// 	cout<<"\nint\n";
+	// else if(lhs->get_data_type()==float_data_type)
+	// 	cout<<"\nfloat\n";
+	// else
+	// 	cout<<"\nwhat\n";
+	// cout<<"\nright\n";
+	// rhs->print_ast(cout);
+	// if(rhs->get_data_type()==int_data_type)
+	// 	cout<<"\nint\n";
+	// else if(rhs->get_data_type()==float_data_type) 
+	// 	cout<<"\nfloat\n";
+	// else
+	// 	cout<<"\nwhat\n";
 	report_error("Assignment statement data type not compatible", line);
 }
 
@@ -325,7 +339,7 @@ bool Relational_Expr_Ast::check_ast(int line)
 {
 	if (lhs->get_data_type() == rhs->get_data_type())
 	{
-		node_data_type = lhs->get_data_type();
+		node_data_type = int_data_type;
 		return true;
 	}
 
@@ -353,22 +367,41 @@ Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostrea
 	Eval_Result & result = *new Eval_Result_Value_Int();
 
 	if(op.compare("GT")==0) {
-		result.set_value(result1.get_value()>result2.get_value());
+		if(result1.get_result_enum()==int_result)
+			result.set_value(result1.get_value()>result2.get_value());
+		else
+			result.set_value(result1.float_get_value()>result2.float_get_value());
 	}
 	else if(op.compare("GE")==0) {
-		result.set_value(result1.get_value()>=result2.get_value());
+		if(result1.get_result_enum()==int_result)
+			result.set_value(result1.get_value()>=result2.get_value());
+		else
+			result.set_value(result1.float_get_value()>=result2.float_get_value());
 	}
 	else if(op.compare("EQ")==0) {
-		result.set_value(result1.get_value()==result2.get_value());
+		if(result1.get_result_enum()==int_result)
+			result.set_value(result1.get_value()==result2.get_value());
+		else
+			result.set_value(result1.float_get_value()==result2.float_get_value());
 	}
 	else if(op.compare("NE")==0) {
-		result.set_value(result1.get_value()!=result2.get_value());
+		if(result1.get_result_enum()==int_result)
+			result.set_value(result1.get_value()!=result2.get_value());
+		else
+			result.set_value(result1.float_get_value()!=result2.float_get_value());
 	}
 	else if(op.compare("LT")==0) {
-		result.set_value(result1.get_value()<result2.get_value());
+		if(result1.get_result_enum()==int_result)
+			result.set_value(result1.get_value()<result2.get_value());
+		else
+			result.set_value(result1.float_get_value()<result2.float_get_value());
 	}
 	else if(op.compare("LE")==0) {
-		result.set_value(result1.get_value()<=result2.get_value());
+		if(result1.get_result_enum()==int_result)
+			result.set_value(result1.get_value()<=result2.get_value());
+		else
+			result.set_value(result1.float_get_value()<=result2.float_get_value());
+
 	}
 	else {
 		;
