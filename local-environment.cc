@@ -23,7 +23,7 @@
 
 #include<string>
 #include<fstream>
-
+#include<iomanip>
 using namespace std;
 
 #include"local-environment.hh"
@@ -112,6 +112,62 @@ void Eval_Result_Value_BB::set_result_enum(Result_Enum res)
 }
 
 Result_Enum Eval_Result_Value_BB::get_result_enum()
+{
+	return result_type;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+Eval_Result_Value_Return::Eval_Result_Value_Return()
+{
+	value = 0;
+	defined = true;
+	result_type = return_result;
+}
+
+Eval_Result_Value_Return::~Eval_Result_Value_Return()
+{ }
+
+void Eval_Result_Value_Return::set_value(int number)
+{
+	value = number;
+	defined = true;
+}
+
+int Eval_Result_Value_Return::get_value()
+{
+	return value;
+}
+
+void Eval_Result_Value_Return::float_set_value(float number)
+{
+	value = number;
+	defined = true;
+}
+
+float Eval_Result_Value_Return::float_get_value()
+{
+	return value;
+}
+
+void Eval_Result_Value_Return::set_variable_status(bool def)
+{
+	defined = def;
+}
+
+bool Eval_Result_Value_Return::is_variable_defined()
+{
+	return defined;
+}
+
+void Eval_Result_Value_Return::set_result_enum(Result_Enum res)
+{
+	result_type = res;
+}
+
+Result_Enum Eval_Result_Value_Return::get_result_enum()
 {
 	return result_type;
 }
@@ -247,8 +303,12 @@ void Local_Environment::print(ostream & file_buffer)
 			if (vi->is_variable_defined() == false)
 				file_buffer << VAR_SPACE << (*i).first << " : undefined" << "\n";
 		
-			else
-				file_buffer << VAR_SPACE << (*i).first << " : " << vi->get_value() << "\n";
+			else {
+				if(vi->get_result_enum()==int_result)
+					file_buffer << VAR_SPACE << (*i).first << " : " << vi->get_value() << "\n";
+				else
+					file_buffer << VAR_SPACE << (*i).first << " : " << fixed << setprecision(2)<<vi->float_get_value() << "\n";
+			}
 		}
 	}
 }

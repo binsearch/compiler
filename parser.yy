@@ -344,7 +344,10 @@ assignment_statement:
 	variable ASSIGN_OP comparision_expression ';'
 	{
 		#if 1
+		
 		$$=new Assignment_Ast($1,$3);
+		$$->check_ast(get_line_number());
+		
 		#endif
 
 	}
@@ -448,6 +451,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($2,NULL,0);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -455,6 +459,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($2,NULL,0);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -462,6 +467,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($3,NULL,0);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -469,6 +475,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -476,6 +483,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -483,6 +491,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($5,NULL,1);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -490,6 +499,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($4,NULL,2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -497,6 +507,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($4,NULL,2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -504,6 +515,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($5,NULL,2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 |
@@ -554,6 +566,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($1,$3,0);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 
@@ -562,6 +575,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($1,$3,1);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 
@@ -570,6 +584,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($1,$3,2);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 
@@ -578,6 +593,7 @@ arith_expression:
 	{
 		#if 1
 		$$=new Arithmetic_Expr_Ast($1,$3, 3);
+		$$->check_ast(get_line_number());
 		#endif
 	}
 

@@ -132,8 +132,8 @@ public:
 	Relational_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,string temp_op);
 	~Relational_Expr_Ast();
 
-	// Data_Type get_data_type();
-	// bool check_ast(int line);
+	Data_Type get_data_type();
+	bool check_ast(int line);
 
 	void print_ast(ostream & file_buffer);
 
@@ -147,12 +147,11 @@ class Arithmetic_Expr_Ast:public Ast
 	int op;
 
 public:
-	// Arithmetic_Expr_Ast(Ast * temp_lhs,int temp_op);
 	Arithmetic_Expr_Ast(Ast * temp_lhs,Ast* temp_rhs,int temp_op);
 	~Arithmetic_Expr_Ast();
 
-	// Data_Type get_data_type();
-	// bool check_ast(int line);
+	Data_Type get_data_type();
+	bool check_ast(int line);
 
 	void print_ast(ostream & file_buffer);
 

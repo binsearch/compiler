@@ -150,6 +150,8 @@ void Name_Ast::print_value(Local_Environment & eval_env, ostream & file_buffer)
 {
 	Eval_Result_Value * loc_var_val = eval_env.get_variable_value(variable_name);
 	Eval_Result_Value * glob_var_val = interpreter_global_table.get_variable_value(variable_name);
+	// cerr << loc_var_val->float_get_value() << endl;
+	// if (loc_var_val->get_result_enum()==float_result) cout << "Yep";
 
 	file_buffer << "\n" << AST_SPACE << variable_name << " : ";
 
@@ -161,7 +163,7 @@ void Name_Ast::print_value(Local_Environment & eval_env, ostream & file_buffer)
 		if (loc_var_val->get_result_enum() == int_result)
 			file_buffer << loc_var_val->get_value() << "\n";
 		else if (loc_var_val->get_result_enum() == float_result)
-			file_buffer << loc_var_val->float_get_value() << "\n";
+			file_buffer << fixed<<setprecision(2)<< loc_var_val->float_get_value() << "\n";
 		else
 			report_internal_error("Result type can only be int and float");
 	}
@@ -180,7 +182,7 @@ void Name_Ast::print_value(Local_Environment & eval_env, ostream & file_buffer)
 			if (glob_var_val == NULL)
 				file_buffer << "0\n";
 			else
-				file_buffer << glob_var_val->float_get_value() << "\n";
+				file_buffer << fixed<<setprecision(2)<< glob_var_val->float_get_value() << "\n";
 		}
 		else
 			report_internal_error("Result type can only be int and float");
@@ -212,8 +214,9 @@ void Name_Ast::set_value_of_evaluation(Local_Environment & eval_env, Eval_Result
 	if (result.get_result_enum() == float_result)
 	{
 		i = new Eval_Result_Value_Float();
-	 	i->set_value(result.float_get_value());
+	 	i->float_set_value(result.float_get_value());
 	}
+	// cout << "Check " << i->float_get_value() <<endl;
 
 	if (eval_env.does_variable_exist(variable_name))
 		eval_env.put_variable_value(*i, variable_name);
@@ -269,8 +272,9 @@ Eval_Result & Number_Ast<DATA_TYPE>::evaluate(Local_Environment & eval_env, ostr
 	if(node_data_type==float_data_type)
 	{
 		Eval_Result & result = *new Eval_Result_Value_Float();
+		// cout<<"kri "<<constant<<endl;
 		result.float_set_value(constant);
-
+		// cout<<"krish "<<result.float_get_value()<<endl;
 		return result;		
 	}
 }
@@ -290,7 +294,7 @@ void Return_Ast::print_ast(ostream & file_buffer)
 
 Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
-	Eval_Result & result = *new Eval_Result_Value_Int();
+	Eval_Result & result = *new Eval_Result_Value_Return();
 	file_buffer<< AST_SPACE << "Return <NOTHING>\n";
 	return result;
 }
@@ -312,6 +316,21 @@ Relational_Expr_Ast::~Relational_Expr_Ast()
 	delete &op;
 }
 
+Data_Type Relational_Expr_Ast::get_data_type()
+{
+	return node_data_type;
+}
+
+bool Relational_Expr_Ast::check_ast(int line)
+{
+	if (lhs->get_data_type() == rhs->get_data_type())
+	{
+		node_data_type = lhs->get_data_type();
+		return true;
+	}
+
+	report_error("Relational Expression Statement data type not compatible", line);
+}
 
 void Relational_Expr_Ast::print_ast(ostream & file_buffer)
 {
@@ -391,6 +410,32 @@ Arithmetic_Expr_Ast::~Arithmetic_Expr_Ast()
 	delete &op;
 }
 
+Data_Type Arithmetic_Expr_Ast::get_data_type()
+{
+	return node_data_type;
+}
+
+bool Arithmetic_Expr_Ast::check_ast(int line)
+{
+	if(rhs==NULL) {
+		if(op==0)
+			node_data_type=lhs->get_data_type();
+		else if(op==1)
+			node_data_type=float_data_type;
+		else if(op==2)
+			node_data_type=int_data_type;
+		else
+			;
+		return true;
+	}
+	if (lhs->get_data_type() == rhs->get_data_type())
+	{
+		node_data_type = lhs->get_data_type();
+		return true;
+	}
+
+	report_error("Arithmetic Expression statement data type not compatible", line);
+}
 
 void Arithmetic_Expr_Ast::print_ast(ostream & file_buffer)
 {
@@ -436,14 +481,49 @@ Eval_Result & Arithmetic_Expr_Ast::evaluate(Local_Environment & eval_env, ostrea
 	if(rhs==NULL) {
 		if(op==0) {
 			Eval_Result & result=lhs->evaluate(eval_env,file_buffer);
-			if(result.get_result_enum()==int_result)
-				result.set_value(-result.get_value());
-			else if(result.get_result_enum()==float_result)
-				result.float_set_value(-result.float_get_value());
+
+			if(result.get_result_enum()==int_result) {
+				Eval_Result & result1=*new Eval_Result_Value_Int();
+				result1.set_value(-result.get_value());
+				return result1;
+			}
+			else if(result.get_result_enum()==float_result) {
+				Eval_Result & result1=*new Eval_Result_Value_Float();
+				result1.float_set_value(-result.float_get_value());
+				return result1;
+			}
 			else
 				;
-			return result;
+			// return result;
 		}
+		if(op==1) {
+			Eval_Result & result=lhs->evaluate(eval_env,file_buffer);
+			if(result.get_result_enum()==float_result) {
+				Eval_Result & result1=*new Eval_Result_Value_Float();
+				result1.float_set_value(result.float_get_value()); 
+				return result1;
+			}
+			else {
+				Eval_Result & result1=* new Eval_Result_Value_Float();
+				result1.float_set_value((float)result.get_value());
+				return result1;
+			}
+		}
+		if(op==2) {
+			Eval_Result & result=lhs->evaluate(eval_env,file_buffer);
+			
+			if(result.get_result_enum()==int_result) {
+				Eval_Result & result1=* new Eval_Result_Value_Int();
+				result1.set_value(result.get_value());
+				return result1;
+			}
+			else {
+				Eval_Result & result1=* new Eval_Result_Value_Int();
+				result1.set_value((int)result.float_get_value());
+				return result1;
+			}
+		}
+
 	}
 	else {
 		Eval_Result & result1 = lhs->evaluate(eval_env, file_buffer);
