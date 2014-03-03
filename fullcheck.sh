@@ -5,13 +5,8 @@ make -f Makefile.cfglp
 for file in test_files/*.cs306.cfg
 do
 echo "$file"
-./cfglp -d -eval "$file" > out
-./cfglp32 -d -eval "$file" > eout
-
-diff -bB out eout
-
-./cfglp -d -ast "$file" > out
-./cfglp32 -d -ast "$file" > eout
+./cfglp -d -tokens "$file" > out
+./cfglp32 -d -tokens "$file" > eout
 
 diff -bB out eout
 done

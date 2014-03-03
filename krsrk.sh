@@ -8,8 +8,8 @@
 # cat test_files/$name
 # make FILE=$name -f Makefile.cfg
 make -f Makefile.cfglp
-./cfglp -d -eval $1 >out
-./cfglp32 -d -eval $1 > eout
+./cfglp -d -tokens $1 >out
+./cfglp32 -d -tokens $1 > eout
 
 diff -bB out eout
 
