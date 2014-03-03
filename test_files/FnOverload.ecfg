@@ -1,0 +1,32 @@
+fn()
+{
+	int a;
+<bb 2>:
+	a = 10;
+}
+fn(int a)
+{
+	int a;
+<bb 2>:
+	a = 19;
+}
+fn(float b)
+{
+	int a;
+<bb 2>:
+	a = 1;
+}
+fn(int a, float b)
+{
+	int a;
+<bb 2>:
+	a = 3;
+}
+
+main()
+{
+	fn();
+	fn(3, 2.3);
+	fn(3.4);
+	fn(4);
+}

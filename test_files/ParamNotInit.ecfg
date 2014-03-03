@@ -1,0 +1,13 @@
+main()
+{
+	int a;
+<bb 2>:
+	fn(a);
+	return;
+}
+
+fn(int b)
+{
+<bb 2>:
+	return;
+}

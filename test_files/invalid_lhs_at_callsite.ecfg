@@ -1,0 +1,35 @@
+
+;; Function main (main)
+
+main ()
+{
+  int z;
+  float y;
+  float x;
+
+<bb 2>:
+  x = 8.1000003814697265625e+0;
+  y = 1.03999996185302734375e+1;
+  z = sum (x, y);
+  return;
+
+}
+
+
+
+;; Function sum (sum)
+
+Merging blocks 2 and 3
+sum (float a, float b)
+{
+  float x;
+  float D.1237;	
+
+<bb 2>:
+  x = a + b;
+  D.1237 = x;
+  return D.1237;
+
+}
+
+

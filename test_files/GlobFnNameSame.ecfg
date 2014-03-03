@@ -1,0 +1,17 @@
+int a;
+int a(int b);
+
+a(int b)
+{
+<bb 2>:
+	return b;
+}
+
+main()
+{
+	int h;
+<bb 2>:
+	h = 3;
+	a(h);
+	return;
+}
