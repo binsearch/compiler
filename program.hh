@@ -54,6 +54,7 @@ public:
 	void print_ast();
 
 	Procedure * get_main_procedure(ostream & file_buffer);
+	Procedure * get_procedure(string name);
 
 	Eval_Result & evaluate();
 

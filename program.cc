@@ -91,6 +91,12 @@ Procedure * Program::get_main_procedure(ostream & file_buffer)
 	return NULL;
 }
 
+Procedure * Program::get_procedure(string name) {
+	if(procedure_map.find(name)==procedure_map.end())
+		return NULL;
+	return procedure_map[name];
+}
+
 void Program::print_ast()
 {
 	command_options.create_ast_buffer();

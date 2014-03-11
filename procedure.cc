@@ -115,6 +115,10 @@ Basic_Block * Procedure::get_next_bb(Basic_Block & current_bb)
 	return NULL;
 }
 
+Symbol_Table & Procedure::get_symbol_table(){
+	return local_symbol_table;
+}
+
 Eval_Result & Procedure::evaluate(ostream & file_buffer)
 {
 	Local_Environment & eval_env = *new Local_Environment();
@@ -159,4 +163,5 @@ Eval_Result & Procedure::evaluate(ostream & file_buffer)
 
 	return *result;
 }
+
 

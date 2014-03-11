@@ -51,6 +51,7 @@ public:
 	void set_local_list(Symbol_Table & new_list);
 	Data_Type get_return_type();
 	Symbol_Table_Entry & get_symbol_table_entry(string variable_name);
+	Symbol_Table & get_symbol_table();
 
 	void print_ast(ostream & file_buffer);
 

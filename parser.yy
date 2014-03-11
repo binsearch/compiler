@@ -47,11 +47,11 @@
 %token <integer_value> BASIC_BLOCK
 %token <float_value> FLOAT_NUMBER
 %token <string_value> NAME
-%token <data_type> RETURN
-%token <data_type> INTEGER
-%token <data_type> FLOAT 
-%token <data_type> DOUBLE
-%token <data_type> VOID
+%token RETURN
+%token INTEGER
+%token FLOAT 
+%token DOUBLE
+%token VOID
 %token IF
 %token ELSE
 %token GOTO
@@ -63,7 +63,10 @@
 
 
 %type <symbol_table> declaration_statement_list
+%type <symbol_table> argument_list
 %type <symbol_entry> declaration_statement
+%type <symbol_entry> argument
+%type <procedure> temp_proc
 %type <basic_block_list> basic_block_list
 %type <basic_block> basic_block
 %type <ast_list> executable_statement_list
@@ -75,6 +78,7 @@
 %type <ast> variable
 %type <ast> constant
 %type <ast> arith_expression
+%type <ast> atomic_expr
 %type <data_type> type_declaration
 
 %start program
@@ -83,6 +87,9 @@
 
 program:
 	declaration_statement_list
+	{
+		program_object.set_global_table(*$1);
+	}
 	procedure_decls
 	procedure_list
 |
@@ -90,19 +97,29 @@ program:
 	procedure_list
 ;
 
+
+procedure_decls:
+	type_declaration procedure_name ';' procedure_decls
+	{
+		
+	}
+|
+
+;
+
 procedure_list:
 
 	procedure_name
 	{
-		#if 0
-		return_statement_used_flag = false;				// No return statement in the current procedure till now
+		#if 1
+		return_statement_used_flag = false;		// No return statement in the current procedure till now
 		#endif
 	}
 	procedure_body
 	{	
-		#if 0
-		
-		program_object.set_procedure_map(*current_procedure);
+		#if 1
+		current_procedure = program_object.get_procedure(*$1);
+
 		#endif
 	}
  procedure_list
@@ -110,49 +127,110 @@ procedure_list:
 
 ;
 
-procedure_decls:
-	type_declaration procedure_name ';' procedure_decls
-	{
-	
-	}
-|
-
-;
 
 procedure_name:
 	NAME '(' argument_list ')'
 	{	
-		#if 0
-		current_procedure = new Procedure(void_data_type, *$1);
+		#if 1
+		current_procedure = new Procedure($0, *$1);
+		current_procedure->set_local_list(*$3);
+		program_object.set_procedure_map(*current_procedure);
+		delete $3;
 		#endif
 	}
 |
 	NAME '(' ')'
+	{
+		#if 1
+		current_procedure = new Procedure($0, *$1);
+		program_object.set_procedure_map(*current_procedure);
+		#endif
+
+
+	}
 ;
 
 argument_list:
 	argument_list ',' argument
+	{
+		#if 1
+		// if declaration is local then no need to check in global list
+		// if declaration is global then this list is global list
+
+		int line = get_line_number();
+		program_object.variable_in_proc_map_check($3->get_variable_name(), line);
+
+		string arg_name = $3->get_variable_name();
+		if (current_procedure && current_procedure->get_proc_name() == arg_name)
+		{
+			int line = get_line_number();
+			report_error("Argument name cannot be same as procedure name", line);
+		}
+
+		if ($1 != NULL)
+		{
+			if($1->variable_in_symbol_list_check(arg_name))
+			{
+				int line = get_line_number();
+				report_error("Argument name is used twice", line);
+			}
+
+			$$ = $1;
+		}
+
+		else
+			$$ = new Symbol_Table();
+
+		$$->push_symbol($3);
+		#endif
+	}
+
+
 |
 	argument
+	{
+		#if 1
+		int line = get_line_number();
+		program_object.variable_in_proc_map_check($1->get_variable_name(), line);
+
+		string var_name = $1->get_variable_name();
+		if (current_procedure && current_procedure->get_proc_name() == var_name)
+		{
+			int line = get_line_number();
+			report_error("Argument name cannot be same as procedure name", line);
+		}
+
+		$$ = new Symbol_Table();
+		$$->push_symbol($1);
+		#endif
+	}
 
 ;
 
 argument:
 	type_declaration NAME
+	{
+		#if 1
+		$$ = new Symbol_Table_Entry(*$2, $1);
+
+		delete $2;
+		#endif
+	}
 ;
 
 
 procedure_body:
 	'{' declaration_statement_list
 	{	
-		#if 0
-		current_procedure->set_local_list(*$2);
+		#if 1
+
+		(current_procedure->get_symbol_table()).append_symbol_table(*$2);
 		delete $2;
 		#endif
 	}
 	basic_block_list '}'
 	{
-		#if 0
+		#if 1
 		
 		// if (return_statement_used_flag == false)
 		// {
@@ -168,7 +246,7 @@ procedure_body:
 |
 	'{' basic_block_list '}'
 	{
-		#if 0
+		#if 1
 		// if (return_statement_used_flag == false)
 		// {
 		// 	int line = get_line_number();
@@ -185,7 +263,7 @@ procedure_body:
 declaration_statement_list:
 	declaration_statement
 	{
-		#if 0
+		#if 1
 		int line = get_line_number();
 		program_object.variable_in_proc_map_check($1->get_variable_name(), line);
 
@@ -203,7 +281,7 @@ declaration_statement_list:
 |
 	declaration_statement_list declaration_statement
 	{
-		#if 0
+		#if 1
 		// if declaration is local then no need to check in global list
 		// if declaration is global then this list is global list
 
@@ -238,10 +316,9 @@ declaration_statement_list:
 
 declaration_statement:
 	type_declaration NAME ';'
-	//need to change this.
 	{
 		#if 1
-		$$ = new Symbol_Table_Entry(*$2, $0);
+		$$ = new Symbol_Table_Entry(*$2, $1);
 
 		delete $2;
 		#endif
@@ -272,7 +349,7 @@ type_declaration:
 basic_block_list:
 	basic_block_list basic_block
 	{
-		#if 0
+		#if 1
 		if (!$2)
 		{
 			int line = get_line_number();
@@ -288,7 +365,7 @@ basic_block_list:
 |
 	basic_block
 	{
-		#if 0
+		#if 1
 		if (!$1)
 		{
 			int line = get_line_number();
@@ -305,7 +382,7 @@ basic_block_list:
 basic_block:
 	BASIC_BLOCK ':' executable_statement_list
 	{
-		#if 0
+		#if 1
 		if ($3 != NULL)
 		$$ = new Basic_Block($1, *$3);
 		else
@@ -323,7 +400,7 @@ basic_block:
 executable_statement_list:
 	assignment_statement_list
 	{
-		#if 0
+		#if 1
 		$$ = $1;
 		#endif
 	}
@@ -354,14 +431,14 @@ return_value:
 
 assignment_statement_list:
 	{
-		#if 0
+		#if 1
 		$$ = NULL;
 		#endif
 	}
 |
 	assignment_statement_list assignment_statement
 	{
-		#if 0
+		#if 1
 		if ($1 == NULL)
 			$$ = new list<Ast *>;
 
@@ -378,7 +455,7 @@ assignment_statement_list:
 assignment_statement:
 	variable ASSIGN_OP comparision_expression ';'
 	{
-		#if 0
+		#if 1
 		
 		$$=new Assignment_Ast($1,$3);
 		$$->check_ast(get_line_number());
@@ -389,19 +466,25 @@ assignment_statement:
 |
 	if_block
 	{
-		#if 0
+		#if 1
 		$$ = $1;
 		#endif
 	}
 |
 	goto_statement	
 	{
-		#if 0
+		#if 1
 		$$ = $1;
 		#endif
 	}
 |
 	func_call ';'
+	{
+		$$=NULL;
+		#if 0
+
+		#endif
+	}
 ;
 
 /* if clause */
@@ -413,7 +496,7 @@ if_block:
 	ELSE
 	GOTO BASIC_BLOCK ';'
 	{
-		#if 0
+		#if 1
 		$$ = new If_Ast($3, $6, $10);
 		#endif
 	}
@@ -423,7 +506,7 @@ goto_statement:
 	
 	GOTO BASIC_BLOCK ';'
 	{	
-		#if 0
+		#if 1
 		$$ = new Goto_Ast($2);
 		#endif
 	}
@@ -433,7 +516,7 @@ comparision_expression:
 	
 	arith_expression
 	{
-		#if 0
+		#if 1
 		$$= $1;
 		#endif
 	}
@@ -441,7 +524,7 @@ comparision_expression:
 	
 	comparision_expression GT comparision_expression
 	{
-		#if 0
+		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 		$$->check_ast(get_line_number());
 		#endif
@@ -449,7 +532,7 @@ comparision_expression:
 |
 	comparision_expression LT comparision_expression
 	{
-		#if 0
+		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 		$$->check_ast(get_line_number());
 		#endif
@@ -457,7 +540,7 @@ comparision_expression:
 |
 	comparision_expression GE comparision_expression
 	{	
-		#if 0
+		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 		$$->check_ast(get_line_number());
 		#endif
@@ -465,7 +548,7 @@ comparision_expression:
 |
 	comparision_expression LE comparision_expression
 	{
-		#if 0
+		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 		$$->check_ast(get_line_number());
 		#endif
@@ -473,7 +556,7 @@ comparision_expression:
 |
 	comparision_expression EQ comparision_expression
 	{
-		#if 0
+		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 		$$->check_ast(get_line_number());
 		#endif
@@ -481,7 +564,7 @@ comparision_expression:
 |
 	comparision_expression NE comparision_expression
 	{
-		#if 0
+		#if 1
 		$$=new Relational_Expr_Ast($1,$3,*$2);
 		$$->check_ast(get_line_number());
 		#endif
@@ -492,7 +575,7 @@ arith_expression:
 	
 	'-' atomic_expr
 	{
-		#if 0
+		#if 1
 		$$=new Arithmetic_Expr_Ast($2,NULL,0);
 		$$->check_ast(get_line_number());
 		#endif
@@ -500,7 +583,7 @@ arith_expression:
 |
 	'-' '(' comparision_expression ')'
 	{
-		#if 0
+		#if 1
 		$$=new Arithmetic_Expr_Ast($3,NULL,0);
 		$$->check_ast(get_line_number());
 		#endif
@@ -508,23 +591,38 @@ arith_expression:
 |
 	'(' type_declaration ')' atomic_expr 
 	{
-		#if 0
-		$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		#if 1
+		if($2==int_data_type)
+			$$=new Arithmetic_Expr_Ast($4,NULL,2);
+		else if($2==float_data_type)
+			$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		else
+			report_error("Typecasting can be only int or float", get_line_number());;
+		
 		$$->check_ast(get_line_number());
+
 		#endif
 	}
 |
 	'(' type_declaration ')' '(' comparision_expression ')'
 	{
-		#if 0
-		$$=new Arithmetic_Expr_Ast($5,NULL,1);
+		#if 1
+		if($2==int_data_type)
+			$$=new Arithmetic_Expr_Ast($4,NULL,2);
+		else if($2==float_data_type)
+			$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		else
+			report_error("Typecasting can be only int or float", get_line_number());;
+		
 		$$->check_ast(get_line_number());
+
 		#endif
 	}
+
 |
 	'(' comparision_expression ')'
 	{
-		#if 0
+		#if 1
 		$$=$2;
 		#endif
 	}
@@ -532,14 +630,14 @@ arith_expression:
 |
 	atomic_expr
 	{	
-		#if 0
+		#if 1
 		$$ = $1;
 		#endif
 	}
 |
 	arith_expression '*' arith_expression
 	{
-		#if 0
+		#if 1
 		$$=new Arithmetic_Expr_Ast($1,$3,0);
 		$$->check_ast(get_line_number());
 		#endif
@@ -548,7 +646,7 @@ arith_expression:
 | 
 	arith_expression '/' arith_expression
 	{
-		#if 0
+		#if 1
 		$$=new Arithmetic_Expr_Ast($1,$3,1);
 		$$->check_ast(get_line_number());
 		#endif
@@ -557,7 +655,7 @@ arith_expression:
 |
 	arith_expression '+' arith_expression
 	{
-		#if 0
+		#if 1
 		$$=new Arithmetic_Expr_Ast($1,$3,2);
 		$$->check_ast(get_line_number());
 		#endif
@@ -566,7 +664,7 @@ arith_expression:
 |
 	arith_expression '-' arith_expression
 	{
-		#if 0
+		#if 1
 		$$=new Arithmetic_Expr_Ast($1,$3, 3);
 		$$->check_ast(get_line_number());
 		#endif
@@ -576,10 +674,19 @@ arith_expression:
 
 atomic_expr:
 	variable
+	{
+		$$=$1;
+	}
 |
 	constant
+	{
+		$$=$1;
+	}
 |
 	func_call
+	{
+		$$=$1;
+	}
 ;
 
 func_call:
@@ -598,7 +705,7 @@ pass_variable_list:
 variable:
 	NAME
 	{
-		#if 0
+		#if 1
 		Symbol_Table_Entry var_table_entry;
 
 		if (current_procedure->variable_in_symbol_list_check(*$1))
@@ -623,14 +730,14 @@ variable:
 constant:
 	INTEGER_NUMBER
 	{
-		#if 0
+		#if 1
 		$$ = new Number_Ast<int>($1, int_data_type);
 		#endif
 	}
 |
 	FLOAT_NUMBER
 	{
-		#if 0
+		#if 1
 		$$= new Number_Ast<float> ($1,float_data_type);
 		#endif
 	}
