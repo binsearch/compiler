@@ -30,6 +30,7 @@
 {
 	int integer_value;
 	float float_value;
+	Data_Type data_type;
 	std::string * string_value;
 	list<Ast *> * ast_list;
 	Ast * ast;
@@ -46,10 +47,11 @@
 %token <integer_value> BASIC_BLOCK
 %token <float_value> FLOAT_NUMBER
 %token <string_value> NAME
-%token RETURN
-%token INTEGER
-%token FLOAT DOUBLE
-%token VOID
+%token <data_type> RETURN
+%token <data_type> INTEGER
+%token <data_type> FLOAT 
+%token <data_type> DOUBLE
+%token <data_type> VOID
 %token IF
 %token ELSE
 %token GOTO
@@ -73,6 +75,7 @@
 %type <ast> variable
 %type <ast> constant
 %type <ast> arith_expression
+%type <data_type> type_declaration
 
 %start program
 
@@ -109,6 +112,9 @@ procedure_list:
 
 procedure_decls:
 	type_declaration procedure_name ';' procedure_decls
+	{
+	
+	}
 |
 
 ;
@@ -234,8 +240,8 @@ declaration_statement:
 	type_declaration NAME ';'
 	//need to change this.
 	{
-		#if 0
-		$$ = new Symbol_Table_Entry(*$2, int_data_type);
+		#if 1
+		$$ = new Symbol_Table_Entry(*$2, $0);
 
 		delete $2;
 		#endif
@@ -243,13 +249,25 @@ declaration_statement:
 ;
 
 type_declaration:
-	INTEGER
+	INTEGER 
+	{
+		$$=int_data_type;
+	}
 |
 	FLOAT
+	{
+		$$=float_data_type;
+	}
 |
 	DOUBLE
+	{
+		$$=float_data_type;
+	}
 |
 	VOID
+	{
+		$$=void_data_type;
+	}
 ;
 basic_block_list:
 	basic_block_list basic_block

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# make -f Makefile.cfglp clean
+make -f Makefile.cfglp clean
 # name1="$1.cs306.cfg"
 # echo $name
 
@@ -8,10 +8,10 @@
 # cat test_files/$name
 # make FILE=$name -f Makefile.cfg
 make -f Makefile.cfglp
-./cfglp -d -tokens $1 >out
-./cfglp32 -d -tokens $1 > eout
+./cfglp -d -ast  $1 >out
+# ./cfglp32 -d -ast  $1 > eout
 
-diff -bB out eout
+# diff -bB out eout
 
 # ./cfglp -d -ast $1 >out
 # ./cfglp32 -d -ast $1 > eout
