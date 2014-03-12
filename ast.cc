@@ -295,11 +295,15 @@ Eval_Result & Number_Ast<DATA_TYPE>::evaluate(Local_Environment & eval_env, ostr
 
 ///////////////////////////////////////////////////////////////////////////////
 
-Return_Ast::Return_Ast()
-{}
+Return_Ast::Return_Ast(Ast * ret_arg)
+{
+	ret_value=ret_arg;
+}
 
 Return_Ast::~Return_Ast()
-{}
+{
+	delete ret_value;
+}
 
 void Return_Ast::print_ast(ostream & file_buffer)
 {
@@ -418,15 +422,54 @@ Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostrea
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+Function_Ast::Function_Ast(string name,list<Ast *> l)
+{
+	fun_name=name;
+	arg_list=l;
+}
+
+Function_Ast::~Function_Ast()
+{
+	delete &fun_name;
+}
+
+Data_Type Function_Ast::get_data_type()
+{
+	// return node_data_type;
+}
+
+bool Function_Ast::check_ast(int line)
+{
+	// if (lhs->get_data_type() == rhs->get_data_type())
+	// {
+	// 	node_data_type = int_data_type;
+	// 	return true;
+	// }
+
+	// report_error("Relational Expression Statement data type not compatible", line);
+}
+
+void Function_Ast::print_ast(ostream & file_buffer)
+{
+	// file_buffer <<"\n"<< COND_SPACE << "Condition: "<<op<<"\n";
+
+	// file_buffer << COND_NODE_SPACE<<"LHS (";
+	// lhs->print_ast(file_buffer);
+	// file_buffer << ")\n";
+
+	// file_buffer << COND_NODE_SPACE << "RHS (";
+	// rhs->print_ast(file_buffer);
+	// file_buffer << ")";
+}
+
+Eval_Result & Function_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-// Arithmetic_Expr_Ast::Arithmetic_Expr_Ast(Ast * temp_lhs,int temp_op)
-// {
-// 	lhs = temp_lhs;
-// 	op='*';
-// 	op+=temp_op;
-// 	rhs=NULL;
-// }
+
+///////////////////////////////////////////////////////////////////////////////
 
 Arithmetic_Expr_Ast::Arithmetic_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,int temp_op)
 {

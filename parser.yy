@@ -42,7 +42,6 @@
 };
 
 
-
 %token <integer_value> INTEGER_NUMBER
 %token <integer_value> BASIC_BLOCK
 %token <float_value> FLOAT_NUMBER
@@ -66,11 +65,11 @@
 %type <symbol_table> argument_list
 %type <symbol_entry> declaration_statement
 %type <symbol_entry> argument
-%type <procedure> temp_proc
 %type <basic_block_list> basic_block_list
 %type <basic_block> basic_block
 %type <ast_list> executable_statement_list
 %type <ast_list> assignment_statement_list
+%type <ast_list> pass_variable_list
 %type <ast> assignment_statement
 %type <ast> comparision_expression
 %type <ast> goto_statement
@@ -78,7 +77,9 @@
 %type <ast> variable
 %type <ast> constant
 %type <ast> arith_expression
+%type <ast> func_call
 %type <ast> atomic_expr
+%type <ast> return_value
 %type <data_type> type_declaration
 
 %start program
@@ -87,24 +88,16 @@
 
 program:
 	declaration_statement_list
+	procedure_decls
 	{
+		#if 1
 		program_object.set_global_table(*$1);
+		#endif
 	}
-	procedure_decls
 	procedure_list
 |
 	procedure_decls
 	procedure_list
-;
-
-
-procedure_decls:
-	type_declaration procedure_name ';' procedure_decls
-	{
-		
-	}
-|
-
 ;
 
 procedure_list:
@@ -118,35 +111,57 @@ procedure_list:
 	procedure_body
 	{	
 		#if 1
-		current_procedure = program_object.get_procedure(*$1);
 
 		#endif
 	}
- procedure_list
+ 	procedure_list
 |
 
 ;
+
+procedure_decls:
+	type_declaration NAME '(' argument_list ')'  ';' 
+	{	
+		#if 1
+		current_procedure = new Procedure($1, *$2);
+		current_procedure->set_argument_list(*$4);
+		program_object.set_procedure_map(*current_procedure);
+		delete $4;
+		#endif
+	}
+	procedure_decls
+|
+	type_declaration NAME '(' ')' ';' 	
+	{
+		#if 1
+		current_procedure = new Procedure($1, *$2);
+		Symbol_Table temp_list;
+		current_procedure->set_argument_list(temp_list);
+		program_object.set_procedure_map(*current_procedure);
+		#endif
+	}
+	procedure_decls
+|
+;
+
 
 
 procedure_name:
 	NAME '(' argument_list ')'
 	{	
+		printf("yoyo\n");
 		#if 1
-		current_procedure = new Procedure($0, *$1);
-		current_procedure->set_local_list(*$3);
-		program_object.set_procedure_map(*current_procedure);
-		delete $3;
+		current_procedure = program_object.get_procedure(*$1);
 		#endif
 	}
 |
 	NAME '(' ')'
 	{
 		#if 1
-		current_procedure = new Procedure($0, *$1);
-		program_object.set_procedure_map(*current_procedure);
+		printf("yo\n");
+		current_procedure = program_object.get_procedure(*$1);
+		printf("dude\n");	
 		#endif
-
-
 	}
 ;
 
@@ -222,9 +237,16 @@ argument:
 procedure_body:
 	'{' declaration_statement_list
 	{	
-		#if 1
+		if($2==NULL)
+			printf("mama\n");
+		else
+			printf("ouch\n");
 
-		(current_procedure->get_symbol_table()).append_symbol_table(*$2);
+
+		#if 1
+		// Symbol_Table s=*$2;
+		current_procedure->set_local_list(*$2);
+		printf("no\n");
 		delete $2;
 		#endif
 	}
@@ -323,33 +345,44 @@ declaration_statement:
 		delete $2;
 		#endif
 	}
+
 ;
 
 type_declaration:
 	INTEGER 
 	{
+		#if 1
 		$$=int_data_type;
+		#endif
 	}
 |
 	FLOAT
 	{
+		#if 1
 		$$=float_data_type;
+		#endif
 	}
 |
 	DOUBLE
 	{
+		#if 1
 		$$=float_data_type;
+		#endif
 	}
 |
 	VOID
 	{
+		#if 1
 		$$=void_data_type;
+		#endif
 	}
 ;
+
 basic_block_list:
 	basic_block_list basic_block
 	{
 		#if 1
+		printf("sai\n");
 		if (!$2)
 		{
 			int line = get_line_number();
@@ -366,6 +399,7 @@ basic_block_list:
 	basic_block
 	{
 		#if 1
+		printf("krish\n");
 		if (!$1)
 		{
 			int line = get_line_number();
@@ -384,11 +418,12 @@ basic_block:
 	{
 		#if 1
 		if ($3 != NULL)
-		$$ = new Basic_Block($1, *$3);
+			$$ = new Basic_Block($1, *$3);
 		else
 		{
-			list<Ast *> * ast_list = new list<Ast *>;
-			$$ = new Basic_Block($1, *ast_list);
+			printf("ayya\n");
+			list<Ast *> * a_li= new list<Ast *>;
+			$$ = new Basic_Block($1, *a_li);
 		}
 
 		delete $3;
@@ -407,8 +442,8 @@ executable_statement_list:
 |
 	assignment_statement_list RETURN return_value ';'
 	{
-		#if 0
-		Ast * ret = new Return_Ast();
+		#if 1
+		Ast * ret = new Return_Ast($3);
 
 		return_statement_used_flag = true;					// Current procedure has an occurrence of return statement
 
@@ -425,14 +460,24 @@ executable_statement_list:
 
 return_value:
 	comparision_expression
+	{
+		#if 1
+		$$ = $1;
+		#endif
+	}
 |
-
+	{
+		#if 1
+		$$ = NULL;
+		#endif
+	}
+	
 ;
 
 assignment_statement_list:
 	{
 		#if 1
-		$$ = NULL;
+		$$ = new list <Ast *>;
 		#endif
 	}
 |
@@ -480,9 +525,8 @@ assignment_statement:
 |
 	func_call ';'
 	{
-		$$=NULL;
-		#if 0
-
+		#if 1
+		$$=$1;
 		#endif
 	}
 ;
@@ -608,9 +652,9 @@ arith_expression:
 	{
 		#if 1
 		if($2==int_data_type)
-			$$=new Arithmetic_Expr_Ast($4,NULL,2);
+			$$=new Arithmetic_Expr_Ast($5,NULL,2);
 		else if($2==float_data_type)
-			$$=new Arithmetic_Expr_Ast($4,NULL,1);
+			$$=new Arithmetic_Expr_Ast($5,NULL,1);
 		else
 			report_error("Typecasting can be only int or float", get_line_number());;
 		
@@ -675,30 +719,64 @@ arith_expression:
 atomic_expr:
 	variable
 	{
+		#if 1
 		$$=$1;
+		#endif
 	}
 |
 	constant
 	{
+		#if 1
 		$$=$1;
+		#endif
 	}
 |
 	func_call
 	{
+		#if 1
 		$$=$1;
+		#endif
 	}
 ;
 
 func_call:
 	NAME '(' pass_variable_list ')'
+	{
+		#if 1
+		$$=new Function_Ast(*$1,*$3);
+		$$->check_ast(get_line_number());
+		#endif
+	}
 |
 	NAME '(' ')'
+	{
+		#if 1
+		list<Ast *> * param_list = new list<Ast*>;
+		$$ = new Function_Ast(*$1,*param_list);
+
+		$$->check_ast(get_line_number());
+		#endif
+	}
 ;
 
 pass_variable_list:
 	comparision_expression ',' pass_variable_list
+	{
+		#if 1
+		if($$==NULL)
+			$$=new list<Ast *>;
+
+		$$->push_back($1);
+		#endif
+	}
 |
 	comparision_expression
+	{
+		#if 1
+		$$ = new list<Ast *>;
+		$$->push_back($1);
+		#endif
+	}
 ;
 
 

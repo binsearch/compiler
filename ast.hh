@@ -111,9 +111,9 @@ public:
 
 class Return_Ast:public Ast
 {
-
+	Ast* ret_value;
 public:
-	Return_Ast();
+	Return_Ast(Ast* ret_arg);
 	~Return_Ast();
 
 	void print_ast(ostream & file_buffer);
@@ -149,6 +149,23 @@ class Arithmetic_Expr_Ast:public Ast
 public:
 	Arithmetic_Expr_Ast(Ast * temp_lhs,Ast* temp_rhs,int temp_op);
 	~Arithmetic_Expr_Ast();
+
+	Data_Type get_data_type();
+	bool check_ast(int line);
+
+	void print_ast(ostream & file_buffer);
+
+	Eval_Result & evaluate(Local_Environment & eval_env, ostream & file_buffer);
+};
+
+class Function_Ast:public Ast
+{
+	string fun_name;
+	list<Ast *> arg_list;
+
+public:
+	Function_Ast(string name,list<Ast *> l);
+	~Function_Ast();
 
 	Data_Type get_data_type();
 	bool check_ast(int line);

@@ -38,7 +38,9 @@ using namespace std;
 #include"program.hh"
 
 Symbol_Table::Symbol_Table()
-{}
+{
+	
+}
 
 Symbol_Table::~Symbol_Table()
 {}
@@ -68,20 +70,20 @@ void Symbol_Table::global_list_in_proc_map_check(int line)
 	}
 }
 
-// -------- we wrote this -----------
-void Symbol_Table::append_symbol_table(Symbol_Table s1)
-{
-	list<Symbol_Table_Entry *> l=s1.get_variable_table();
+// // -------- we wrote this -----------
+// void Symbol_Table::append_symbol_table(Symbol_Table s1)
+// {
+// 	list<Symbol_Table_Entry *> l=s1.get_variable_table();
 
-	for(i=l.begin();i!=l.end();i++) {
-		variable_table->push_back(*i);
-	}
-}
+// 	for(i=l.begin();i!=l.end();i++) {
+// 		variable_table->push_back(*i);
+// 	}
+// }
 
-list<Symbol_Table_Entry *> Symbol_Table::get_variable_table() {
-	return variable_table;
-}
-// ---------------------------------
+// list<Symbol_Table_Entry *> Symbol_Table::get_variable_table() {
+// 	return variable_table;
+// }
+// // ---------------------------------
 
 bool Symbol_Table::variable_in_symbol_list_check(string variable)
 {

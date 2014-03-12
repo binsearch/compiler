@@ -61,8 +61,41 @@ void Procedure::set_basic_block_list(list<Basic_Block *> bb_list)
 
 void Procedure::set_local_list(Symbol_Table & new_list)
 {
-	local_symbol_table = new_list;
+	printf("nannna\n");
+	// list<Symbol_Table_Entry*> l1=local_symbol_table.variable_table;
+	printf("yo\n");
+	printf("yay %d \n",new_list.variable_table.size());
+	printf("%d",local_symbol_table.variable_table.size());
+	printf("dude\n");
+
+	// Symbol_Table s=new_list;
+	// printf("ddue\n");
+	local_symbol_table.variable_table=new_list.variable_table;
+	// printf("nayna\n");
+
+	list<Symbol_Table_Entry *> l=new_list.variable_table;
+	for(list<Symbol_Table_Entry *>::iterator it=l.begin();it!=l.end();it++) {
+		if((*it)==NULL)
+			cout<<"what\n";
+		else
+			printf("nayna\n");
+		cout<<(*it)->variable_name<<" "<<(*it)->variable_data_type<<endl;
+	}
+	// local_symbol_table.variable_table=new_list.variable_table;
+	printf("man\n");
+	// local_symbol_table.
+	// printf("ohhh\n");
+	// printf("o re piya\n");
+	// // for(list<Symbol_Table_Entry *>::iterator it=)
+	// // local_symbol_table = new_list;
+	// printf("mann\n");
 	local_symbol_table.set_table_scope(local);
+}
+
+void Procedure::set_argument_list(Symbol_Table & new_list)
+{
+	argument_table=new_list;
+	argument_table.set_table_scope(local);
 }
 
 Data_Type Procedure::get_return_type()
@@ -72,12 +105,17 @@ Data_Type Procedure::get_return_type()
 
 bool Procedure::variable_in_symbol_list_check(string variable)
 {
-	return local_symbol_table.variable_in_symbol_list_check(variable);
+	return local_symbol_table.variable_in_symbol_list_check(variable) | argument_table.variable_in_symbol_list_check(variable);
 }
 
 Symbol_Table_Entry & Procedure::get_symbol_table_entry(string variable_name)
 {
-	return local_symbol_table.get_symbol_table_entry(variable_name);
+	if(local_symbol_table.variable_in_symbol_list_check(variable_name))
+		return local_symbol_table.get_symbol_table_entry(variable_name);
+	if(argument_table.variable_in_symbol_list_check(variable_name))
+		return argument_table.get_symbol_table_entry(variable_name);
+
+	report_error("variable symbol entry doesn't exist", NOLINE);
 }
 
 void Procedure::print_ast(ostream & file_buffer)
