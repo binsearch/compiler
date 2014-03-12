@@ -63,6 +63,8 @@
 
 %type <symbol_table> declaration_statement_list
 %type <symbol_entry> declaration_statement
+%type <symbol_table> argument_list
+%type <symbol_entry> argument
 %type <basic_block_list> basic_block_list
 %type <basic_block> basic_block
 %type <ast_list> executable_statement_list
@@ -113,23 +115,39 @@ procedure_list:
 ;
 
 procedure_decls:
-	type_declaration procedure_name ';' procedure_decls
+	type_declaration NAME '(' argument_list ')' ';' procedure_decls
+	{
+		current_procedure = new Procedure($1, *$2);
+		current_procedure->set_argument_list(*$4);
+		program_object.set_procedure_map(*current_procedure);
+	}
+|
+	type_declaration NAME '(' ')' ';' procedure_decls
+	{
+		current_procedure = new Procedure($1, *$2);
+		program_object.set_procedure_map(*current_procedure);
+	}
 |
 
+	
 ;
 
 procedure_name:
 	NAME '(' argument_list ')'
 	{	
 		#if 1
-		current_procedure = new Procedure(void_data_type, *$1);
+		current_procedure = program_object.get_procedure(*$1);
+		// current_procedure->set_argument_list(*$3);
 		#endif
 	}
 |
 	NAME '(' ')'
 	{	
 		#if 1
-		current_procedure = new Procedure(void_data_type, *$1);
+		if(*$1 != "main")
+			current_procedure = program_object.get_procedure(*$1);
+		else
+			current_procedure = new Procedure(void_data_type, *$1);
 		#endif
 	}
 
@@ -137,13 +155,27 @@ procedure_name:
 
 argument_list:
 	argument_list ',' argument
+	{
+		if($1 == NULL)
+			$$ = new Symbol_Table();
+		else
+			$$ = $1;
+		$$->push_symbol($3);
+	}
 |
 	argument
+	{
+		$$ = new Symbol_Table();
+		$$->push_symbol($1);
+	}
 
 ;
 
 argument:
 	type_declaration NAME
+	{
+		$$ = new Symbol_Table_Entry(*$2, $1);
+	}
 ;
 
 
@@ -246,7 +278,7 @@ declaration_statement:
 	//need to change this.
 	{
 		#if 1
-		$$ = new Symbol_Table_Entry(*$2, int_data_type);
+		$$ = new Symbol_Table_Entry(*$2, $1);
 
 		delete $2;
 		#endif
