@@ -1,76 +1,72 @@
 
 Production Rules
 (rule precedences determined from %prec or 1st terminal between parentheses):
-1: program ->  declaration_statement_list procedure_decls #0001 procedure_list
-2: #0001 ->  <empty>
-3: program ->  procedure_decls procedure_list
-4: procedure_list ->  procedure_name #0002 procedure_body #0003 procedure_list
+1: program ->  declaration_statement_list procedure_decls procedure_list
+2: program ->  procedure_decls procedure_list
+3: procedure_list ->  procedure_name #0001 procedure_body #0002 procedure_list
+4: #0001 ->  <empty>
 5: #0002 ->  <empty>
-6: #0003 ->  <empty>
-7: procedure_list ->  <empty>
-8: procedure_decls (NAME) ->  type_declaration NAME '(' argument_list ')' ';' #0004 procedure_decls
-9: #0004 ->  <empty>
-10: procedure_decls (NAME) ->  type_declaration NAME '(' ')' ';' #0005 procedure_decls
-11: #0005 ->  <empty>
-12: procedure_decls ->  <empty>
-13: procedure_name (NAME) ->  NAME '(' argument_list ')'
-14: procedure_name (NAME) ->  NAME '(' ')'
-15: argument_list (',') ->  argument_list ',' argument
-16: argument_list ->  argument
-17: argument (NAME) ->  type_declaration NAME
-18: procedure_body ('{') ->  '{' declaration_statement_list #0006 basic_block_list '}'
-19: #0006 ->  <empty>
-20: procedure_body ('{') ->  '{' basic_block_list '}'
-21: declaration_statement_list ->  declaration_statement
-22: declaration_statement_list ->  declaration_statement_list declaration_statement
-23: declaration_statement (NAME) ->  type_declaration NAME ';'
-24: type_declaration (INTEGER) ->  INTEGER
-25: type_declaration (FLOAT) ->  FLOAT
-26: type_declaration (DOUBLE) ->  DOUBLE
-27: type_declaration (VOID) ->  VOID
-28: basic_block_list ->  basic_block_list basic_block
-29: basic_block_list ->  basic_block
-30: basic_block (BASIC_BLOCK) ->  BASIC_BLOCK ':' executable_statement_list
-31: executable_statement_list ->  assignment_statement_list
-32: executable_statement_list (RETURN) ->  assignment_statement_list RETURN return_value ';'
-33: return_value ->  comparision_expression
-34: return_value ->  <empty>
-35: assignment_statement_list ->  <empty>
-36: assignment_statement_list ->  assignment_statement_list assignment_statement
-37: assignment_statement (ASSIGN_OP) ->  variable ASSIGN_OP comparision_expression ';'
-38: assignment_statement ->  if_block
-39: assignment_statement ->  goto_statement
-40: assignment_statement (';') ->  func_call ';'
-41: if_block (IF) ->  IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';'
-42: goto_statement (GOTO) ->  GOTO BASIC_BLOCK ';'
-43: comparision_expression ->  arith_expression
-44: comparision_expression (GT) ->  comparision_expression GT comparision_expression
-45: comparision_expression (LT) ->  comparision_expression LT comparision_expression
-46: comparision_expression (GE) ->  comparision_expression GE comparision_expression
-47: comparision_expression (LE) ->  comparision_expression LE comparision_expression
-48: comparision_expression (EQ) ->  comparision_expression EQ comparision_expression
-49: comparision_expression (NE) ->  comparision_expression NE comparision_expression
-50: arith_expression ('-') ->  '-' atomic_expr
-51: arith_expression ('-') ->  '-' '(' comparision_expression ')'
-52: arith_expression ('(') ->  '(' type_declaration ')' atomic_expr
-53: arith_expression ('(') ->  '(' type_declaration ')' '(' comparision_expression ')'
-54: arith_expression ('(') ->  '(' comparision_expression ')'
-55: arith_expression ->  atomic_expr
-56: arith_expression ('*') ->  arith_expression '*' arith_expression
-57: arith_expression ('/') ->  arith_expression '/' arith_expression
-58: arith_expression ('+') ->  arith_expression '+' arith_expression
-59: arith_expression ('-') ->  arith_expression '-' arith_expression
-60: atomic_expr ->  variable
-61: atomic_expr ->  constant
-62: atomic_expr ->  func_call
-63: func_call (NAME) ->  NAME '(' pass_variable_list ')'
-64: func_call (NAME) ->  NAME '(' ')'
-65: pass_variable_list (',') ->  comparision_expression ',' pass_variable_list
-66: pass_variable_list ->  comparision_expression
-67: variable (NAME) ->  NAME
-68: constant (INTEGER_NUMBER) ->  INTEGER_NUMBER
-69: constant (FLOAT_NUMBER) ->  FLOAT_NUMBER
-70: program_$ ->  program
+6: procedure_list ->  <empty>
+7: procedure_decls (';') ->  type_declaration procedure_name ';' procedure_decls
+8: procedure_decls ->  <empty>
+9: procedure_name (NAME) ->  NAME '(' argument_list ')'
+10: procedure_name (NAME) ->  NAME '(' ')'
+11: argument_list (',') ->  argument_list ',' argument
+12: argument_list ->  argument
+13: argument (NAME) ->  type_declaration NAME
+14: procedure_body ('{') ->  '{' declaration_statement_list #0003 basic_block_list '}'
+15: #0003 ->  <empty>
+16: procedure_body ('{') ->  '{' basic_block_list '}'
+17: declaration_statement_list ->  declaration_statement
+18: declaration_statement_list ->  declaration_statement_list declaration_statement
+19: declaration_statement (NAME) ->  type_declaration NAME ';'
+20: type_declaration (INTEGER) ->  INTEGER
+21: type_declaration (FLOAT) ->  FLOAT
+22: type_declaration (DOUBLE) ->  DOUBLE
+23: type_declaration (VOID) ->  VOID
+24: basic_block_list ->  basic_block_list basic_block
+25: basic_block_list ->  basic_block
+26: basic_block (BASIC_BLOCK) ->  BASIC_BLOCK ':' executable_statement_list
+27: executable_statement_list ->  assignment_statement_list
+28: executable_statement_list (RETURN) ->  assignment_statement_list RETURN return_value ';'
+29: return_value ->  comparision_expression
+30: return_value ->  <empty>
+31: assignment_statement_list ->  <empty>
+32: assignment_statement_list ->  assignment_statement_list assignment_statement
+33: assignment_statement (ASSIGN_OP) ->  variable ASSIGN_OP comparision_expression ';'
+34: assignment_statement ->  if_block
+35: assignment_statement ->  goto_statement
+36: assignment_statement (';') ->  func_call ';'
+37: if_block (IF) ->  IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';'
+38: goto_statement (GOTO) ->  GOTO BASIC_BLOCK ';'
+39: comparision_expression ->  arith_expression
+40: comparision_expression (GT) ->  comparision_expression GT comparision_expression
+41: comparision_expression (LT) ->  comparision_expression LT comparision_expression
+42: comparision_expression (GE) ->  comparision_expression GE comparision_expression
+43: comparision_expression (LE) ->  comparision_expression LE comparision_expression
+44: comparision_expression (EQ) ->  comparision_expression EQ comparision_expression
+45: comparision_expression (NE) ->  comparision_expression NE comparision_expression
+46: arith_expression ('-') ->  '-' atomic_expr
+47: arith_expression ('-') ->  '-' '(' comparision_expression ')'
+48: arith_expression ('(') ->  '(' type_declaration ')' atomic_expr
+49: arith_expression ('(') ->  '(' type_declaration ')' '(' comparision_expression ')'
+50: arith_expression ('(') ->  '(' comparision_expression ')'
+51: arith_expression ->  atomic_expr
+52: arith_expression ('*') ->  arith_expression '*' arith_expression
+53: arith_expression ('/') ->  arith_expression '/' arith_expression
+54: arith_expression ('+') ->  arith_expression '+' arith_expression
+55: arith_expression ('-') ->  arith_expression '-' arith_expression
+56: atomic_expr ->  variable
+57: atomic_expr ->  constant
+58: atomic_expr ->  func_call
+59: func_call (NAME) ->  NAME '(' pass_variable_list ')'
+60: func_call (NAME) ->  NAME '(' ')'
+61: pass_variable_list (',') ->  comparision_expression ',' pass_variable_list
+62: pass_variable_list ->  comparision_expression
+63: variable (NAME) ->  NAME
+64: constant (INTEGER_NUMBER) ->  INTEGER_NUMBER
+65: constant (FLOAT_NUMBER) ->  FLOAT_NUMBER
+66: program_$ ->  program
 
 
 Symbolic Terminal tokens:
@@ -99,9 +95,9 @@ Symbolic Terminal tokens:
     45: '-'
     42: '*'
     47: '/'
+    59: ';'
     40: '('
     41: ')'
-    59: ';'
     44: ','
    123: '{'
    125: '}'
@@ -110,7 +106,7 @@ Symbolic Terminal tokens:
 
 Grammar States: 
 State 0:
-70: program_$ ->  . program 
+66: program_$ ->  . program 
   0:   On program to state 1
   1:   On declaration_statement_list to state 2
   2:   On procedure_decls to state 3
@@ -120,16 +116,16 @@ State 0:
   6:   On FLOAT to state 7
   7:   On DOUBLE to state 8
   8:   On VOID to state 9
-  Reduce by 12: procedure_decls ->  . 
+  Reduce by 8: procedure_decls ->  . 
 
 
 State 1:
-70: program_$ -> program  . 
+66: program_$ -> program  . 
 
 
 State 2:
-1: program -> declaration_statement_list  . procedure_decls #0001 procedure_list 
-22: declaration_statement_list -> declaration_statement_list  . declaration_statement 
+1: program -> declaration_statement_list  . procedure_decls procedure_list 
+18: declaration_statement_list -> declaration_statement_list  . declaration_statement 
   0:   On procedure_decls to state 10
   1:   On declaration_statement to state 11
   2:   On type_declaration to state 5
@@ -137,102 +133,106 @@ State 2:
   4:   On FLOAT to state 7
   5:   On DOUBLE to state 8
   6:   On VOID to state 9
-  Reduce by 12: procedure_decls ->  . 
+  Reduce by 8: procedure_decls ->  . 
 
 
 State 3:
-3: program -> procedure_decls  . procedure_list 
+2: program -> procedure_decls  . procedure_list 
   0:   On procedure_list to state 12
   1:   On procedure_name to state 13
   2:   On NAME to state 14
-  Reduce by 7: procedure_list ->  . 
+  Reduce by 6: procedure_list ->  . 
 
 
 State 4:
-21: declaration_statement_list -> declaration_statement  . 
-  Reduce by 21: declaration_statement_list -> declaration_statement  . 
+17: declaration_statement_list -> declaration_statement  . 
+  Reduce by 17: declaration_statement_list -> declaration_statement  . 
 
 
 State 5:
-8: procedure_decls -> type_declaration  . NAME '(' argument_list ')' ';' #0004 procedure_decls 
-10: procedure_decls -> type_declaration  . NAME '(' ')' ';' #0005 procedure_decls 
-23: declaration_statement -> type_declaration  . NAME ';' 
-  0:   On NAME to state 15
+7: procedure_decls -> type_declaration  . procedure_name ';' procedure_decls 
+19: declaration_statement -> type_declaration  . NAME ';' 
+  0:   On procedure_name to state 15
+  1:   On NAME to state 16
 
 
 State 6:
-24: type_declaration -> INTEGER  . 
-  Reduce by 24: type_declaration -> INTEGER  . 
+20: type_declaration -> INTEGER  . 
+  Reduce by 20: type_declaration -> INTEGER  . 
 
 
 State 7:
-25: type_declaration -> FLOAT  . 
-  Reduce by 25: type_declaration -> FLOAT  . 
+21: type_declaration -> FLOAT  . 
+  Reduce by 21: type_declaration -> FLOAT  . 
 
 
 State 8:
-26: type_declaration -> DOUBLE  . 
-  Reduce by 26: type_declaration -> DOUBLE  . 
+22: type_declaration -> DOUBLE  . 
+  Reduce by 22: type_declaration -> DOUBLE  . 
 
 
 State 9:
-27: type_declaration -> VOID  . 
-  Reduce by 27: type_declaration -> VOID  . 
+23: type_declaration -> VOID  . 
+  Reduce by 23: type_declaration -> VOID  . 
 
 
 State 10:
-1: program -> declaration_statement_list procedure_decls  . #0001 procedure_list 
-  0:   On #0001 to state 16
-  Reduce by 2: #0001 ->  . 
+1: program -> declaration_statement_list procedure_decls  . procedure_list 
+  0:   On procedure_list to state 17
+  1:   On procedure_name to state 13
+  2:   On NAME to state 14
+  Reduce by 6: procedure_list ->  . 
 
 
 State 11:
-22: declaration_statement_list -> declaration_statement_list declaration_statement  . 
-  Reduce by 22: declaration_statement_list -> declaration_statement_list declaration_statement  . 
+18: declaration_statement_list -> declaration_statement_list declaration_statement  . 
+  Reduce by 18: declaration_statement_list -> declaration_statement_list declaration_statement  . 
 
 
 State 12:
-3: program -> procedure_decls procedure_list  . 
-  Reduce by 3: program -> procedure_decls procedure_list  . 
+2: program -> procedure_decls procedure_list  . 
+  Reduce by 2: program -> procedure_decls procedure_list  . 
 
 
 State 13:
-4: procedure_list -> procedure_name  . #0002 procedure_body #0003 procedure_list 
-  0:   On #0002 to state 17
-  Reduce by 5: #0002 ->  . 
+3: procedure_list -> procedure_name  . #0001 procedure_body #0002 procedure_list 
+  0:   On #0001 to state 18
+  Reduce by 4: #0001 ->  . 
 
 
 State 14:
-13: procedure_name -> NAME  . '(' argument_list ')' 
-14: procedure_name -> NAME  . '(' ')' 
-  0:   On '(' to state 18
+9: procedure_name -> NAME  . '(' argument_list ')' 
+10: procedure_name -> NAME  . '(' ')' 
+  0:   On '(' to state 19
 
 
 State 15:
-8: procedure_decls -> type_declaration NAME  . '(' argument_list ')' ';' #0004 procedure_decls 
-10: procedure_decls -> type_declaration NAME  . '(' ')' ';' #0005 procedure_decls 
-23: declaration_statement -> type_declaration NAME  . ';' 
-  0:   On '(' to state 19
-  1:   On ';' to state 20
+7: procedure_decls -> type_declaration procedure_name  . ';' procedure_decls 
+  0:   On ';' to state 20
 
 
 State 16:
-1: program -> declaration_statement_list procedure_decls #0001  . procedure_list 
-  0:   On procedure_list to state 21
-  1:   On procedure_name to state 13
-  2:   On NAME to state 14
-  Reduce by 7: procedure_list ->  . 
+19: declaration_statement -> type_declaration NAME  . ';' 
+9: procedure_name -> NAME  . '(' argument_list ')' 
+10: procedure_name -> NAME  . '(' ')' 
+  0:   On ';' to state 21
+  1:   On '(' to state 19
 
 
 State 17:
-4: procedure_list -> procedure_name #0002  . procedure_body #0003 procedure_list 
+1: program -> declaration_statement_list procedure_decls procedure_list  . 
+  Reduce by 1: program -> declaration_statement_list procedure_decls procedure_list  . 
+
+
+State 18:
+3: procedure_list -> procedure_name #0001  . procedure_body #0002 procedure_list 
   0:   On procedure_body to state 22
   1:   On '{' to state 23
 
 
-State 18:
-13: procedure_name -> NAME '('  . argument_list ')' 
-14: procedure_name -> NAME '('  . ')' 
+State 19:
+9: procedure_name -> NAME '('  . argument_list ')' 
+10: procedure_name -> NAME '('  . ')' 
   0:   On argument_list to state 24
   1:   On ')' to state 25
   2:   On argument to state 26
@@ -243,38 +243,31 @@ State 18:
   7:   On VOID to state 9
 
 
-State 19:
-8: procedure_decls -> type_declaration NAME '('  . argument_list ')' ';' #0004 procedure_decls 
-10: procedure_decls -> type_declaration NAME '('  . ')' ';' #0005 procedure_decls 
-  0:   On argument_list to state 28
-  1:   On ')' to state 29
-  2:   On argument to state 26
-  3:   On type_declaration to state 27
-  4:   On INTEGER to state 6
-  5:   On FLOAT to state 7
-  6:   On DOUBLE to state 8
-  7:   On VOID to state 9
-
-
 State 20:
-23: declaration_statement -> type_declaration NAME ';'  . 
-  Reduce by 23: declaration_statement -> type_declaration NAME ';'  . 
+7: procedure_decls -> type_declaration procedure_name ';'  . procedure_decls 
+  0:   On procedure_decls to state 28
+  1:   On type_declaration to state 29
+  2:   On INTEGER to state 6
+  3:   On FLOAT to state 7
+  4:   On DOUBLE to state 8
+  5:   On VOID to state 9
+  Reduce by 8: procedure_decls ->  . 
 
 
 State 21:
-1: program -> declaration_statement_list procedure_decls #0001 procedure_list  . 
-  Reduce by 1: program -> declaration_statement_list procedure_decls #0001 procedure_list  . 
+19: declaration_statement -> type_declaration NAME ';'  . 
+  Reduce by 19: declaration_statement -> type_declaration NAME ';'  . 
 
 
 State 22:
-4: procedure_list -> procedure_name #0002 procedure_body  . #0003 procedure_list 
-  0:   On #0003 to state 30
-  Reduce by 6: #0003 ->  . 
+3: procedure_list -> procedure_name #0001 procedure_body  . #0002 procedure_list 
+  0:   On #0002 to state 30
+  Reduce by 5: #0002 ->  . 
 
 
 State 23:
-18: procedure_body -> '{'  . declaration_statement_list #0006 basic_block_list '}' 
-20: procedure_body -> '{'  . basic_block_list '}' 
+14: procedure_body -> '{'  . declaration_statement_list #0003 basic_block_list '}' 
+16: procedure_body -> '{'  . basic_block_list '}' 
   0:   On declaration_statement_list to state 31
   1:   On basic_block_list to state 32
   2:   On declaration_statement to state 4
@@ -288,91 +281,90 @@ State 23:
 
 
 State 24:
-13: procedure_name -> NAME '(' argument_list  . ')' 
-15: argument_list -> argument_list  . ',' argument 
+9: procedure_name -> NAME '(' argument_list  . ')' 
+11: argument_list -> argument_list  . ',' argument 
   0:   On ')' to state 36
   1:   On ',' to state 37
 
 
 State 25:
-14: procedure_name -> NAME '(' ')'  . 
-  Reduce by 14: procedure_name -> NAME '(' ')'  . 
+10: procedure_name -> NAME '(' ')'  . 
+  Reduce by 10: procedure_name -> NAME '(' ')'  . 
 
 
 State 26:
-16: argument_list -> argument  . 
-  Reduce by 16: argument_list -> argument  . 
+12: argument_list -> argument  . 
+  Reduce by 12: argument_list -> argument  . 
 
 
 State 27:
-17: argument -> type_declaration  . NAME 
+13: argument -> type_declaration  . NAME 
   0:   On NAME to state 38
 
 
 State 28:
-8: procedure_decls -> type_declaration NAME '(' argument_list  . ')' ';' #0004 procedure_decls 
-15: argument_list -> argument_list  . ',' argument 
-  0:   On ')' to state 39
-  1:   On ',' to state 37
+7: procedure_decls -> type_declaration procedure_name ';' procedure_decls  . 
+  Reduce by 7: procedure_decls -> type_declaration procedure_name ';' procedure_decls  . 
 
 
 State 29:
-10: procedure_decls -> type_declaration NAME '(' ')'  . ';' #0005 procedure_decls 
-  0:   On ';' to state 40
+7: procedure_decls -> type_declaration  . procedure_name ';' procedure_decls 
+  0:   On procedure_name to state 15
+  1:   On NAME to state 14
 
 
 State 30:
-4: procedure_list -> procedure_name #0002 procedure_body #0003  . procedure_list 
-  0:   On procedure_list to state 41
+3: procedure_list -> procedure_name #0001 procedure_body #0002  . procedure_list 
+  0:   On procedure_list to state 39
   1:   On procedure_name to state 13
   2:   On NAME to state 14
-  Reduce by 7: procedure_list ->  . 
+  Reduce by 6: procedure_list ->  . 
 
 
 State 31:
-18: procedure_body -> '{' declaration_statement_list  . #0006 basic_block_list '}' 
-22: declaration_statement_list -> declaration_statement_list  . declaration_statement 
-  0:   On #0006 to state 42
+14: procedure_body -> '{' declaration_statement_list  . #0003 basic_block_list '}' 
+18: declaration_statement_list -> declaration_statement_list  . declaration_statement 
+  0:   On #0003 to state 40
   1:   On declaration_statement to state 11
   2:   On type_declaration to state 34
   3:   On INTEGER to state 6
   4:   On FLOAT to state 7
   5:   On DOUBLE to state 8
   6:   On VOID to state 9
-  Reduce by 19: #0006 ->  . 
+  Reduce by 15: #0003 ->  . 
 
 
 State 32:
-20: procedure_body -> '{' basic_block_list  . '}' 
-28: basic_block_list -> basic_block_list  . basic_block 
-  0:   On '}' to state 43
-  1:   On basic_block to state 44
+16: procedure_body -> '{' basic_block_list  . '}' 
+24: basic_block_list -> basic_block_list  . basic_block 
+  0:   On '}' to state 41
+  1:   On basic_block to state 42
   2:   On BASIC_BLOCK to state 35
 
 
 State 33:
-29: basic_block_list -> basic_block  . 
-  Reduce by 29: basic_block_list -> basic_block  . 
+25: basic_block_list -> basic_block  . 
+  Reduce by 25: basic_block_list -> basic_block  . 
 
 
 State 34:
-23: declaration_statement -> type_declaration  . NAME ';' 
-  0:   On NAME to state 45
+19: declaration_statement -> type_declaration  . NAME ';' 
+  0:   On NAME to state 43
 
 
 State 35:
-30: basic_block -> BASIC_BLOCK  . ':' executable_statement_list 
-  0:   On ':' to state 46
+26: basic_block -> BASIC_BLOCK  . ':' executable_statement_list 
+  0:   On ':' to state 44
 
 
 State 36:
-13: procedure_name -> NAME '(' argument_list ')'  . 
-  Reduce by 13: procedure_name -> NAME '(' argument_list ')'  . 
+9: procedure_name -> NAME '(' argument_list ')'  . 
+  Reduce by 9: procedure_name -> NAME '(' argument_list ')'  . 
 
 
 State 37:
-15: argument_list -> argument_list ','  . argument 
-  0:   On argument to state 47
+11: argument_list -> argument_list ','  . argument 
+  0:   On argument to state 45
   1:   On type_declaration to state 27
   2:   On INTEGER to state 6
   3:   On FLOAT to state 7
@@ -381,929 +373,868 @@ State 37:
 
 
 State 38:
-17: argument -> type_declaration NAME  . 
-  Reduce by 17: argument -> type_declaration NAME  . 
+13: argument -> type_declaration NAME  . 
+  Reduce by 13: argument -> type_declaration NAME  . 
 
 
 State 39:
-8: procedure_decls -> type_declaration NAME '(' argument_list ')'  . ';' #0004 procedure_decls 
-  0:   On ';' to state 48
+3: procedure_list -> procedure_name #0001 procedure_body #0002 procedure_list  . 
+  Reduce by 3: procedure_list -> procedure_name #0001 procedure_body #0002 procedure_list  . 
 
 
 State 40:
-10: procedure_decls -> type_declaration NAME '(' ')' ';'  . #0005 procedure_decls 
-  0:   On #0005 to state 49
-  Reduce by 11: #0005 ->  . 
-
-
-State 41:
-4: procedure_list -> procedure_name #0002 procedure_body #0003 procedure_list  . 
-  Reduce by 4: procedure_list -> procedure_name #0002 procedure_body #0003 procedure_list  . 
-
-
-State 42:
-18: procedure_body -> '{' declaration_statement_list #0006  . basic_block_list '}' 
-  0:   On basic_block_list to state 50
+14: procedure_body -> '{' declaration_statement_list #0003  . basic_block_list '}' 
+  0:   On basic_block_list to state 46
   1:   On basic_block to state 33
   2:   On BASIC_BLOCK to state 35
 
 
+State 41:
+16: procedure_body -> '{' basic_block_list '}'  . 
+  Reduce by 16: procedure_body -> '{' basic_block_list '}'  . 
+
+
+State 42:
+24: basic_block_list -> basic_block_list basic_block  . 
+  Reduce by 24: basic_block_list -> basic_block_list basic_block  . 
+
+
 State 43:
-20: procedure_body -> '{' basic_block_list '}'  . 
-  Reduce by 20: procedure_body -> '{' basic_block_list '}'  . 
+19: declaration_statement -> type_declaration NAME  . ';' 
+  0:   On ';' to state 21
 
 
 State 44:
-28: basic_block_list -> basic_block_list basic_block  . 
-  Reduce by 28: basic_block_list -> basic_block_list basic_block  . 
+26: basic_block -> BASIC_BLOCK ':'  . executable_statement_list 
+  0:   On executable_statement_list to state 47
+  1:   On assignment_statement_list to state 48
+  Reduce by 31: assignment_statement_list ->  . 
 
 
 State 45:
-23: declaration_statement -> type_declaration NAME  . ';' 
-  0:   On ';' to state 20
+11: argument_list -> argument_list ',' argument  . 
+  Reduce by 11: argument_list -> argument_list ',' argument  . 
 
 
 State 46:
-30: basic_block -> BASIC_BLOCK ':'  . executable_statement_list 
-  0:   On executable_statement_list to state 51
-  1:   On assignment_statement_list to state 52
-  Reduce by 35: assignment_statement_list ->  . 
-
-
-State 47:
-15: argument_list -> argument_list ',' argument  . 
-  Reduce by 15: argument_list -> argument_list ',' argument  . 
-
-
-State 48:
-8: procedure_decls -> type_declaration NAME '(' argument_list ')' ';'  . #0004 procedure_decls 
-  0:   On #0004 to state 53
-  Reduce by 9: #0004 ->  . 
-
-
-State 49:
-10: procedure_decls -> type_declaration NAME '(' ')' ';' #0005  . procedure_decls 
-  0:   On procedure_decls to state 54
-  1:   On type_declaration to state 55
-  2:   On INTEGER to state 6
-  3:   On FLOAT to state 7
-  4:   On DOUBLE to state 8
-  5:   On VOID to state 9
-  Reduce by 12: procedure_decls ->  . 
-
-
-State 50:
-18: procedure_body -> '{' declaration_statement_list #0006 basic_block_list  . '}' 
-28: basic_block_list -> basic_block_list  . basic_block 
-  0:   On '}' to state 56
-  1:   On basic_block to state 44
+14: procedure_body -> '{' declaration_statement_list #0003 basic_block_list  . '}' 
+24: basic_block_list -> basic_block_list  . basic_block 
+  0:   On '}' to state 49
+  1:   On basic_block to state 42
   2:   On BASIC_BLOCK to state 35
 
 
+State 47:
+26: basic_block -> BASIC_BLOCK ':' executable_statement_list  . 
+  Reduce by 26: basic_block -> BASIC_BLOCK ':' executable_statement_list  . 
+
+
+State 48:
+27: executable_statement_list -> assignment_statement_list  . 
+28: executable_statement_list -> assignment_statement_list  . RETURN return_value ';' 
+32: assignment_statement_list -> assignment_statement_list  . assignment_statement 
+  0:   On RETURN to state 50
+  1:   On assignment_statement to state 51
+  2:   On variable to state 52
+  3:   On if_block to state 53
+  4:   On goto_statement to state 54
+  5:   On func_call to state 55
+  6:   On NAME to state 56
+  7:   On IF to state 57
+  8:   On GOTO to state 58
+  Reduce by 27: executable_statement_list -> assignment_statement_list  . 
+
+
+State 49:
+14: procedure_body -> '{' declaration_statement_list #0003 basic_block_list '}'  . 
+  Reduce by 14: procedure_body -> '{' declaration_statement_list #0003 basic_block_list '}'  . 
+
+
+State 50:
+28: executable_statement_list -> assignment_statement_list RETURN  . return_value ';' 
+  0:   On return_value to state 59
+  1:   On comparision_expression to state 60
+  2:   On arith_expression to state 61
+  3:   On '-' to state 62
+  4:   On '(' to state 63
+  5:   On atomic_expr to state 64
+  6:   On variable to state 65
+  7:   On constant to state 66
+  8:   On func_call to state 67
+  9:   On NAME to state 56
+  10:   On INTEGER_NUMBER to state 68
+  11:   On FLOAT_NUMBER to state 69
+  Reduce by 30: return_value ->  . 
+
+
 State 51:
-30: basic_block -> BASIC_BLOCK ':' executable_statement_list  . 
-  Reduce by 30: basic_block -> BASIC_BLOCK ':' executable_statement_list  . 
+32: assignment_statement_list -> assignment_statement_list assignment_statement  . 
+  Reduce by 32: assignment_statement_list -> assignment_statement_list assignment_statement  . 
 
 
 State 52:
-31: executable_statement_list -> assignment_statement_list  . 
-32: executable_statement_list -> assignment_statement_list  . RETURN return_value ';' 
-36: assignment_statement_list -> assignment_statement_list  . assignment_statement 
-  0:   On RETURN to state 57
-  1:   On assignment_statement to state 58
-  2:   On variable to state 59
-  3:   On if_block to state 60
-  4:   On goto_statement to state 61
-  5:   On func_call to state 62
-  6:   On NAME to state 63
-  7:   On IF to state 64
-  8:   On GOTO to state 65
-  Reduce by 31: executable_statement_list -> assignment_statement_list  . 
+33: assignment_statement -> variable  . ASSIGN_OP comparision_expression ';' 
+  0:   On ASSIGN_OP to state 70
 
 
 State 53:
-8: procedure_decls -> type_declaration NAME '(' argument_list ')' ';' #0004  . procedure_decls 
-  0:   On procedure_decls to state 66
-  1:   On type_declaration to state 55
-  2:   On INTEGER to state 6
-  3:   On FLOAT to state 7
-  4:   On DOUBLE to state 8
-  5:   On VOID to state 9
-  Reduce by 12: procedure_decls ->  . 
+34: assignment_statement -> if_block  . 
+  Reduce by 34: assignment_statement -> if_block  . 
 
 
 State 54:
-10: procedure_decls -> type_declaration NAME '(' ')' ';' #0005 procedure_decls  . 
-  Reduce by 10: procedure_decls -> type_declaration NAME '(' ')' ';' #0005 procedure_decls  . 
+35: assignment_statement -> goto_statement  . 
+  Reduce by 35: assignment_statement -> goto_statement  . 
 
 
 State 55:
-8: procedure_decls -> type_declaration  . NAME '(' argument_list ')' ';' #0004 procedure_decls 
-10: procedure_decls -> type_declaration  . NAME '(' ')' ';' #0005 procedure_decls 
-  0:   On NAME to state 67
+36: assignment_statement -> func_call  . ';' 
+  0:   On ';' to state 71
 
 
 State 56:
-18: procedure_body -> '{' declaration_statement_list #0006 basic_block_list '}'  . 
-  Reduce by 18: procedure_body -> '{' declaration_statement_list #0006 basic_block_list '}'  . 
+63: variable -> NAME  . 
+59: func_call -> NAME  . '(' pass_variable_list ')' 
+60: func_call -> NAME  . '(' ')' 
+  0:   On '(' to state 72
+  Reduce by 63: variable -> NAME  . 
 
 
 State 57:
-32: executable_statement_list -> assignment_statement_list RETURN  . return_value ';' 
-  0:   On return_value to state 68
-  1:   On comparision_expression to state 69
-  2:   On arith_expression to state 70
-  3:   On '-' to state 71
-  4:   On '(' to state 72
-  5:   On atomic_expr to state 73
-  6:   On variable to state 74
-  7:   On constant to state 75
-  8:   On func_call to state 76
-  9:   On NAME to state 63
-  10:   On INTEGER_NUMBER to state 77
-  11:   On FLOAT_NUMBER to state 78
-  Reduce by 34: return_value ->  . 
+37: if_block -> IF  . '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
+  0:   On '(' to state 73
 
 
 State 58:
-36: assignment_statement_list -> assignment_statement_list assignment_statement  . 
-  Reduce by 36: assignment_statement_list -> assignment_statement_list assignment_statement  . 
+38: goto_statement -> GOTO  . BASIC_BLOCK ';' 
+  0:   On BASIC_BLOCK to state 74
 
 
 State 59:
-37: assignment_statement -> variable  . ASSIGN_OP comparision_expression ';' 
-  0:   On ASSIGN_OP to state 79
+28: executable_statement_list -> assignment_statement_list RETURN return_value  . ';' 
+  0:   On ';' to state 75
 
 
 State 60:
-38: assignment_statement -> if_block  . 
-  Reduce by 38: assignment_statement -> if_block  . 
+29: return_value -> comparision_expression  . 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0:   On GT to state 76
+  1:   On LT to state 77
+  2:   On GE to state 78
+  3:   On LE to state 79
+  4:   On EQ to state 80
+  5:   On NE to state 81
+  Reduce by 29: return_value -> comparision_expression  . 
 
 
 State 61:
-39: assignment_statement -> goto_statement  . 
-  Reduce by 39: assignment_statement -> goto_statement  . 
+39: comparision_expression -> arith_expression  . 
+52: arith_expression -> arith_expression  . '*' arith_expression 
+53: arith_expression -> arith_expression  . '/' arith_expression 
+54: arith_expression -> arith_expression  . '+' arith_expression 
+55: arith_expression -> arith_expression  . '-' arith_expression 
+  0:   On '*' to state 82
+  1:   On '/' to state 83
+  2:   On '+' to state 84
+  3:   On '-' to state 85
+  Reduce by 39: comparision_expression -> arith_expression  . 
 
 
 State 62:
-40: assignment_statement -> func_call  . ';' 
-  0:   On ';' to state 80
+46: arith_expression -> '-'  . atomic_expr 
+47: arith_expression -> '-'  . '(' comparision_expression ')' 
+  0:   On atomic_expr to state 86
+  1:   On '(' to state 87
+  2:   On variable to state 65
+  3:   On constant to state 66
+  4:   On func_call to state 67
+  5:   On NAME to state 56
+  6:   On INTEGER_NUMBER to state 68
+  7:   On FLOAT_NUMBER to state 69
 
 
 State 63:
-67: variable -> NAME  . 
-63: func_call -> NAME  . '(' pass_variable_list ')' 
-64: func_call -> NAME  . '(' ')' 
-  0:   On '(' to state 81
-  Reduce by 67: variable -> NAME  . 
-
-
-State 64:
-41: if_block -> IF  . '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
-  0:   On '(' to state 82
-
-
-State 65:
-42: goto_statement -> GOTO  . BASIC_BLOCK ';' 
-  0:   On BASIC_BLOCK to state 83
-
-
-State 66:
-8: procedure_decls -> type_declaration NAME '(' argument_list ')' ';' #0004 procedure_decls  . 
-  Reduce by 8: procedure_decls -> type_declaration NAME '(' argument_list ')' ';' #0004 procedure_decls  . 
-
-
-State 67:
-8: procedure_decls -> type_declaration NAME  . '(' argument_list ')' ';' #0004 procedure_decls 
-10: procedure_decls -> type_declaration NAME  . '(' ')' ';' #0005 procedure_decls 
-  0:   On '(' to state 19
-
-
-State 68:
-32: executable_statement_list -> assignment_statement_list RETURN return_value  . ';' 
-  0:   On ';' to state 84
-
-
-State 69:
-33: return_value -> comparision_expression  . 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0:   On GT to state 85
-  1:   On LT to state 86
-  2:   On GE to state 87
-  3:   On LE to state 88
-  4:   On EQ to state 89
-  5:   On NE to state 90
-  Reduce by 33: return_value -> comparision_expression  . 
-
-
-State 70:
-43: comparision_expression -> arith_expression  . 
-56: arith_expression -> arith_expression  . '*' arith_expression 
-57: arith_expression -> arith_expression  . '/' arith_expression 
-58: arith_expression -> arith_expression  . '+' arith_expression 
-59: arith_expression -> arith_expression  . '-' arith_expression 
-  0:   On '*' to state 91
-  1:   On '/' to state 92
-  2:   On '+' to state 93
-  3:   On '-' to state 94
-  Reduce by 43: comparision_expression -> arith_expression  . 
-
-
-State 71:
-50: arith_expression -> '-'  . atomic_expr 
-51: arith_expression -> '-'  . '(' comparision_expression ')' 
-  0:   On atomic_expr to state 95
-  1:   On '(' to state 96
-  2:   On variable to state 74
-  3:   On constant to state 75
-  4:   On func_call to state 76
-  5:   On NAME to state 63
-  6:   On INTEGER_NUMBER to state 77
-  7:   On FLOAT_NUMBER to state 78
-
-
-State 72:
-52: arith_expression -> '('  . type_declaration ')' atomic_expr 
-53: arith_expression -> '('  . type_declaration ')' '(' comparision_expression ')' 
-54: arith_expression -> '('  . comparision_expression ')' 
-  0:   On type_declaration to state 97
-  1:   On comparision_expression to state 98
+48: arith_expression -> '('  . type_declaration ')' atomic_expr 
+49: arith_expression -> '('  . type_declaration ')' '(' comparision_expression ')' 
+50: arith_expression -> '('  . comparision_expression ')' 
+  0:   On type_declaration to state 88
+  1:   On comparision_expression to state 89
   2:   On INTEGER to state 6
   3:   On FLOAT to state 7
   4:   On DOUBLE to state 8
   5:   On VOID to state 9
-  6:   On arith_expression to state 70
-  7:   On '-' to state 71
-  8:   On '(' to state 72
-  9:   On atomic_expr to state 73
-  10:   On variable to state 74
-  11:   On constant to state 75
-  12:   On func_call to state 76
-  13:   On NAME to state 63
-  14:   On INTEGER_NUMBER to state 77
-  15:   On FLOAT_NUMBER to state 78
+  6:   On arith_expression to state 61
+  7:   On '-' to state 62
+  8:   On '(' to state 63
+  9:   On atomic_expr to state 64
+  10:   On variable to state 65
+  11:   On constant to state 66
+  12:   On func_call to state 67
+  13:   On NAME to state 56
+  14:   On INTEGER_NUMBER to state 68
+  15:   On FLOAT_NUMBER to state 69
+
+
+State 64:
+51: arith_expression -> atomic_expr  . 
+  Reduce by 51: arith_expression -> atomic_expr  . 
+
+
+State 65:
+56: atomic_expr -> variable  . 
+  Reduce by 56: atomic_expr -> variable  . 
+
+
+State 66:
+57: atomic_expr -> constant  . 
+  Reduce by 57: atomic_expr -> constant  . 
+
+
+State 67:
+58: atomic_expr -> func_call  . 
+  Reduce by 58: atomic_expr -> func_call  . 
+
+
+State 68:
+64: constant -> INTEGER_NUMBER  . 
+  Reduce by 64: constant -> INTEGER_NUMBER  . 
+
+
+State 69:
+65: constant -> FLOAT_NUMBER  . 
+  Reduce by 65: constant -> FLOAT_NUMBER  . 
+
+
+State 70:
+33: assignment_statement -> variable ASSIGN_OP  . comparision_expression ';' 
+  0:   On comparision_expression to state 90
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
+
+
+State 71:
+36: assignment_statement -> func_call ';'  . 
+  Reduce by 36: assignment_statement -> func_call ';'  . 
+
+
+State 72:
+59: func_call -> NAME '('  . pass_variable_list ')' 
+60: func_call -> NAME '('  . ')' 
+  0:   On pass_variable_list to state 91
+  1:   On ')' to state 92
+  2:   On comparision_expression to state 93
+  3:   On arith_expression to state 61
+  4:   On '-' to state 62
+  5:   On '(' to state 63
+  6:   On atomic_expr to state 64
+  7:   On variable to state 65
+  8:   On constant to state 66
+  9:   On func_call to state 67
+  10:   On NAME to state 56
+  11:   On INTEGER_NUMBER to state 68
+  12:   On FLOAT_NUMBER to state 69
 
 
 State 73:
-55: arith_expression -> atomic_expr  . 
-  Reduce by 55: arith_expression -> atomic_expr  . 
+37: if_block -> IF '('  . comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
+  0:   On comparision_expression to state 94
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
 
 
 State 74:
-60: atomic_expr -> variable  . 
-  Reduce by 60: atomic_expr -> variable  . 
+38: goto_statement -> GOTO BASIC_BLOCK  . ';' 
+  0:   On ';' to state 95
 
 
 State 75:
-61: atomic_expr -> constant  . 
-  Reduce by 61: atomic_expr -> constant  . 
+28: executable_statement_list -> assignment_statement_list RETURN return_value ';'  . 
+  Reduce by 28: executable_statement_list -> assignment_statement_list RETURN return_value ';'  . 
 
 
 State 76:
-62: atomic_expr -> func_call  . 
-  Reduce by 62: atomic_expr -> func_call  . 
+40: comparision_expression -> comparision_expression GT  . comparision_expression 
+  0:   On comparision_expression to state 96
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
 
 
 State 77:
-68: constant -> INTEGER_NUMBER  . 
-  Reduce by 68: constant -> INTEGER_NUMBER  . 
+41: comparision_expression -> comparision_expression LT  . comparision_expression 
+  0:   On comparision_expression to state 97
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
 
 
 State 78:
-69: constant -> FLOAT_NUMBER  . 
-  Reduce by 69: constant -> FLOAT_NUMBER  . 
+42: comparision_expression -> comparision_expression GE  . comparision_expression 
+  0:   On comparision_expression to state 98
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
 
 
 State 79:
-37: assignment_statement -> variable ASSIGN_OP  . comparision_expression ';' 
+43: comparision_expression -> comparision_expression LE  . comparision_expression 
   0:   On comparision_expression to state 99
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
 
 
 State 80:
-40: assignment_statement -> func_call ';'  . 
-  Reduce by 40: assignment_statement -> func_call ';'  . 
+44: comparision_expression -> comparision_expression EQ  . comparision_expression 
+  0:   On comparision_expression to state 100
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
 
 
 State 81:
-63: func_call -> NAME '('  . pass_variable_list ')' 
-64: func_call -> NAME '('  . ')' 
-  0:   On pass_variable_list to state 100
-  1:   On ')' to state 101
-  2:   On comparision_expression to state 102
-  3:   On arith_expression to state 70
-  4:   On '-' to state 71
-  5:   On '(' to state 72
-  6:   On atomic_expr to state 73
-  7:   On variable to state 74
-  8:   On constant to state 75
-  9:   On func_call to state 76
-  10:   On NAME to state 63
-  11:   On INTEGER_NUMBER to state 77
-  12:   On FLOAT_NUMBER to state 78
+45: comparision_expression -> comparision_expression NE  . comparision_expression 
+  0:   On comparision_expression to state 101
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
 
 
 State 82:
-41: if_block -> IF '('  . comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
-  0:   On comparision_expression to state 103
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+52: arith_expression -> arith_expression '*'  . arith_expression 
+  0:   On arith_expression to state 102
+  1:   On '-' to state 62
+  2:   On '(' to state 63
+  3:   On atomic_expr to state 64
+  4:   On variable to state 65
+  5:   On constant to state 66
+  6:   On func_call to state 67
+  7:   On NAME to state 56
+  8:   On INTEGER_NUMBER to state 68
+  9:   On FLOAT_NUMBER to state 69
 
 
 State 83:
-42: goto_statement -> GOTO BASIC_BLOCK  . ';' 
-  0:   On ';' to state 104
+53: arith_expression -> arith_expression '/'  . arith_expression 
+  0:   On arith_expression to state 103
+  1:   On '-' to state 62
+  2:   On '(' to state 63
+  3:   On atomic_expr to state 64
+  4:   On variable to state 65
+  5:   On constant to state 66
+  6:   On func_call to state 67
+  7:   On NAME to state 56
+  8:   On INTEGER_NUMBER to state 68
+  9:   On FLOAT_NUMBER to state 69
 
 
 State 84:
-32: executable_statement_list -> assignment_statement_list RETURN return_value ';'  . 
-  Reduce by 32: executable_statement_list -> assignment_statement_list RETURN return_value ';'  . 
+54: arith_expression -> arith_expression '+'  . arith_expression 
+  0:   On arith_expression to state 104
+  1:   On '-' to state 62
+  2:   On '(' to state 63
+  3:   On atomic_expr to state 64
+  4:   On variable to state 65
+  5:   On constant to state 66
+  6:   On func_call to state 67
+  7:   On NAME to state 56
+  8:   On INTEGER_NUMBER to state 68
+  9:   On FLOAT_NUMBER to state 69
 
 
 State 85:
-44: comparision_expression -> comparision_expression GT  . comparision_expression 
-  0:   On comparision_expression to state 105
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+55: arith_expression -> arith_expression '-'  . arith_expression 
+  0:   On arith_expression to state 105
+  1:   On '-' to state 62
+  2:   On '(' to state 63
+  3:   On atomic_expr to state 64
+  4:   On variable to state 65
+  5:   On constant to state 66
+  6:   On func_call to state 67
+  7:   On NAME to state 56
+  8:   On INTEGER_NUMBER to state 68
+  9:   On FLOAT_NUMBER to state 69
 
 
 State 86:
-45: comparision_expression -> comparision_expression LT  . comparision_expression 
-  0:   On comparision_expression to state 106
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+46: arith_expression -> '-' atomic_expr  . 
+  Reduce by 46: arith_expression -> '-' atomic_expr  . 
 
 
 State 87:
-46: comparision_expression -> comparision_expression GE  . comparision_expression 
-  0:   On comparision_expression to state 107
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+47: arith_expression -> '-' '('  . comparision_expression ')' 
+  0:   On comparision_expression to state 106
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
 
 
 State 88:
-47: comparision_expression -> comparision_expression LE  . comparision_expression 
-  0:   On comparision_expression to state 108
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+48: arith_expression -> '(' type_declaration  . ')' atomic_expr 
+49: arith_expression -> '(' type_declaration  . ')' '(' comparision_expression ')' 
+  0:   On ')' to state 107
 
 
 State 89:
-48: comparision_expression -> comparision_expression EQ  . comparision_expression 
-  0:   On comparision_expression to state 109
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+50: arith_expression -> '(' comparision_expression  . ')' 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0:   On ')' to state 108
+  1:   On GT to state 76
+  2:   On LT to state 77
+  3:   On GE to state 78
+  4:   On LE to state 79
+  5:   On EQ to state 80
+  6:   On NE to state 81
 
 
 State 90:
-49: comparision_expression -> comparision_expression NE  . comparision_expression 
-  0:   On comparision_expression to state 110
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+33: assignment_statement -> variable ASSIGN_OP comparision_expression  . ';' 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0:   On ';' to state 109
+  1:   On GT to state 76
+  2:   On LT to state 77
+  3:   On GE to state 78
+  4:   On LE to state 79
+  5:   On EQ to state 80
+  6:   On NE to state 81
 
 
 State 91:
-56: arith_expression -> arith_expression '*'  . arith_expression 
-  0:   On arith_expression to state 111
-  1:   On '-' to state 71
-  2:   On '(' to state 72
-  3:   On atomic_expr to state 73
-  4:   On variable to state 74
-  5:   On constant to state 75
-  6:   On func_call to state 76
-  7:   On NAME to state 63
-  8:   On INTEGER_NUMBER to state 77
-  9:   On FLOAT_NUMBER to state 78
+59: func_call -> NAME '(' pass_variable_list  . ')' 
+  0:   On ')' to state 110
 
 
 State 92:
-57: arith_expression -> arith_expression '/'  . arith_expression 
-  0:   On arith_expression to state 112
-  1:   On '-' to state 71
-  2:   On '(' to state 72
-  3:   On atomic_expr to state 73
-  4:   On variable to state 74
-  5:   On constant to state 75
-  6:   On func_call to state 76
-  7:   On NAME to state 63
-  8:   On INTEGER_NUMBER to state 77
-  9:   On FLOAT_NUMBER to state 78
+60: func_call -> NAME '(' ')'  . 
+  Reduce by 60: func_call -> NAME '(' ')'  . 
 
 
 State 93:
-58: arith_expression -> arith_expression '+'  . arith_expression 
-  0:   On arith_expression to state 113
-  1:   On '-' to state 71
-  2:   On '(' to state 72
-  3:   On atomic_expr to state 73
-  4:   On variable to state 74
-  5:   On constant to state 75
-  6:   On func_call to state 76
-  7:   On NAME to state 63
-  8:   On INTEGER_NUMBER to state 77
-  9:   On FLOAT_NUMBER to state 78
+61: pass_variable_list -> comparision_expression  . ',' pass_variable_list 
+62: pass_variable_list -> comparision_expression  . 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0:   On ',' to state 111
+  1:   On GT to state 76
+  2:   On LT to state 77
+  3:   On GE to state 78
+  4:   On LE to state 79
+  5:   On EQ to state 80
+  6:   On NE to state 81
+  Reduce by 62: pass_variable_list -> comparision_expression  . 
 
 
 State 94:
-59: arith_expression -> arith_expression '-'  . arith_expression 
-  0:   On arith_expression to state 114
-  1:   On '-' to state 71
-  2:   On '(' to state 72
-  3:   On atomic_expr to state 73
-  4:   On variable to state 74
-  5:   On constant to state 75
-  6:   On func_call to state 76
-  7:   On NAME to state 63
-  8:   On INTEGER_NUMBER to state 77
-  9:   On FLOAT_NUMBER to state 78
+37: if_block -> IF '(' comparision_expression  . ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0:   On ')' to state 112
+  1:   On GT to state 76
+  2:   On LT to state 77
+  3:   On GE to state 78
+  4:   On LE to state 79
+  5:   On EQ to state 80
+  6:   On NE to state 81
 
 
 State 95:
-50: arith_expression -> '-' atomic_expr  . 
-  Reduce by 50: arith_expression -> '-' atomic_expr  . 
+38: goto_statement -> GOTO BASIC_BLOCK ';'  . 
+  Reduce by 38: goto_statement -> GOTO BASIC_BLOCK ';'  . 
 
 
 State 96:
-51: arith_expression -> '-' '('  . comparision_expression ')' 
-  0:   On comparision_expression to state 115
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+40: comparision_expression -> comparision_expression GT comparision_expression  . 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0 (removed by precedence):   On GT to state 76
+  1 (removed by precedence):   On LT to state 77
+  2 (removed by precedence):   On GE to state 78
+  3 (removed by precedence):   On LE to state 79
+  4 (removed by precedence):   On EQ to state 80
+  5 (removed by precedence):   On NE to state 81
+  Reduce by 40: comparision_expression -> comparision_expression GT comparision_expression  . 
 
 
 State 97:
-52: arith_expression -> '(' type_declaration  . ')' atomic_expr 
-53: arith_expression -> '(' type_declaration  . ')' '(' comparision_expression ')' 
-  0:   On ')' to state 116
+41: comparision_expression -> comparision_expression LT comparision_expression  . 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0 (removed by precedence):   On GT to state 76
+  1 (removed by precedence):   On LT to state 77
+  2 (removed by precedence):   On GE to state 78
+  3 (removed by precedence):   On LE to state 79
+  4 (removed by precedence):   On EQ to state 80
+  5 (removed by precedence):   On NE to state 81
+  Reduce by 41: comparision_expression -> comparision_expression LT comparision_expression  . 
 
 
 State 98:
-54: arith_expression -> '(' comparision_expression  . ')' 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0:   On ')' to state 117
-  1:   On GT to state 85
-  2:   On LT to state 86
-  3:   On GE to state 87
-  4:   On LE to state 88
-  5:   On EQ to state 89
-  6:   On NE to state 90
+42: comparision_expression -> comparision_expression GE comparision_expression  . 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0 (removed by precedence):   On GT to state 76
+  1 (removed by precedence):   On LT to state 77
+  2 (removed by precedence):   On GE to state 78
+  3 (removed by precedence):   On LE to state 79
+  4 (removed by precedence):   On EQ to state 80
+  5 (removed by precedence):   On NE to state 81
+  Reduce by 42: comparision_expression -> comparision_expression GE comparision_expression  . 
 
 
 State 99:
-37: assignment_statement -> variable ASSIGN_OP comparision_expression  . ';' 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0:   On ';' to state 118
-  1:   On GT to state 85
-  2:   On LT to state 86
-  3:   On GE to state 87
-  4:   On LE to state 88
-  5:   On EQ to state 89
-  6:   On NE to state 90
+43: comparision_expression -> comparision_expression LE comparision_expression  . 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0 (removed by precedence):   On GT to state 76
+  1 (removed by precedence):   On LT to state 77
+  2 (removed by precedence):   On GE to state 78
+  3 (removed by precedence):   On LE to state 79
+  4 (removed by precedence):   On EQ to state 80
+  5 (removed by precedence):   On NE to state 81
+  Reduce by 43: comparision_expression -> comparision_expression LE comparision_expression  . 
 
 
 State 100:
-63: func_call -> NAME '(' pass_variable_list  . ')' 
-  0:   On ')' to state 119
+44: comparision_expression -> comparision_expression EQ comparision_expression  . 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0:   On GT to state 76
+  1:   On LT to state 77
+  2:   On GE to state 78
+  3:   On LE to state 79
+  4 (removed by precedence):   On EQ to state 80
+  5 (removed by precedence):   On NE to state 81
+  Reduce by 44: comparision_expression -> comparision_expression EQ comparision_expression  . 
 
 
 State 101:
-64: func_call -> NAME '(' ')'  . 
-  Reduce by 64: func_call -> NAME '(' ')'  . 
+45: comparision_expression -> comparision_expression NE comparision_expression  . 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0:   On GT to state 76
+  1:   On LT to state 77
+  2:   On GE to state 78
+  3:   On LE to state 79
+  4 (removed by precedence):   On EQ to state 80
+  5 (removed by precedence):   On NE to state 81
+  Reduce by 45: comparision_expression -> comparision_expression NE comparision_expression  . 
 
 
 State 102:
-65: pass_variable_list -> comparision_expression  . ',' pass_variable_list 
-66: pass_variable_list -> comparision_expression  . 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0:   On ',' to state 120
-  1:   On GT to state 85
-  2:   On LT to state 86
-  3:   On GE to state 87
-  4:   On LE to state 88
-  5:   On EQ to state 89
-  6:   On NE to state 90
-  Reduce by 66: pass_variable_list -> comparision_expression  . 
+52: arith_expression -> arith_expression '*' arith_expression  . 
+52: arith_expression -> arith_expression  . '*' arith_expression 
+53: arith_expression -> arith_expression  . '/' arith_expression 
+54: arith_expression -> arith_expression  . '+' arith_expression 
+55: arith_expression -> arith_expression  . '-' arith_expression 
+  0 (removed by precedence):   On '*' to state 82
+  1 (removed by precedence):   On '/' to state 83
+  2 (removed by precedence):   On '+' to state 84
+  3 (removed by precedence):   On '-' to state 85
+  Reduce by 52: arith_expression -> arith_expression '*' arith_expression  . 
 
 
 State 103:
-41: if_block -> IF '(' comparision_expression  . ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0:   On ')' to state 121
-  1:   On GT to state 85
-  2:   On LT to state 86
-  3:   On GE to state 87
-  4:   On LE to state 88
-  5:   On EQ to state 89
-  6:   On NE to state 90
+53: arith_expression -> arith_expression '/' arith_expression  . 
+52: arith_expression -> arith_expression  . '*' arith_expression 
+53: arith_expression -> arith_expression  . '/' arith_expression 
+54: arith_expression -> arith_expression  . '+' arith_expression 
+55: arith_expression -> arith_expression  . '-' arith_expression 
+  0 (removed by precedence):   On '*' to state 82
+  1 (removed by precedence):   On '/' to state 83
+  2 (removed by precedence):   On '+' to state 84
+  3 (removed by precedence):   On '-' to state 85
+  Reduce by 53: arith_expression -> arith_expression '/' arith_expression  . 
 
 
 State 104:
-42: goto_statement -> GOTO BASIC_BLOCK ';'  . 
-  Reduce by 42: goto_statement -> GOTO BASIC_BLOCK ';'  . 
+54: arith_expression -> arith_expression '+' arith_expression  . 
+52: arith_expression -> arith_expression  . '*' arith_expression 
+53: arith_expression -> arith_expression  . '/' arith_expression 
+54: arith_expression -> arith_expression  . '+' arith_expression 
+55: arith_expression -> arith_expression  . '-' arith_expression 
+  0:   On '*' to state 82
+  1:   On '/' to state 83
+  2 (removed by precedence):   On '+' to state 84
+  3 (removed by precedence):   On '-' to state 85
+  Reduce by 54: arith_expression -> arith_expression '+' arith_expression  . 
 
 
 State 105:
-44: comparision_expression -> comparision_expression GT comparision_expression  . 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0 (removed by precedence):   On GT to state 85
-  1 (removed by precedence):   On LT to state 86
-  2 (removed by precedence):   On GE to state 87
-  3 (removed by precedence):   On LE to state 88
-  4 (removed by precedence):   On EQ to state 89
-  5 (removed by precedence):   On NE to state 90
-  Reduce by 44: comparision_expression -> comparision_expression GT comparision_expression  . 
+55: arith_expression -> arith_expression '-' arith_expression  . 
+52: arith_expression -> arith_expression  . '*' arith_expression 
+53: arith_expression -> arith_expression  . '/' arith_expression 
+54: arith_expression -> arith_expression  . '+' arith_expression 
+55: arith_expression -> arith_expression  . '-' arith_expression 
+  0:   On '*' to state 82
+  1:   On '/' to state 83
+  2 (removed by precedence):   On '+' to state 84
+  3 (removed by precedence):   On '-' to state 85
+  Reduce by 55: arith_expression -> arith_expression '-' arith_expression  . 
 
 
 State 106:
-45: comparision_expression -> comparision_expression LT comparision_expression  . 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0 (removed by precedence):   On GT to state 85
-  1 (removed by precedence):   On LT to state 86
-  2 (removed by precedence):   On GE to state 87
-  3 (removed by precedence):   On LE to state 88
-  4 (removed by precedence):   On EQ to state 89
-  5 (removed by precedence):   On NE to state 90
-  Reduce by 45: comparision_expression -> comparision_expression LT comparision_expression  . 
+47: arith_expression -> '-' '(' comparision_expression  . ')' 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0:   On ')' to state 113
+  1:   On GT to state 76
+  2:   On LT to state 77
+  3:   On GE to state 78
+  4:   On LE to state 79
+  5:   On EQ to state 80
+  6:   On NE to state 81
 
 
 State 107:
-46: comparision_expression -> comparision_expression GE comparision_expression  . 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0 (removed by precedence):   On GT to state 85
-  1 (removed by precedence):   On LT to state 86
-  2 (removed by precedence):   On GE to state 87
-  3 (removed by precedence):   On LE to state 88
-  4 (removed by precedence):   On EQ to state 89
-  5 (removed by precedence):   On NE to state 90
-  Reduce by 46: comparision_expression -> comparision_expression GE comparision_expression  . 
+48: arith_expression -> '(' type_declaration ')'  . atomic_expr 
+49: arith_expression -> '(' type_declaration ')'  . '(' comparision_expression ')' 
+  0:   On atomic_expr to state 114
+  1:   On '(' to state 115
+  2:   On variable to state 65
+  3:   On constant to state 66
+  4:   On func_call to state 67
+  5:   On NAME to state 56
+  6:   On INTEGER_NUMBER to state 68
+  7:   On FLOAT_NUMBER to state 69
 
 
 State 108:
-47: comparision_expression -> comparision_expression LE comparision_expression  . 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0 (removed by precedence):   On GT to state 85
-  1 (removed by precedence):   On LT to state 86
-  2 (removed by precedence):   On GE to state 87
-  3 (removed by precedence):   On LE to state 88
-  4 (removed by precedence):   On EQ to state 89
-  5 (removed by precedence):   On NE to state 90
-  Reduce by 47: comparision_expression -> comparision_expression LE comparision_expression  . 
+50: arith_expression -> '(' comparision_expression ')'  . 
+  Reduce by 50: arith_expression -> '(' comparision_expression ')'  . 
 
 
 State 109:
-48: comparision_expression -> comparision_expression EQ comparision_expression  . 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0:   On GT to state 85
-  1:   On LT to state 86
-  2:   On GE to state 87
-  3:   On LE to state 88
-  4 (removed by precedence):   On EQ to state 89
-  5 (removed by precedence):   On NE to state 90
-  Reduce by 48: comparision_expression -> comparision_expression EQ comparision_expression  . 
+33: assignment_statement -> variable ASSIGN_OP comparision_expression ';'  . 
+  Reduce by 33: assignment_statement -> variable ASSIGN_OP comparision_expression ';'  . 
 
 
 State 110:
-49: comparision_expression -> comparision_expression NE comparision_expression  . 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0:   On GT to state 85
-  1:   On LT to state 86
-  2:   On GE to state 87
-  3:   On LE to state 88
-  4 (removed by precedence):   On EQ to state 89
-  5 (removed by precedence):   On NE to state 90
-  Reduce by 49: comparision_expression -> comparision_expression NE comparision_expression  . 
+59: func_call -> NAME '(' pass_variable_list ')'  . 
+  Reduce by 59: func_call -> NAME '(' pass_variable_list ')'  . 
 
 
 State 111:
-56: arith_expression -> arith_expression '*' arith_expression  . 
-56: arith_expression -> arith_expression  . '*' arith_expression 
-57: arith_expression -> arith_expression  . '/' arith_expression 
-58: arith_expression -> arith_expression  . '+' arith_expression 
-59: arith_expression -> arith_expression  . '-' arith_expression 
-  0 (removed by precedence):   On '*' to state 91
-  1 (removed by precedence):   On '/' to state 92
-  2 (removed by precedence):   On '+' to state 93
-  3 (removed by precedence):   On '-' to state 94
-  Reduce by 56: arith_expression -> arith_expression '*' arith_expression  . 
+61: pass_variable_list -> comparision_expression ','  . pass_variable_list 
+  0:   On pass_variable_list to state 116
+  1:   On comparision_expression to state 93
+  2:   On arith_expression to state 61
+  3:   On '-' to state 62
+  4:   On '(' to state 63
+  5:   On atomic_expr to state 64
+  6:   On variable to state 65
+  7:   On constant to state 66
+  8:   On func_call to state 67
+  9:   On NAME to state 56
+  10:   On INTEGER_NUMBER to state 68
+  11:   On FLOAT_NUMBER to state 69
 
 
 State 112:
-57: arith_expression -> arith_expression '/' arith_expression  . 
-56: arith_expression -> arith_expression  . '*' arith_expression 
-57: arith_expression -> arith_expression  . '/' arith_expression 
-58: arith_expression -> arith_expression  . '+' arith_expression 
-59: arith_expression -> arith_expression  . '-' arith_expression 
-  0 (removed by precedence):   On '*' to state 91
-  1 (removed by precedence):   On '/' to state 92
-  2 (removed by precedence):   On '+' to state 93
-  3 (removed by precedence):   On '-' to state 94
-  Reduce by 57: arith_expression -> arith_expression '/' arith_expression  . 
+37: if_block -> IF '(' comparision_expression ')'  . GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
+  0:   On GOTO to state 117
 
 
 State 113:
-58: arith_expression -> arith_expression '+' arith_expression  . 
-56: arith_expression -> arith_expression  . '*' arith_expression 
-57: arith_expression -> arith_expression  . '/' arith_expression 
-58: arith_expression -> arith_expression  . '+' arith_expression 
-59: arith_expression -> arith_expression  . '-' arith_expression 
-  0:   On '*' to state 91
-  1:   On '/' to state 92
-  2 (removed by precedence):   On '+' to state 93
-  3 (removed by precedence):   On '-' to state 94
-  Reduce by 58: arith_expression -> arith_expression '+' arith_expression  . 
+47: arith_expression -> '-' '(' comparision_expression ')'  . 
+  Reduce by 47: arith_expression -> '-' '(' comparision_expression ')'  . 
 
 
 State 114:
-59: arith_expression -> arith_expression '-' arith_expression  . 
-56: arith_expression -> arith_expression  . '*' arith_expression 
-57: arith_expression -> arith_expression  . '/' arith_expression 
-58: arith_expression -> arith_expression  . '+' arith_expression 
-59: arith_expression -> arith_expression  . '-' arith_expression 
-  0:   On '*' to state 91
-  1:   On '/' to state 92
-  2 (removed by precedence):   On '+' to state 93
-  3 (removed by precedence):   On '-' to state 94
-  Reduce by 59: arith_expression -> arith_expression '-' arith_expression  . 
+48: arith_expression -> '(' type_declaration ')' atomic_expr  . 
+  Reduce by 48: arith_expression -> '(' type_declaration ')' atomic_expr  . 
 
 
 State 115:
-51: arith_expression -> '-' '(' comparision_expression  . ')' 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0:   On ')' to state 122
-  1:   On GT to state 85
-  2:   On LT to state 86
-  3:   On GE to state 87
-  4:   On LE to state 88
-  5:   On EQ to state 89
-  6:   On NE to state 90
+49: arith_expression -> '(' type_declaration ')' '('  . comparision_expression ')' 
+  0:   On comparision_expression to state 118
+  1:   On arith_expression to state 61
+  2:   On '-' to state 62
+  3:   On '(' to state 63
+  4:   On atomic_expr to state 64
+  5:   On variable to state 65
+  6:   On constant to state 66
+  7:   On func_call to state 67
+  8:   On NAME to state 56
+  9:   On INTEGER_NUMBER to state 68
+  10:   On FLOAT_NUMBER to state 69
 
 
 State 116:
-52: arith_expression -> '(' type_declaration ')'  . atomic_expr 
-53: arith_expression -> '(' type_declaration ')'  . '(' comparision_expression ')' 
-  0:   On atomic_expr to state 123
-  1:   On '(' to state 124
-  2:   On variable to state 74
-  3:   On constant to state 75
-  4:   On func_call to state 76
-  5:   On NAME to state 63
-  6:   On INTEGER_NUMBER to state 77
-  7:   On FLOAT_NUMBER to state 78
+61: pass_variable_list -> comparision_expression ',' pass_variable_list  . 
+  Reduce by 61: pass_variable_list -> comparision_expression ',' pass_variable_list  . 
 
 
 State 117:
-54: arith_expression -> '(' comparision_expression ')'  . 
-  Reduce by 54: arith_expression -> '(' comparision_expression ')'  . 
+37: if_block -> IF '(' comparision_expression ')' GOTO  . BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
+  0:   On BASIC_BLOCK to state 119
 
 
 State 118:
-37: assignment_statement -> variable ASSIGN_OP comparision_expression ';'  . 
-  Reduce by 37: assignment_statement -> variable ASSIGN_OP comparision_expression ';'  . 
+49: arith_expression -> '(' type_declaration ')' '(' comparision_expression  . ')' 
+40: comparision_expression -> comparision_expression  . GT comparision_expression 
+41: comparision_expression -> comparision_expression  . LT comparision_expression 
+42: comparision_expression -> comparision_expression  . GE comparision_expression 
+43: comparision_expression -> comparision_expression  . LE comparision_expression 
+44: comparision_expression -> comparision_expression  . EQ comparision_expression 
+45: comparision_expression -> comparision_expression  . NE comparision_expression 
+  0:   On ')' to state 120
+  1:   On GT to state 76
+  2:   On LT to state 77
+  3:   On GE to state 78
+  4:   On LE to state 79
+  5:   On EQ to state 80
+  6:   On NE to state 81
 
 
 State 119:
-63: func_call -> NAME '(' pass_variable_list ')'  . 
-  Reduce by 63: func_call -> NAME '(' pass_variable_list ')'  . 
+37: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK  . ';' ELSE GOTO BASIC_BLOCK ';' 
+  0:   On ';' to state 121
 
 
 State 120:
-65: pass_variable_list -> comparision_expression ','  . pass_variable_list 
-  0:   On pass_variable_list to state 125
-  1:   On comparision_expression to state 102
-  2:   On arith_expression to state 70
-  3:   On '-' to state 71
-  4:   On '(' to state 72
-  5:   On atomic_expr to state 73
-  6:   On variable to state 74
-  7:   On constant to state 75
-  8:   On func_call to state 76
-  9:   On NAME to state 63
-  10:   On INTEGER_NUMBER to state 77
-  11:   On FLOAT_NUMBER to state 78
+49: arith_expression -> '(' type_declaration ')' '(' comparision_expression ')'  . 
+  Reduce by 49: arith_expression -> '(' type_declaration ')' '(' comparision_expression ')'  . 
 
 
 State 121:
-41: if_block -> IF '(' comparision_expression ')'  . GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
-  0:   On GOTO to state 126
+37: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';'  . ELSE GOTO BASIC_BLOCK ';' 
+  0:   On ELSE to state 122
 
 
 State 122:
-51: arith_expression -> '-' '(' comparision_expression ')'  . 
-  Reduce by 51: arith_expression -> '-' '(' comparision_expression ')'  . 
+37: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE  . GOTO BASIC_BLOCK ';' 
+  0:   On GOTO to state 123
 
 
 State 123:
-52: arith_expression -> '(' type_declaration ')' atomic_expr  . 
-  Reduce by 52: arith_expression -> '(' type_declaration ')' atomic_expr  . 
+37: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO  . BASIC_BLOCK ';' 
+  0:   On BASIC_BLOCK to state 124
 
 
 State 124:
-53: arith_expression -> '(' type_declaration ')' '('  . comparision_expression ')' 
-  0:   On comparision_expression to state 127
-  1:   On arith_expression to state 70
-  2:   On '-' to state 71
-  3:   On '(' to state 72
-  4:   On atomic_expr to state 73
-  5:   On variable to state 74
-  6:   On constant to state 75
-  7:   On func_call to state 76
-  8:   On NAME to state 63
-  9:   On INTEGER_NUMBER to state 77
-  10:   On FLOAT_NUMBER to state 78
+37: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK  . ';' 
+  0:   On ';' to state 125
 
 
 State 125:
-65: pass_variable_list -> comparision_expression ',' pass_variable_list  . 
-  Reduce by 65: pass_variable_list -> comparision_expression ',' pass_variable_list  . 
-
-
-State 126:
-41: if_block -> IF '(' comparision_expression ')' GOTO  . BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';' 
-  0:   On BASIC_BLOCK to state 128
-
-
-State 127:
-53: arith_expression -> '(' type_declaration ')' '(' comparision_expression  . ')' 
-44: comparision_expression -> comparision_expression  . GT comparision_expression 
-45: comparision_expression -> comparision_expression  . LT comparision_expression 
-46: comparision_expression -> comparision_expression  . GE comparision_expression 
-47: comparision_expression -> comparision_expression  . LE comparision_expression 
-48: comparision_expression -> comparision_expression  . EQ comparision_expression 
-49: comparision_expression -> comparision_expression  . NE comparision_expression 
-  0:   On ')' to state 129
-  1:   On GT to state 85
-  2:   On LT to state 86
-  3:   On GE to state 87
-  4:   On LE to state 88
-  5:   On EQ to state 89
-  6:   On NE to state 90
-
-
-State 128:
-41: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK  . ';' ELSE GOTO BASIC_BLOCK ';' 
-  0:   On ';' to state 130
-
-
-State 129:
-53: arith_expression -> '(' type_declaration ')' '(' comparision_expression ')'  . 
-  Reduce by 53: arith_expression -> '(' type_declaration ')' '(' comparision_expression ')'  . 
-
-
-State 130:
-41: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';'  . ELSE GOTO BASIC_BLOCK ';' 
-  0:   On ELSE to state 131
-
-
-State 131:
-41: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE  . GOTO BASIC_BLOCK ';' 
-  0:   On GOTO to state 132
-
-
-State 132:
-41: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO  . BASIC_BLOCK ';' 
-  0:   On BASIC_BLOCK to state 133
-
-
-State 133:
-41: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK  . ';' 
-  0:   On ';' to state 134
-
-
-State 134:
-41: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';'  . 
-  Reduce by 41: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';'  . 
+37: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';'  . 
+  Reduce by 37: if_block -> IF '(' comparision_expression ')' GOTO BASIC_BLOCK ';' ELSE GOTO BASIC_BLOCK ';'  . 
 
 
 

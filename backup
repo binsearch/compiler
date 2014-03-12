@@ -30,10 +30,10 @@
 {
 	int integer_value;
 	float float_value;
+	Data_Type data_type;
 	std::string * string_value;
 	list<Ast *> * ast_list;
 	Ast * ast;
-	Data_Type data_type;
 	Symbol_Table * symbol_table;
 	Symbol_Table_Entry * symbol_entry;
 	Basic_Block * basic_block;
@@ -42,14 +42,14 @@
 };
 
 
-
 %token <integer_value> INTEGER_NUMBER
 %token <integer_value> BASIC_BLOCK
 %token <float_value> FLOAT_NUMBER
 %token <string_value> NAME
 %token RETURN
 %token INTEGER
-%token FLOAT DOUBLE
+%token FLOAT 
+%token DOUBLE
 %token VOID
 %token IF
 %token ELSE
@@ -62,11 +62,14 @@
 
 
 %type <symbol_table> declaration_statement_list
+%type <symbol_table> argument_list
 %type <symbol_entry> declaration_statement
+%type <symbol_entry> argument
 %type <basic_block_list> basic_block_list
 %type <basic_block> basic_block
 %type <ast_list> executable_statement_list
 %type <ast_list> assignment_statement_list
+%type <ast_list> pass_variable_list
 %type <ast> assignment_statement
 %type <ast> comparision_expression
 %type <ast> goto_statement
@@ -74,10 +77,11 @@
 %type <ast> variable
 %type <ast> constant
 %type <ast> arith_expression
-%type <data_type> type_declaration
 %type <ast> func_call
 %type <ast> atomic_expr
 %type <ast> return_value
+%type <data_type> type_declaration
+
 %start program
 
 %%
@@ -85,6 +89,11 @@
 program:
 	declaration_statement_list
 	procedure_decls
+	{
+		#if 1
+		program_object.set_global_table(*$1);
+		#endif
+	}
 	procedure_list
 |
 	procedure_decls
@@ -96,61 +105,148 @@ procedure_list:
 	procedure_name
 	{
 		#if 1
-		return_statement_used_flag = false;				// No return statement in the current procedure till now
+		return_statement_used_flag = false;		// No return statement in the current procedure till now
 		#endif
 	}
 	procedure_body
 	{	
 		#if 1
-		
-		program_object.set_procedure_map(*current_procedure);
+
 		#endif
 	}
- procedure_list
+ 	procedure_list
 |
 
 ;
 
 procedure_decls:
-	type_declaration procedure_name ';' procedure_decls
+	type_declaration NAME '(' argument_list ')'  ';' 
+	{	
+		#if 1
+		current_procedure = new Procedure($1, *$2);
+		current_procedure->set_argument_list(*$4);
+		program_object.set_procedure_map(*current_procedure);
+		delete $4;
+		#endif
+	}
+	procedure_decls
 |
-
+	type_declaration NAME '(' ')' ';' 	
+	{
+		#if 1
+		current_procedure = new Procedure($1, *$2);
+		Symbol_Table temp_list;
+		current_procedure->set_argument_list(temp_list);
+		program_object.set_procedure_map(*current_procedure);
+		#endif
+	}
+	procedure_decls
+|
 ;
+
+
 
 procedure_name:
 	NAME '(' argument_list ')'
 	{	
+		printf("yoyo\n");
 		#if 1
-		current_procedure = new Procedure(void_data_type, *$1);
+		current_procedure = program_object.get_procedure(*$1);
 		#endif
 	}
 |
 	NAME '(' ')'
-	{	
+	{
 		#if 1
-		current_procedure = new Procedure(void_data_type, *$1);
+		printf("yo\n");
+		current_procedure = program_object.get_procedure(*$1);
+		printf("dude\n");	
 		#endif
 	}
-
 ;
 
 argument_list:
 	argument_list ',' argument
+	{
+		#if 1
+		// if declaration is local then no need to check in global list
+		// if declaration is global then this list is global list
+
+		int line = get_line_number();
+		program_object.variable_in_proc_map_check($3->get_variable_name(), line);
+
+		string arg_name = $3->get_variable_name();
+		if (current_procedure && current_procedure->get_proc_name() == arg_name)
+		{
+			int line = get_line_number();
+			report_error("Argument name cannot be same as procedure name", line);
+		}
+
+		if ($1 != NULL)
+		{
+			if($1->variable_in_symbol_list_check(arg_name))
+			{
+				int line = get_line_number();
+				report_error("Argument name is used twice", line);
+			}
+
+			$$ = $1;
+		}
+
+		else
+			$$ = new Symbol_Table();
+
+		$$->push_symbol($3);
+		#endif
+	}
+
+
 |
 	argument
+	{
+		#if 1
+		int line = get_line_number();
+		program_object.variable_in_proc_map_check($1->get_variable_name(), line);
+
+		string var_name = $1->get_variable_name();
+		if (current_procedure && current_procedure->get_proc_name() == var_name)
+		{
+			int line = get_line_number();
+			report_error("Argument name cannot be same as procedure name", line);
+		}
+
+		$$ = new Symbol_Table();
+		$$->push_symbol($1);
+		#endif
+	}
 
 ;
 
 argument:
 	type_declaration NAME
+	{
+		#if 1
+		$$ = new Symbol_Table_Entry(*$2, $1);
+
+		delete $2;
+		#endif
+	}
 ;
 
 
 procedure_body:
 	'{' declaration_statement_list
 	{	
+		if($2==NULL)
+			printf("mama\n");
+		else
+			printf("ouch\n");
+
+
 		#if 1
+		// Symbol_Table s=*$2;
 		current_procedure->set_local_list(*$2);
+		printf("no\n");
 		delete $2;
 		#endif
 	}
@@ -242,41 +338,51 @@ declaration_statement_list:
 
 declaration_statement:
 	type_declaration NAME ';'
-	//need to change this.
 	{
 		#if 1
-		$$ = new Symbol_Table_Entry(*$2, int_data_type);
+		$$ = new Symbol_Table_Entry(*$2, $1);
 
 		delete $2;
 		#endif
 	}
+
 ;
 
 type_declaration:
-	INTEGER
+	INTEGER 
 	{
-		$$ = int_data_type;
+		#if 1
+		$$=int_data_type;
+		#endif
 	}
 |
 	FLOAT
 	{
-		$$ = float_data_type;
+		#if 1
+		$$=float_data_type;
+		#endif
 	}
 |
 	DOUBLE
 	{
-		$$ = float_data_type;
+		#if 1
+		$$=float_data_type;
+		#endif
 	}
 |
 	VOID
-	{	
-		$$ = void_data_type;
+	{
+		#if 1
+		$$=void_data_type;
+		#endif
 	}
 ;
+
 basic_block_list:
 	basic_block_list basic_block
 	{
 		#if 1
+		printf("sai\n");
 		if (!$2)
 		{
 			int line = get_line_number();
@@ -293,6 +399,7 @@ basic_block_list:
 	basic_block
 	{
 		#if 1
+		printf("krish\n");
 		if (!$1)
 		{
 			int line = get_line_number();
@@ -311,11 +418,12 @@ basic_block:
 	{
 		#if 1
 		if ($3 != NULL)
-		$$ = new Basic_Block($1, *$3);
+			$$ = new Basic_Block($1, *$3);
 		else
 		{
-			list<Ast *> * ast_list = new list<Ast *>;
-			$$ = new Basic_Block($1, *ast_list);
+			printf("ayya\n");
+			list<Ast *> * a_li= new list<Ast *>;
+			$$ = new Basic_Block($1, *a_li);
 		}
 
 		delete $3;
@@ -353,18 +461,23 @@ executable_statement_list:
 return_value:
 	comparision_expression
 	{
+		#if 1
 		$$ = $1;
+		#endif
 	}
 |
 	{
+		#if 1
 		$$ = NULL;
+		#endif
 	}
+	
 ;
 
 assignment_statement_list:
 	{
 		#if 1
-		$$ = NULL;
+		$$ = new list <Ast *>;
 		#endif
 	}
 |
@@ -413,7 +526,7 @@ assignment_statement:
 	func_call ';'
 	{
 		#if 1
-		$$ = $1;
+		$$=$1;
 		#endif
 	}
 ;
@@ -523,18 +636,33 @@ arith_expression:
 	'(' type_declaration ')' atomic_expr 
 	{
 		#if 1
-		$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		if($2==int_data_type)
+			$$=new Arithmetic_Expr_Ast($4,NULL,2);
+		else if($2==float_data_type)
+			$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		else
+			report_error("Typecasting can be only int or float", get_line_number());;
+		
 		$$->check_ast(get_line_number());
+
 		#endif
 	}
 |
 	'(' type_declaration ')' '(' comparision_expression ')'
 	{
 		#if 1
-		$$=new Arithmetic_Expr_Ast($5,NULL,1);
+		if($2==int_data_type)
+			$$=new Arithmetic_Expr_Ast($5,NULL,2);
+		else if($2==float_data_type)
+			$$=new Arithmetic_Expr_Ast($5,NULL,1);
+		else
+			report_error("Typecasting can be only int or float", get_line_number());;
+		
 		$$->check_ast(get_line_number());
+
 		#endif
 	}
+
 |
 	'(' comparision_expression ')'
 	{
@@ -591,35 +719,64 @@ arith_expression:
 atomic_expr:
 	variable
 	{
-		$$ = $1;
+		#if 1
+		$$=$1;
+		#endif
 	}
 |
 	constant
 	{
-		$$ = $1;
+		#if 1
+		$$=$1;
+		#endif
 	}
 |
-	func_call{
-		$$ = $1;
+	func_call
+	{
+		#if 1
+		$$=$1;
+		#endif
 	}
 ;
 
 func_call:
 	NAME '(' pass_variable_list ')'
 	{
-		$$ = new Number_Ast<int>(1, int_data_type);
+		#if 1
+		$$=new Function_Ast(*$1,*$3);
+		$$->check_ast(get_line_number());
+		#endif
 	}
 |
 	NAME '(' ')'
 	{
-		$$ = new Number_Ast<int>(1, int_data_type);
+		#if 1
+		list<Ast *> * param_list = new list<Ast*>;
+		$$ = new Function_Ast(*$1,*param_list);
+
+		$$->check_ast(get_line_number());
+		#endif
 	}
 ;
 
 pass_variable_list:
 	comparision_expression ',' pass_variable_list
+	{
+		#if 1
+		if($$==NULL)
+			$$=new list<Ast *>;
+
+		$$->push_back($1);
+		#endif
+	}
 |
 	comparision_expression
+	{
+		#if 1
+		$$ = new list<Ast *>;
+		$$->push_back($1);
+		#endif
+	}
 ;
 
 
