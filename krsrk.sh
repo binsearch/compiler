@@ -9,9 +9,9 @@ make -f Makefile.cfglp clean
 # make FILE=$name -f Makefile.cfg
 make -f Makefile.cfglp
 ./cfglp -d -ast  $1 >out
-# ./cfglp32 -d -ast  $1 > eout
+./cfglp32 -d -ast  $1 > eout
 
-# diff -bB out eout
+diff -bB out eout
 
 # ./cfglp -d -ast $1 >out
 # ./cfglp32 -d -ast $1 > eout

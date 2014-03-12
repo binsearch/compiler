@@ -556,7 +556,12 @@ arith_expression:
 	'(' type_declaration ')' atomic_expr 
 	{
 		#if 1
-		$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		if($2==int_data_type)
+			$$=new Arithmetic_Expr_Ast($4,NULL,2);
+		else if($2==float_data_type)
+			$$=new Arithmetic_Expr_Ast($4,NULL,1);
+		else
+			;
 		$$->check_ast(get_line_number());
 		#endif
 	}
@@ -564,7 +569,13 @@ arith_expression:
 	'(' type_declaration ')' '(' comparision_expression ')'
 	{
 		#if 1
-		$$=new Arithmetic_Expr_Ast($5,NULL,1);
+		if($2==int_data_type)
+			$$=new Arithmetic_Expr_Ast($5,NULL,2);
+		else if($2==float_data_type)
+			$$=new Arithmetic_Expr_Ast($5,NULL,1);
+		else
+			;
+
 		$$->check_ast(get_line_number());
 		#endif
 	}
@@ -644,12 +655,14 @@ func_call:
 		$$ = new Number_Ast<int>(1, int_data_type);
 		*/
 		$$ = new Function_Ast(*$1, *$3);
+		$$->check_ast(get_line_number());
 	}
 |
 	NAME '(' ')'
 	{
 		list<Ast* > * newlist = new list<Ast* >;
 		$$ = new Function_Ast(*$1, *newlist);
+		$$->check_ast(get_line_number());
 	}
 ;
 

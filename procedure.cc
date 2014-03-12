@@ -61,33 +61,33 @@ void Procedure::set_basic_block_list(list<Basic_Block *> bb_list)
 
 void Procedure::set_local_list(Symbol_Table & new_list)
 {
-	printf("nannna\n");
-	// list<Symbol_Table_Entry*> l1=local_symbol_table.variable_table;
-	printf("yo\n");
-	printf("yay %d \n",new_list.variable_table.size());
-	printf("%d",local_symbol_table.variable_table.size());
-	printf("dude\n");
+	// printf("nannna\n");
+	// // list<Symbol_Table_Entry*> l1=local_symbol_table.variable_table;
+	// printf("yo\n");
+	// printf("yay %d \n",new_list.variable_table.size());
+	// printf("%d",local_symbol_table.variable_table.size());
+	// printf("dude\n");
 
-	// Symbol_Table s=new_list;
-	// printf("ddue\n");
-	local_symbol_table.variable_table=new_list.variable_table;
-	// printf("nayna\n");
-
-	list<Symbol_Table_Entry *> l=new_list.variable_table;
-	for(list<Symbol_Table_Entry *>::iterator it=l.begin();it!=l.end();it++) {
-		if((*it)==NULL)
-			cout<<"what\n";
-		else
-			printf("nayna\n");
-		cout<<(*it)->variable_name<<" "<<(*it)->variable_data_type<<endl;
-	}
+	// // Symbol_Table s=new_list;
+	// // printf("ddue\n");
 	// local_symbol_table.variable_table=new_list.variable_table;
-	printf("man\n");
+	// // printf("nayna\n");
+
+	// list<Symbol_Table_Entry *> l=new_list.variable_table;
+	// for(list<Symbol_Table_Entry *>::iterator it=l.begin();it!=l.end();it++) {
+	// 	if((*it)==NULL)
+	// 		cout<<"what\n";
+	// 	else
+	// 		printf("nayna\n");
+	// 	cout<<(*it)->variable_name<<" "<<(*it)->variable_data_type<<endl;
+	// }
+	// // local_symbol_table.variable_table=new_list.variable_table;
+	// printf("man\n");
 	// local_symbol_table.
 	// printf("ohhh\n");
 	// printf("o re piya\n");
 	// // for(list<Symbol_Table_Entry *>::iterator it=)
-	// // local_symbol_table = new_list;
+	local_symbol_table = new_list;
 	// printf("mann\n");
 	local_symbol_table.set_table_scope(local);
 }
@@ -120,7 +120,7 @@ Symbol_Table_Entry & Procedure::get_symbol_table_entry(string variable_name)
 
 void Procedure::print_ast(ostream & file_buffer)
 {
-	file_buffer << PROC_SPACE << "Procedure: main" << "\n";
+	file_buffer << PROC_SPACE << "Procedure: " <<name<< "\n";
 
 	list<Basic_Block *>::iterator i;
 	for(i = basic_block_list.begin(); i != basic_block_list.end(); i++)

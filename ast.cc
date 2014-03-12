@@ -33,6 +33,9 @@ using namespace std;
 
 #include"symbol-table.hh"
 #include"ast.hh"
+#include"basic-block.hh"
+#include"procedure.hh"
+#include"program.hh"
 
 Ast::Ast()
 {}
@@ -307,7 +310,14 @@ Return_Ast::~Return_Ast()
 
 void Return_Ast::print_ast(ostream & file_buffer)
 {
-	file_buffer << AST_SPACE << "Return <NOTHING>\n";
+	if(ret_value==NULL)
+		file_buffer << AST_SPACE << "Return <NOTHING>\n";
+	else {
+		file_buffer << AST_SPACE << "Return ";
+		ret_value->print_ast(file_buffer);
+		file_buffer<<endl;
+
+	}
 }
 
 Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
@@ -435,11 +445,15 @@ Function_Ast::~Function_Ast()
 
 Data_Type Function_Ast::get_data_type()
 {
-	// return node_data_type;
+	return node_data_type;
 }
 
 bool Function_Ast::check_ast(int line)
 {
+	if(program_object.get_procedure(fun_name)==NULL)
+		report_error("Function is not defined", line);
+	else
+		node_data_type=program_object.get_procedure(fun_name)->get_return_type();
 	// if (lhs->get_data_type() == rhs->get_data_type())
 	// {
 	// 	node_data_type = int_data_type;

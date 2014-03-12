@@ -1,0 +1,7 @@
+Program  :
+   Procedure: fn
+      Basic_Block 2
+         Return Num : 3
+   Procedure: main
+      Basic_Block 2
+         Return <NOTHING>
