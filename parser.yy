@@ -67,6 +67,7 @@
 %type <basic_block> basic_block
 %type <ast_list> executable_statement_list
 %type <ast_list> assignment_statement_list
+%type <ast_list> pass_variable_list
 %type <ast> assignment_statement
 %type <ast> comparision_expression
 %type <ast> goto_statement
@@ -607,19 +608,34 @@ atomic_expr:
 func_call:
 	NAME '(' pass_variable_list ')'
 	{
+		/*
 		$$ = new Number_Ast<int>(1, int_data_type);
+		*/
+		$$ = new Function_Ast(*$1, *$3);
 	}
 |
 	NAME '(' ')'
 	{
-		$$ = new Number_Ast<int>(1, int_data_type);
+		list<Ast* > * newlist = new list<Ast* >;
+		$$ = new Function_Ast(*$1, *newlist);
 	}
 ;
 
 pass_variable_list:
 	comparision_expression ',' pass_variable_list
+	{
+		if($3 != NULL)
+			$$ = $3;
+		else
+			$$ = new list<Ast *>;
+		$$->push_back($1);
+	}
 |
 	comparision_expression
+	{
+		$$ = new list<Ast *>;
+		$$->push_back($1);
+	}
 ;
 
 
