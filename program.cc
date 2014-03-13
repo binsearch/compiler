@@ -102,11 +102,9 @@ void Program::print_ast()
 	command_options.create_ast_buffer();
 	ostream & ast_buffer = command_options.get_ast_buffer();
 	// map<string, Procedure *> procedure_map;
-	ast_buffer<<"Program  :\n";
+	ast_buffer<<"Program:\n";
 	for(map<string,Procedure *>::iterator it=procedure_map.begin();it!=procedure_map.end();it++) {
 		// cout<<it->first<<endl;
-		if((it->first).compare("main")==0)
-			continue;
 		// ast_buffer << "Procedure: "<<it->first<<endl;;
 		Procedure * pro = get_procedure(it->first);
 		if (pro == NULL) {
@@ -120,16 +118,16 @@ void Program::print_ast()
 		}
 
 	}
-	// ast_buffer << "Procedure: main\n";
+	// // ast_buffer << "Procedure: main\n";
 
-	Procedure * main = get_main_procedure(ast_buffer);
-	if (main == NULL)
-		report_error("No main function found in the program", NOLINE);
+	// Procedure * main = get_main_procedure(ast_buffer);
+	// if (main == NULL)
+	// 	report_error("No main function found in the program", NOLINE);
 
-	else
-	{
-		main->print_ast(ast_buffer);
-	}
+	// else
+	// {
+	// 	main->print_ast(ast_buffer);
+	// }
 }
 
 Eval_Result & Program::evaluate()

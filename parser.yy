@@ -144,10 +144,7 @@ procedure_name:
 	NAME '(' ')'
 	{	
 		#if 1
-		if(*$1 != "main")
-			current_procedure = program_object.get_procedure(*$1);
-		else
-			current_procedure = new Procedure(void_data_type, *$1);
+		current_procedure = program_object.get_procedure(*$1);
 		#endif
 	}
 

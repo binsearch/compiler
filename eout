@@ -1,0 +1,40 @@
+Program:
+   Procedure: fact
+
+      Basic_Block 2
+         If_Else statement:
+            Condition: EQ
+               LHS (Name : a)
+               RHS (Num : 1)
+            True Successor: 3
+            False Successor: 4
+      Basic_Block 3
+         RETURN Num : 1
+
+      Basic_Block 4
+         Asgn:
+            LHS (Name : prod)
+            RHS (
+            Arith: MULT
+               LHS (Name : prod)
+               RHS (Name : a))
+         FN CALL: fact(
+            
+            Arith: PLUS
+               LHS (Name : a)
+               RHS (Num : -1))
+         RETURN <NOTHING>
+
+   Procedure: main
+
+      Basic_Block 2
+         Asgn:
+            LHS (Name : a)
+            RHS (Num : 10)
+         Asgn:
+            LHS (Name : prod)
+            RHS (Num : 1)
+         FN CALL: fact(
+            Name : a)
+         RETURN <NOTHING>
+

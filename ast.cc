@@ -311,9 +311,9 @@ Return_Ast::~Return_Ast()
 void Return_Ast::print_ast(ostream & file_buffer)
 {
 	if(ret_value==NULL)
-		file_buffer << AST_SPACE << "Return <NOTHING>\n";
+		file_buffer <<"\n"<< AST_SPACE << "RETURN <NOTHING>\n\n";
 	else {
-		file_buffer << AST_SPACE << "Return ";
+		file_buffer << "\n"<<AST_SPACE << "RETURN ";
 		ret_value->print_ast(file_buffer);
 		file_buffer<<endl;
 
@@ -323,7 +323,7 @@ void Return_Ast::print_ast(ostream & file_buffer)
 Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
 	Eval_Result & result = *new Eval_Result_Value_Return();
-	file_buffer<< AST_SPACE << "Return <NOTHING>\n";
+	file_buffer<< "\n"<<AST_SPACE << "Return <NOTHING>\n";
 	return result;
 }
 
@@ -467,13 +467,13 @@ void Function_Ast::print_ast(ostream & file_buffer)
 {
 	// file_buffer <<"\n"<< COND_SPACE << "Condition: "<<op<<"\n";
 
-	// file_buffer << COND_NODE_SPACE<<"LHS (";
-	// lhs->print_ast(file_buffer);
-	// file_buffer << ")\n";
+	file_buffer <<"\n"<< AST_SPACE<<"FN CALL: "<<fun_name<<"(";
 
-	// file_buffer << COND_NODE_SPACE << "RHS (";
-	// rhs->print_ast(file_buffer);
-	// file_buffer << ")";
+	for(list<Ast *>::reverse_iterator it=arg_list.rbegin();it!=arg_list.rend();it++) {
+		file_buffer<<"\n"<<ARITH_SPACE;
+		(*it)->print_ast(file_buffer);
+	}
+	file_buffer<<")";
 }
 
 Eval_Result & Function_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
