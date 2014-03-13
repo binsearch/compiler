@@ -88,6 +88,9 @@
 program:
 	declaration_statement_list
 	procedure_decls
+	{
+		program_object.set_global_table(*$1);
+	}
 	procedure_list
 |
 	procedure_decls

@@ -37,7 +37,9 @@ typedef enum
 	void_result,
 	bb_result,
 	float_result,
-	return_result
+	return_result,
+	return_int,
+	return_float
 } Result_Enum;
 
 class Eval_Result;
@@ -162,6 +164,7 @@ class Eval_Result_Value_Return:public Eval_Result_Value
 {
 	bool defined;
 	int value;
+	float value_float;
 public:
 	Eval_Result_Value_Return();
 	~Eval_Result_Value_Return();

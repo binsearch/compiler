@@ -123,6 +123,7 @@ Result_Enum Eval_Result_Value_BB::get_result_enum()
 Eval_Result_Value_Return::Eval_Result_Value_Return()
 {
 	value = 0;
+	value_float=0;
 	defined = true;
 	result_type = return_result;
 }
@@ -143,13 +144,13 @@ int Eval_Result_Value_Return::get_value()
 
 void Eval_Result_Value_Return::float_set_value(float number)
 {
-	value = number;
+	value_float = number;
 	defined = true;
 }
 
 float Eval_Result_Value_Return::float_get_value()
 {
-	return value;
+	return value_float;
 }
 
 void Eval_Result_Value_Return::set_variable_status(bool def)
@@ -307,8 +308,8 @@ void Local_Environment::print(ostream & file_buffer)
 				if(vi->get_result_enum()==int_result)
 					file_buffer << VAR_SPACE << (*i).first << " : " << vi->get_value() << "\n";
 				else
-					file_buffer << VAR_SPACE << (*i).first << " : " <<vi->float_get_value() << "\n";
-					// file_buffer << VAR_SPACE << (*i).first << " : " << fixed << setprecision(2)<<vi->float_get_value() << "\n";
+					// file_buffer << VAR_SPACE << (*i).first << " : " <<vi->float_get_value() << "\n";
+					file_buffer << VAR_SPACE << (*i).first << " : " << fixed << setprecision(2)<<vi->float_get_value() << "\n";
 			}
 		}
 	}

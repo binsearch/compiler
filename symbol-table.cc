@@ -143,6 +143,57 @@ void Symbol_Table::create(Local_Environment & local_global_variables_table)
 	}
 }
 
+void Symbol_Table::create_arg(Local_Environment & local_global_variables_table,list<Eval_Result * > & l)
+{
+	list<Symbol_Table_Entry *>::iterator i;
+
+	list<Eval_Result *>::iterator j=l.begin();
+
+	for (i = variable_table.begin(); i != variable_table.end(); i++,j++)
+	{
+		string name = (*i)->get_variable_name();
+
+		if((*j)->get_result_enum()==int_result) {
+			Eval_Result_Value & result1=*new Eval_Result_Value_Int();
+			result1.set_value((*j)->get_value());
+
+			local_global_variables_table.put_variable_value(result1,name);		
+		}
+		else if((*j)->get_result_enum()==float_result) {
+			Eval_Result_Value & result1=*new Eval_Result_Value_Float();
+			result1.float_set_value((*j)->float_get_value());
+
+			local_global_variables_table.put_variable_value(result1,name);		
+
+		}
+		else 
+			report_error("Parameter should be of type int and float",NOLINE);
+		// if((*i)->get_data_type()==int_data_type) {
+		// 	Eval_Result_Value_Int * j = new Eval_Result_Value_Int();
+		// 	if (scope == global)
+		// 	{
+		// 		j->set_variable_status(true);
+		// 		j->set_value(0);
+		// 	}
+
+		// 	local_global_variables_table.put_variable_value(*j, name);
+
+		// }
+		// else {
+		// 	Eval_Result_Value_Float * j =new Eval_Result_Value_Float(); 
+		// 	if (scope == global)
+		// 	{
+		// 		j->set_variable_status(true);
+		// 		j->float_set_value(0);
+		// 	}
+
+		// 	local_global_variables_table.put_variable_value(*j, name);
+
+		// }
+		
+	}
+}
+
 /////////////////////////////////////////////////////////////
 
 Symbol_Table_Entry::Symbol_Table_Entry()

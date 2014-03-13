@@ -66,7 +66,7 @@ class Symbol_Table
 
 	void create(Local_Environment & local_global_variables_table);
 
-	
+	void create_arg(Local_Environment & local_global_variables_table,list<Eval_Result * >& l);	
 
 	// list<Symbol_Table_Entry *> get_variable_table(); 
 	// void append_symbol_table(Symbol_Table s1);

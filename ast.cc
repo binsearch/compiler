@@ -114,7 +114,7 @@ bool Assignment_Ast::check_ast(int line)
 
 void Assignment_Ast::print_ast(ostream & file_buffer)
 {
-	file_buffer << AST_SPACE << "Asgn:\n";
+	file_buffer <<"\n"<< AST_SPACE << "Asgn:\n";
 
 	file_buffer << AST_NODE_SPACE"LHS (";
 	lhs->print_ast(file_buffer);
@@ -313,18 +313,55 @@ void Return_Ast::print_ast(ostream & file_buffer)
 	if(ret_value==NULL)
 		file_buffer <<"\n"<< AST_SPACE << "RETURN <NOTHING>\n\n";
 	else {
-		file_buffer << "\n"<<AST_SPACE << "RETURN ";
+		file_buffer <<"\n"<<AST_SPACE << "RETURN ";
 		ret_value->print_ast(file_buffer);
-		file_buffer<<endl;
+		file_buffer<<endl<<endl;
 
 	}
 }
 
 Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
-	Eval_Result & result = *new Eval_Result_Value_Return();
-	file_buffer<< "\n"<<AST_SPACE << "Return <NOTHING>\n";
-	return result;
+	Eval_Result & result1= *new Eval_Result_Value_Return();
+
+	
+	print_ast(file_buffer);
+
+	if(ret_value==NULL) {
+		// file_buffer <<"\n"<< AST_SPACE << "RETURN <NOTHING>\n\n";
+		return result1;
+	}
+	Eval_Result & result=ret_value->evaluate(eval_env,file_buffer);
+
+
+	if(result.get_result_enum()==int_result) {
+		result1.set_value(result.get_value());
+		result1.set_result_enum(return_int);
+
+		Eval_Result_Value & result2=* new Eval_Result_Value_Int();
+		result2.set_value(result.get_value());
+		// eval_env.put_variable_value(result2,"return");
+		return result1;
+	}
+	else if(result.get_result_enum()==float_result) {
+		result1.float_set_value(result.float_get_value());
+		result1.set_result_enum(return_float);
+
+		Eval_Result_Value & result2=* new Eval_Result_Value_Float();
+		result2.float_set_value(result.float_get_value());
+		// eval_env.put_variable_value(result2,"return");
+
+		return result1;
+	}
+	else if(result.get_result_enum()==void_result) {
+		// file_buffer <<"\n"<< AST_SPACE << "RETURN <NOTHING>\n\n";
+		return result1;
+	}
+	else
+		;
+	// file_buffer <<"\n"<< AST_SPACE << "RETURN <NOTHING>\n\n";
+	// eval_env.put_variable_value(result1,"return");
+	return result1;
 }
 
 template class Number_Ast<int>;
@@ -334,7 +371,7 @@ Relational_Expr_Ast::Relational_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,string t
 {
 	lhs = temp_lhs;
 	rhs = temp_rhs;
-	op=temp_op;
+	op=temp_op; 
 }
 
 Relational_Expr_Ast::~Relational_Expr_Ast()
@@ -478,6 +515,46 @@ void Function_Ast::print_ast(ostream & file_buffer)
 
 Eval_Result & Function_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
+	// Eval_Result_Value * i;
+	// if (result.get_result_enum() == int_result)
+	// {
+	// 	i = new Eval_Result_Value_Int();
+	//  	i->set_value(result.get_value());
+	// }
+
+	// if (result.get_result_enum() == float_result)
+	// {
+	// 	i = new Eval_Result_Value_Float();
+	//  	i->float_set_value(result.float_get_value());
+	// }
+	// // cout << "Check " << i->float_get_value() <<endl;
+
+	// if (eval_env.does_variable_exist(variable_name))
+	// 	eval_env.put_variable_value(*i, variable_name);
+	// else
+	// 	interpreter_global_table.put_variable_value(*i, variable_name);
+
+	// string fun_name;
+	list<Eval_Result *> l;
+	// list<Ast *> arg_list;
+	// cout<<"dude "<<arg_list.size()<<endl;
+	for(list<Ast *>::reverse_iterator it=arg_list.rbegin();it!=arg_list.rend();it++) {
+		Eval_Result *result=&((*it)->evaluate(eval_env,file_buffer));
+		// printf("%d man\n",result->get_result_enum() );;
+		l.push_back( result );
+		// (*it)->print_ast(file_buffer);
+	}
+
+	if(program_object.get_procedure(fun_name)==NULL)
+		;// cout<<"what\n";
+	else {
+		// cout<<"man\n";
+		return program_object.get_procedure(fun_name)->evaluate(file_buffer,l);
+	}
+
+	report_error("Function not defined",NOLINE);
+	Eval_Result & result= * new Eval_Result_Value_Int();
+	return result;
 
 }
 
@@ -723,12 +800,18 @@ void If_Ast::print_ast(ostream & file_buffer)
 Eval_Result & If_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
 
+	file_buffer<< AST_SPACE << "If_Else statement:";
+	comp_exp->print_ast(file_buffer);
+
 	Eval_Result & result = comp_exp->evaluate(eval_env, file_buffer);
+
+	file_buffer <<endl<< AST_NODE_SPACE<<"True Successor: "<<true_bb<<endl;
+	file_buffer << AST_NODE_SPACE<<"False Successor: "<<false_bb<<endl;
 
 	int ret = result.get_value();
 
 	int ans;
-	print_ast(file_buffer);
+	// print_ast(file_buffer);
 	
 	if(ret){
 		file_buffer<<AST_SPACE<<"Condition True : Goto (BB "<<true_bb<<")\n";
