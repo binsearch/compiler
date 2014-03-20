@@ -1,0 +1,18 @@
+main()
+{
+   int b;
+   int a;
+
+<bb 2>:
+   if(a == b)
+      goto <bb 3>;
+   else
+      goto <bb 4>;
+
+<bb 3>:
+   a != b;
+
+<bb 4>:
+   return;
+
+}

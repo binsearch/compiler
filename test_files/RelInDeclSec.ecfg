@@ -1,0 +1,9 @@
+main()
+{
+   int a;
+   int b;
+   a = a > b;
+<bb 2>:
+   a = 3;
+   return;
+}

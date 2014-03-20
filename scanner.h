@@ -33,12 +33,13 @@
 
 using namespace std;
 
+#include"common-classes.hh"
 #include"local-environment.hh"
 #include"user-options.hh"
 #include"error-display.hh"
-
+#include"icode.hh"
+#include"reg-alloc.hh"
 #include"symbol-table.hh"
-
 #include"ast.hh"
 #include"basic-block.hh"
 #include"procedure.hh"

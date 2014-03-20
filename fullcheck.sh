@@ -5,8 +5,10 @@ make -f Makefile.cfglp
 for file in test_files/*.cs306.cfg
 do
 echo "$file"
-./cfglp -d -ast "$file" > out
-./cfglp32 -d -ast "$file" > eout
+./cfglp32ref -icode "$file"
+mv "$file.ic" "$file.ic.ref"
+./cfglp32 -icode "$file"
 
-diff -bB out eout
+diff -bB "$file.ic" "$file.ic.ref"
 done
+

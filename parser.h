@@ -35,19 +35,20 @@
 #include<vector>
 #include<list>
 #include<map>
+#include <string.h>
 
 using namespace std;
 
-#include <string.h>
-
+#include"common-classes.hh"
 #include"error-display.hh"
 #include"user-options.hh"
 #include"local-environment.hh"
-
+#include"reg-alloc.hh"
 #include"symbol-table.hh"
 #include"ast.hh"
 #include"basic-block.hh"
 #include"procedure.hh"
+#include"icode.hh"
 #include"program.hh"
 
 ////////////////////////////////////////////////////////////////////////////
@@ -62,6 +63,8 @@ class Parser: public ParserBase
 	{
 		d_scanner.switchStreams(input_file_name, "");
 		d_scanner.setSval(&d_val__);
+
+		NOT_ONLY_PARSE = command_options.not_only_parse;
 	}
 
         int parse();
@@ -69,11 +72,12 @@ class Parser: public ParserBase
 
 	int get_line_number();					// Used for errors
 
+	bool NOT_ONLY_PARSE;
+
     private:
         void error(char const *msg);
         int lex();
 
-	bool return_statement_used_flag;				// Keeps track that atleast a procedure has atleast 1 return statement
 	void bb_strictly_increasing_order_check(list<Basic_Block *> * bb_list, int bb_number); 
         
 	void executeAction(int ruleNr);
@@ -88,35 +92,52 @@ class Parser: public ParserBase
 
 /* Structure of parser
 
-program: 			declaration_statement_list procedure_name procedure_body
-				| procedure_name procedure_body
+program:
+	optional_declaration_list procedure_definition
 
-procedure_name: 		NAME '(' ')'
+optional_declaration_list:
+|	variable_declaration_list
 
-procedure_body:			'{' declaration_statement_list basic_block_list '}'
-				| '{' basic_block_list '}'
+procedure_definition:
+	NAME '(' ')'
+	'{' optional_variable_declaration_list
+	basic_block_list '}'
 
-declaration_statement_list: 	declaration_statement
-				| declaration_statement_list 	declaration_statement
+optional_variable_declaration_list:
+|	variable_declaration_list
 
-declaration_statement: 		INTEGER NAME ';'
+variable_declaration_list:
+	variable_declaration
+|	variable_declaration_list variable_declaration
 
-basic_block_list: 		basic_block_list 	basic_block
-				| basic_block
+variable_declaration:
+	declaration ';'
 
-basic_block: 			'<' NAME INTEGER_NUMBER '>' ':' executable_statement_list
+declaration:
+	INTEGER NAME
 
-executable_statement_list: 	assignment_statement_list
-				| assignment_statement_list RETURN
+basic_block_list:
+	basic_block_list basic_block
+|	basic_block
 
-assignment_statement_list: 	// empty
-				| assignment_statement_list assignment_statement
+basic_block:
+	BBNUM ':' executable_statement_list
 
-assignment_statement: 		assignment_variable '='	assignment_variable ';'
-				| assignment_variable '=' constant ';'
+executable_statement_list:
+	assignment_statement_list
+|	assignment_statement_list RETURN ';'
 
-assignment_variable:		NAME
+assignment_statement_list:
+|	assignment_statement_list assignment_statement
 
-constant:			INTEGER_NUMBER
+assignment_statement:
+	variable ASSIGN variable ';'
+|	variable ASSIGN constant ';'
+
+variable:
+	NAME
+
+constant:
+	INTEGER_NUMBER
 
 */

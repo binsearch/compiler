@@ -1,0 +1,17 @@
+main ()
+{
+  int j;
+  int i;
+
+<bb 2>:
+  goto <bb 3>;
+  goto <bb 13>;
+
+<bb 3>:
+
+<bb 13>:
+  return;
+
+}
+
+

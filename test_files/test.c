@@ -1,12 +1,11 @@
 main()
-{
-	int a = 3;
-	int b = 5;
+{	
+	int a = 4;
+	int b = 3;
+	int c = 3;
 
-	fn();
-}
-
-fn()
-{
-	int c = 4;
+	if (c > (a > b)?0:21)
+		a = 6;
+	else
+		b = 6;
 }

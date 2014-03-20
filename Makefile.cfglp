@@ -27,18 +27,19 @@ PROC_OBJ = procedure.o
 BB_OBJ = basic-block.o
 SYMTAB_OBJ = symbol-table.o
 OBJ_CORE = error-display.o main.o user-options.o local-environment.o
+COMPILE_OBJ = icode.o reg-alloc.o
 OBJ_GEN = scanner.o parser.o
 
-HEADERS_CORE = error-display.hh user-options.hh local-environment.hh ast.hh symbol-table.hh program.hh procedure.hh basic-block.hh
+HEADERS_CORE = error-display.hh user-options.hh local-environment.hh ast.hh symbol-table.hh program.hh procedure.hh basic-block.hh icode.hh reg-alloc.hh
 HEADERS_GEN = parser.h parser.ih parserbase.h scanner.h scanner.ih scannerbase.h
 
-OBJ = $(OBJ_GEN) $(OBJ_CORE) $(AST_OBJ) $(PROC_OBJ) $(BB_OBJ) $(PROG_OBJ) $(SYMTAB_OBJ)
+OBJ = $(COMPILE_OBJ) $(OBJ_GEN) $(OBJ_CORE) $(AST_OBJ) $(PROC_OBJ) $(BB_OBJ) $(PROG_OBJ) $(SYMTAB_OBJ)
 HEADERS = $(HEADERS_CORE) $(HEADERS_GEN)
 
 CPP = g++
 BISONCPP = bisonc++
 FLEXCPP = flexc++
-TGT = cfglp
+TGT = cfglp32
 
 CFLAGS = -g 
 
@@ -55,5 +56,236 @@ parser.cc parserbase.h: parser.yy parser.ih parser.h
 	$(BISONCPP) --verbose parser.yy
 
 clean :
-	rm -rf *.o cfglp scannerbase.h parserbase.h scanner.cc parser.cc parser.yy.output
-	rm -rf cscope.out tags a.out
+	rm -f *.o cfglp32 scannerbase.h parserbase.h scanner.cc parser.cc parser.yy.output
+	rm -f cscope.out tags a.out
+
+###########################################################################
+
+check_clean :
+	rm -f *.o cfglp32 cfgpp32 scannerbase.h parserbase.h scanner.cc parser.cc parser.yy.output plugin*.so
+	rm -f cscope.out tags a.out
+	rm Makefile*
+	rm -rf test_files test_files_output
+
+check:
+	@mkdir -p test_files
+	@cp ../test_files/* ../../../Interpreter/Level-0/test_files/
+	@cp ../../../Interpreter/Level-0/test_files/* ../test_files/
+	@cp ../dummy_test_files/* ../../../Interpreter/Level-0/dummy_test_files/
+	@cp ../../../Interpreter/Level-0/dummy_test_files/* ../dummy_test_files/
+	@cp ../test_files/* test_files/
+	@cp ../dummy_test_files/* test_files/
+	
+	@mkdir -p test_files_output
+	@cp ../test_files_output/* ../../../Interpreter/Level-0/test_files_output/
+	@cp ../../../Interpreter/Level-0/test_files_output/* ../test_files_output/
+	@cp ../test_files_output/* test_files_output/
+	
+	@cp ../../../Documentation/sources-interpreter/level-0-32bits/plugin32.so ../../../Documentation/sources-compiler/level-0-32bits/
+	@cp ../../../Documentation/sources-interpreter/level-0-32bits/plugin32.so .
+	@cp ../../../Documentation/sources-interpreter/level-0-32bits/cfgpp32 ../../../Documentation/sources-compiler/level-0-32bits/
+	@cp ../../../Documentation/sources-interpreter/level-0-32bits/cfgpp32 .
+	@cp ../../../Preprocessor/Level-0/make-32-bits/Makefile.cfg .
+	
+	@make --no-print-directory -f Makefile.cfglp check_no_print_dir
+
+check_no_print_dir:
+	@for file in $(shell find -iname '*.c' | cut -f3 -d"/"); do \
+		make -f Makefile.cfg FILE=$$file; \
+	done
+	
+	@# create .toks .ast .eval files	
+	@for file in `ls test_files/*.cs306.cfg`; do \
+		./cfglp32 $$file -tokens; \
+		mv $$file.toks $$file.toks.new; \
+		./cfglp32 $$file -ast; \
+		mv $$file.ast $$file.ast.new; \
+		./cfglp32 $$file -eval; \
+		mv $$file.eval $$file.eval.new; \
+		./cfglp32 $$file -icode; \
+		mv $$file.ic $$file.ic.new; \
+		./cfglp32 $$file -program; \
+		mv $$file.prog $$file.prog.new; \
+		./cfglp32 $$file -symtab; \
+		mv $$file.sym $$file.sym.new; \
+		./cfglp32 $$file -lra -compile; \
+		mv $$file.spim $$file.lra.new; \
+		./cfglp32 $$file -compile; \
+		mv $$file.spim $$file.spim.new; \
+	done
+	
+	@for file in `ls test_files/*.ecfg`; do \
+		./cfglp32 $$file -tokens; \
+		if [ -f $$file.toks ]; then \
+			mv $$file.toks $$file.toks.new; \
+		fi; \
+		./cfglp32 $$file -ast; \
+		if [ -f $$file.ast ]; then \
+			mv $$file.ast $$file.ast.new; \
+		fi; \
+		./cfglp32 $$file -eval; \
+		if [ -f $$file.eval ]; then \
+			mv $$file.eval $$file.eval.new; \
+		fi; \
+		./cfglp32 $$file -icode; \
+		if [ -f $$file.ic ]; then \
+			mv $$file.ic $$file.ic.new; \
+		fi; \
+		./cfglp32 $$file -lra -compile; \
+		if [ -f $$file.spim ]; then \
+			mv $$file.spim $$file.lra.new; \
+		fi; \
+		./cfglp32 $$file -compile; \
+		if [ -f $$file.spim ]; then \
+			mv $$file.spim $$file.spim.new; \
+		fi; \
+		./cfglp32 $$file -symtab; \
+		if [ -f $$file.sym ]; then \
+			mv $$file.sym $$file.sym.new; \
+		fi; \
+		./cfglp32 $$file -program; \
+		if [ -f $$file.prog ]; then \
+			mv $$file.prog $$file.prog.new; \
+		fi; \
+	done
+	
+	@# compare .toks .ast .eval files
+	@for cfglpfile in $(shell find -iname '*.cs306.cfg' | cut -f3 -d"/"); do \
+		diff -w -b -B test_files/$$cfglpfile.toks.new test_files_output/$$cfglpfile.toks.old; \
+		RETVAL=$$?; \
+		if [ $$RETVAL -eq 0 ]; then \
+			echo -n; \
+		else \
+			echo failed $$cfglpfile - toks; \
+		fi; \
+		diff -w -b -B test_files/$$cfglpfile.ast.new test_files_output/$$cfglpfile.ast.old; \
+		RETVAL=$$?; \
+		if [ $$RETVAL -eq 0 ]; then \
+			echo -n; \
+		else \
+			echo failed $$cfglpfile - ast; \
+		fi; \
+		diff -w -b -B test_files/$$cfglpfile.eval.new test_files_output/$$cfglpfile.eval.old; \
+		RETVAL=$$?; \
+		if [ $$RETVAL -eq 0 ]; then \
+			echo -n; \
+		else \
+			echo failed $$cfglpfile - eval; \
+		fi; \
+		diff -w -b -B test_files/$$cfglpfile.ic.new test_files_output/$$cfglpfile.ic.old; \
+		RETVAL=$$?; \
+		if [ $$RETVAL -eq 0 ]; then \
+			echo -n; \
+		else \
+			echo failed $$cfglpfile - ic; \
+		fi; \
+		diff -w -b -B test_files/$$cfglpfile.prog.new test_files_output/$$cfglpfile.prog.old; \
+		RETVAL=$$?; \
+		if [ $$RETVAL -eq 0 ]; then \
+			echo -n; \
+		else \
+			echo failed $$cfglpfile - prog; \
+		fi; \
+		diff -w -b -B test_files/$$cfglpfile.sym.new test_files_output/$$cfglpfile.sym.old; \
+		RETVAL=$$?; \
+		if [ $$RETVAL -eq 0 ]; then \
+			echo -n; \
+		else \
+			echo failed $$cfglpfile - sym; \
+		fi; \
+		diff -w -b -B test_files/$$cfglpfile.lra.new test_files_output/$$cfglpfile.lra.old; \
+		RETVAL=$$?; \
+		if [ $$RETVAL -eq 0 ]; then \
+			echo -n; \
+		else \
+			echo failed $$cfglpfile - lra; \
+		fi; \
+		diff -w -b -B test_files/$$cfglpfile.spim.new test_files_output/$$cfglpfile.spim.old; \
+		RETVAL=$$?; \
+		if [ $$RETVAL -eq 0 ]; then \
+			echo -n; \
+		else \
+			echo failed $$cfglpfile - spim; \
+		fi; \
+	done
+	
+	@# compare .toks .ast .eval files
+	@for cfglpfile in $(shell find -iname '*.ecfg' | cut -f3 -d"/"); do \
+		if [ -s test_files/$$cfglpfile.toks.new ]; then \
+			if [ -s test_files_output/$$cfglpfile.toks.old ]; then \
+				diff -w -b -B test_files/$$cfglpfile.toks.new test_files_output/$$cfglpfile.toks.old; \
+				RETVAL=$$?; \
+				if [ $$RETVAL -eq 0 ]; then \
+					echo -n; \
+				else \
+					echo failed $$cfglpfile - toks; \
+				fi; \
+				diff -w -b -B test_files/$$cfglpfile.ast.new test_files_output/$$cfglpfile.ast.old; \
+				RETVAL=$$?; \
+				if [ $$RETVAL -eq 0 ]; then \
+					echo -n; \
+				else \
+					echo failed $$cfglpfile - ast; \
+				fi; \
+				diff -w -b -B test_files/$$cfglpfile.eval.new test_files_output/$$cfglpfile.eval.old; \
+				RETVAL=$$?; \
+				if [ $$RETVAL -eq 0 ]; then \
+					echo -n; \
+				else \
+					echo failed $$cfglpfile - eval; \
+				fi; \
+				diff -w -b -B test_files/$$cfglpfile.ic.new test_files_output/$$cfglpfile.ic.old; \
+				RETVAL=$$?; \
+				if [ $$RETVAL -eq 0 ]; then \
+					echo -n; \
+				else \
+					echo failed $$cfglpfile - ic; \
+				fi; \
+				diff -w -b -B test_files/$$cfglpfile.prog.new test_files_output/$$cfglpfile.prog.old; \
+				RETVAL=$$?; \
+				if [ $$RETVAL -eq 0 ]; then \
+					echo -n; \
+				else \
+					echo failed $$cfglpfile - prog; \
+				fi; \
+				diff -w -b -B test_files/$$cfglpfile.sym.new test_files_output/$$cfglpfile.sym.old; \
+				RETVAL=$$?; \
+				if [ $$RETVAL -eq 0 ]; then \
+					echo -n; \
+				else \
+					echo failed $$cfglpfile - sym; \
+				fi; \
+				diff -w -b -B test_files/$$cfglpfile.lra.new test_files_output/$$cfglpfile.lra.old; \
+				RETVAL=$$?; \
+				if [ $$RETVAL -eq 0 ]; then \
+					echo -n; \
+				else \
+					echo failed $$cfglpfile - lra; \
+				fi; \
+				diff -w -b -B test_files/$$cfglpfile.spim.new test_files_output/$$cfglpfile.spim.old; \
+				RETVAL=$$?; \
+				if [ $$RETVAL -eq 0 ]; then \
+					echo -n; \
+				else \
+					echo failed $$cfglpfile - spim; \
+				fi; \
+			else \
+				echo failed $$cfglpfile - toks/eval/ast/icode/spim/lra/sym/prog missing in test_files_output; \
+			fi; \
+		else \
+			if [ -s test_files_output/$$cfglpfile.toks.old ]; then \
+				echo failed $$cfglpfile - toks/eval/ast/icode/spim/lra/sym/prog missing in test_files;	\
+			else \
+				echo -n; \
+			fi; \
+		fi; \
+	done
+	
+	@rm -f test_files/*.toks test_files/*.toks.new
+	@rm -f test_files/*.eval test_files/*.eval.new
+	@rm -f test_files/*.ast test_files/*.ast.new
+	@rm -f test_files/*.ic test_files/*.ic.new
+	@rm -f test_files/*.spim test_files/*.spim.new
+	@rm -f test_files/*.lra test_files/*.lra.new
+	@rm -f test_files/*.prog test_files/*.prog.new
+	@rm -f test_files/*.sym test_files/*.sym.new

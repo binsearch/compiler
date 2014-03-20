@@ -24,17 +24,19 @@
 #ifndef PARSER_IH
 #define PARSER_IH
 
+#include <typeinfo>
+
+#include "common-classes.hh"
 #include "local-environment.hh"
 #include "error-display.hh"
 #include "user-options.hh"
-
+#include "icode.hh"
+#include "reg-alloc.hh"
 #include "symbol-table.hh"
-
 #include "ast.hh"
 #include "basic-block.hh"
 #include "procedure.hh"
 #include "program.hh"
-
 #include "parser.h"
 
 ////////////////////// cfglp Parser functions ///////////////////////
@@ -80,13 +82,7 @@ inline void Parser::bb_strictly_increasing_order_check(list<Basic_Block *> * bb_
 {
 	list<Basic_Block *>::iterator i;
 	for(i = bb_list->begin(); i != bb_list->end(); i++)
-	{
-		if ((*i)->get_bb_number() >= bb_number)
-		{
-			int line = get_line_number();
-			report_error("basic_block should be in strictly increasing order", get_line_number());
-		}
-	}
+		CHECK_INPUT(((*i)->get_bb_number() < bb_number), "Basic blocks should be in strictly increasing order", get_line_number());
 }
 
 ///////////////////////////////////////////////////////////////////

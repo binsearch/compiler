@@ -31,33 +31,11 @@ int		{
 			return Parser::INTEGER; 
 		}
 
-void {
-	store_token_name("VOID");
-	return Parser::VOID;
-}
-
-float {
-	store_token_name("FLOAT");
-	return Parser::FLOAT;
-}
-double {
-	store_token_name("DOUBLE");
-	return Parser::DOUBLE;
-}
-
-[-]?[[:digit:]]*\.[[:digit:]]+	{
-				store_token_name("FNUM");
-
-				ParserBase::STYPE__ * val = getSval();
-				val->float_value = atof(matched().c_str());
-
-				return Parser::FLOAT_NUMBER; 
-			}
-
 return		{ 
 			store_token_name("RETURN");
 			return Parser::RETURN; 
 		}
+
 
 if		{
 			store_token_name("IF");
@@ -73,6 +51,7 @@ goto	{
 			store_token_name("GOTO");
 			return Parser::GOTO; 
 		}
+
 "==" {
 	store_token_name("EQ");
 	ParserBase::STYPE__ * val = getSval();
@@ -88,11 +67,6 @@ goto	{
 
 	return Parser::NE;
 }
-
-[=]		{
-			store_token_name("ASSIGN_OP");
-			return Parser::ASSIGN_OP;	
-		}
 
 [>] {
 	store_token_name("GT");
@@ -124,27 +98,6 @@ goto	{
 }
 
 
-
-"<bb "[[:digit:]]+">" {
-	store_token_name("BASIC BLOCK");
-	
-	ParserBase::STYPE__ * val = getSval();
-	string s = matched();
-	
-	s = s.substr(4, s.size()-5);
-	val->integer_value = atoi(s.c_str());
-	return Parser::BASIC_BLOCK;
-}
-
-[-/*+] {
-	store_token_name("ARITHOP");
-	return matched()[0];
-}
-[<>:{}();!,]	{
-			store_token_name("META CHAR");
-			return matched()[0];
-		}
-
 [-]?[[:digit:]]+ 	{ 
 				store_token_name("NUM");
 
@@ -154,7 +107,7 @@ goto	{
 				return Parser::INTEGER_NUMBER; 
 			}
 
-[[:alpha:]][[:alpha:][:digit:]]* {
+[[:alpha:]_][[:alpha:][:digit:]_]* {
 					store_token_name("NAME");
 
 					ParserBase::STYPE__ * val = getSval();
@@ -163,12 +116,33 @@ goto	{
 					return Parser::NAME; 
 				}
 
-\n		{ 
-			if (command_options.is_show_tokens_selected())
-				ignore_token();
-		}    
+"<bb "[[:digit:]]+">"	{
+				store_token_name("BASIC BLOCK");
 
+				string bb_num_str = matched().substr(4, matched().length() - 2);
+				CHECK_INPUT_AND_ABORT((atoi(bb_num_str.c_str()) >= 2), "Illegal basic block lable", lineNr());
+
+				ParserBase::STYPE__ * val = getSval();
+				val->integer_value = atoi(bb_num_str.c_str());
+
+				return Parser::BBNUM;
+			}
+
+"="	{
+		store_token_name("ASSIGN_OP");
+		return Parser::ASSIGN;
+	}
+
+[:{}();]	{
+			store_token_name("META CHAR");
+			return matched()[0];
+		}
+
+
+\n    		|
 ";;".*  	|
+[ \t]*";;".*	|
+[ \t]*"//".*	|
 [ \t]		{
 			if (command_options.is_show_tokens_selected())
 				ignore_token();
@@ -179,6 +153,5 @@ goto	{
 			error_message =  "Illegal character `" + matched();
 			error_message += "' on line " + lineNr();
 			
-			int line_number = lineNr();
-			report_error(error_message, line_number);
+			CHECK_INPUT(CONTROL_SHOULD_NOT_REACH, error_message, lineNr());
 		}

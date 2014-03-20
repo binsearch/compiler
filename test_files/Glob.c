@@ -1,12 +1,8 @@
 int a;
 main()
 {
-	int a = 3;
-	a = 10;
-	fn();
-}
+	int b = 4;
+	a = 3;
 
-fn()
-{
-	int a = 6;
+	a = a > b;
 }
