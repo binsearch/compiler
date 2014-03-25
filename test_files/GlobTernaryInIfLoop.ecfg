@@ -1,0 +1,29 @@
+int a;
+int b;
+main()
+{
+	int c;
+	int f;
+	int d;
+	int e;
+
+	c = 10;
+	f = 3;
+	d - 6;
+	e = 8;
+
+	a = f < d;
+	b = d <= c;
+	if (c > b <= a != e)
+	{
+		c = e != d;
+		d = f > e;
+	}
+	else if (c < e != d >= 9)
+	{
+		a = d >= e == f;
+		b = b >= a;
+	}
+	else
+		a = 4;
+}

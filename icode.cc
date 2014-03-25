@@ -263,7 +263,7 @@ void Move_IC_Stmt::print_assembly(ostream & file_buffer)
 	switch (assem_format)
 	{
 	case a_op_r_o1: 
-			file_buffer << "\t" << op_name << ", ";
+			file_buffer << "\t" << op_name << " ";
 			result->print_asm_opd(file_buffer);
 			file_buffer << ", ";
 			opd1->print_asm_opd(file_buffer);
@@ -272,7 +272,7 @@ void Move_IC_Stmt::print_assembly(ostream & file_buffer)
 			break; 
 
 	case a_op_o1_r: 
-			file_buffer << "\t" << op_name << ", ";
+			file_buffer << "\t" << op_name << " ";
 			opd1->print_asm_opd(file_buffer);
 			file_buffer << ", ";
 			result->print_asm_opd(file_buffer);
@@ -327,6 +327,69 @@ void Comp_IC_Stmt::print_icode(ostream & file_buffer)
 }
 
 void Comp_IC_Stmt::print_assembly(ostream & file_buffer){
+	CHECK_INVARIANT ((lhs != NULL), "lhs cannot be NULL for a Comparision IC Stmt");
+	CHECK_INVARIANT ((rhs != NULL), "rhs cannot be NULL for a Comparision IC Stmt");
+	CHECK_INVARIANT((result != NULL), "result cannot be NULL for a Comparision IC Stmt");
+
+	// string op_name = op_desc.get_mnemonic();
+
+	// Assembly_Format assem_format = op_desc.get_assembly_format();
+	// switch (assem_format)
+	// {
+	// case a_op_r_o1: 
+	// 		file_buffer << "\t" << op_name << " ";
+	// 		result->print_asm_opd(file_buffer);
+	// 		file_buffer << ", ";
+	// 		opd1->print_asm_opd(file_buffer);
+	// 		file_buffer << "\n";
+
+	// 		break; 
+
+	// case a_op_o1_r: 
+	// 		file_buffer << "\t" << op_name << " ";
+	// 		opd1->print_asm_opd(file_buffer);
+	// 		file_buffer << ", ";
+	// 		result->print_asm_opd(file_buffer);
+	// 		file_buffer << "\n";
+
+	// 		break; 
+
+	// default: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Intermediate code format not supported");
+	// 	break;
+	// }
+
+	string op_name = op_desc.get_mnemonic();
+
+	Assembly_Format assem_format = op_desc.get_assembly_format();
+
+	switch (assem_format)
+	{
+
+	case a_op_r_o1: 
+		file_buffer << "\t" << op_name << " ";
+		result->print_asm_opd(file_buffer);
+		file_buffer << ", ";
+		lhs->print_asm_opd(file_buffer);
+		file_buffer << ", ";
+		rhs->print_asm_opd(file_buffer);
+		file_buffer << "\n";
+
+		break; 
+
+	// case i_r_op_o1: 
+	// 		file_buffer << " " << operation_name << ": ";
+	// 		result->print_ics_opd(file_buffer);
+	// 		file_buffer << " <- ";
+	// 		lhs->print_ics_opd(file_buffer);
+	// 		file_buffer << " , ";
+	// 		rhs->print_ics_opd(file_buffer);
+	// 		file_buffer << "\n";
+
+	// 		break; 
+	default: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Intermediate code format not supported");
+
+	break;
+	}
 
 }
 
@@ -374,6 +437,46 @@ void Cflow_IC_Stmt::print_icode(ostream & file_buffer){
 }
 
 void Cflow_IC_Stmt::print_assembly(ostream & file_buffer){
+
+	// string op_name = op_desc.get_mnemonic();
+
+	// Assembly_Format assem_format = op_desc.get_assembly_format();
+
+	// switch (assem_format)
+	// {
+
+	// case a_op_r_o1: 
+	// 	file_buffer << "\t" << op_name << " ";
+	// 	result->print_asm_opd(file_buffer);
+	// 	file_buffer << ", ";
+	// 	lhs->print_asm_opd(file_buffer);
+	// 	file_buffer << ", ";
+	// 	rhs->print_asm_opd(file_buffer);
+	// 	file_buffer << "\n";
+
+	// 	break; 
+
+	string op_name = op_desc.get_mnemonic();
+
+	Assembly_Format assem_format = op_desc.get_assembly_format();	
+
+	switch (assem_format)
+	{
+	case a_op_r_o1: 
+			file_buffer << "\t" << op_name << " ";
+			cond->print_asm_opd(file_buffer);
+			file_buffer << ", $zero, label" << trueid << endl;
+			file_buffer << " j label" << falseid << endl;
+			break; 
+
+	case a_op_o1:
+			file_buffer << " j label" << trueid << endl;
+			break;
+
+	default: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, 
+				"Intermediate code format not supported");
+		break;
+	}
 
 }
 

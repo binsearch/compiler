@@ -93,7 +93,7 @@ class Register_Descriptor
 
     string get_name();
     void clear_lra_symbol_list();
-
+    int getsize_symlist();
     bool get_used_for_expr_result();
     void reset_use_for_expr_result();
 

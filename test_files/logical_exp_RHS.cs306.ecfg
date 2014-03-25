@@ -1,0 +1,10 @@
+main()
+{
+   int b;
+   int a;
+
+<bb 2>:
+   a > b;
+   return;
+
+}

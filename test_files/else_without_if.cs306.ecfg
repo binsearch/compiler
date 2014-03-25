@@ -1,0 +1,21 @@
+main()
+{
+   int b;
+   int a;
+
+<bb 2>:
+      goto <bb 3>;
+   else
+      goto <bb 4>;
+
+<bb 3>:
+   a = 4;
+   goto <bb 5>;
+
+<bb 4>:
+   b = 4;
+
+<bb 5>:
+   return;
+
+}

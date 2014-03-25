@@ -57,6 +57,14 @@ void Register_Descriptor::set_used(){
 void Register_Descriptor::reset_used(){
 	used_for_expr_result = false;
 }
+int Register_Descriptor::getsize_symlist(){
+	// cout << "came to getsize\n";
+	// if(lra_symbol_list.empty())
+	// 	return 0;
+	// cout << "after size\n";
+	return lra_symbol_list.size();
+}
+
 Register_Use_Category Register_Descriptor::get_use_category() 	{ return reg_use; }
 Spim_Register Register_Descriptor::get_register()             	{ return reg_id; }
 string Register_Descriptor::get_name()				{ return reg_name; }
@@ -137,10 +145,11 @@ bool Lra_Outcome::is_load_needed()	     		{ return load_needed; }
 void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast * source_memory)
 {
 	// Register allocation is done only when the source is in either memory or is a constant
+	// cout << "came here" << endl;
 
 	Register_Descriptor * destination_register, * source_register, * result_register;
 	Symbol_Table_Entry * source_symbol_entry, * destination_symbol_entry;
-
+	destination_symbol_entry = NULL;
 	destination_register = NULL;
 	source_register = NULL;
 	result_register = NULL;
@@ -151,6 +160,7 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 	register_move_needed = false;
 	load_needed = false;
 
+
 	switch (lcase)
 	{
 	case mc_2m:
@@ -158,13 +168,19 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 			"Destination ast pointer cannot be NULL for m2m scenario in lra");
 		CHECK_INVARIANT(source_memory, 
 			"Sourse ast pointer cannot be NULL for m2m scenario in lra");
-
+		// cout << "in mc_2m" << endl;
+		// cout << destination_memory << endl;
 		if (typeid(*destination_memory) == typeid(Number_Ast<int>))
 			destination_register = NULL;
 		else
 		{
 			destination_symbol_entry = &(destination_memory->get_symbol_entry());
 			destination_register = destination_symbol_entry->get_register(); 
+			// cout << "before check\n";
+			if(destination_register != NULL) 
+				if(destination_register->getsize_symlist() > 1)
+					destination_register = NULL;
+			// cout << "after check\n"; 
 		}
 
 		if (typeid(*source_memory) == typeid(Number_Ast<int>))
@@ -198,18 +214,24 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 
 	case mc_2r:
 		CHECK_INVARIANT(source_memory, "Sourse ast pointer cannot be NULL for m2r scenario in lra");
+		// cout << "in mc_2r" << endl;
+		if (typeid(*source_memory) != typeid(Number_Ast<int>)){
+			source_symbol_entry = &(source_memory->get_symbol_entry());
+			source_register = source_symbol_entry->get_register(); 
+		}
 
-		source_symbol_entry = &(source_memory->get_symbol_entry());
-		source_register = source_symbol_entry->get_register(); 
+		// cout << "after get symbol mc_2r\n";
 
 		if (source_register != NULL)
 		{
+			// cout << "source_register not null" << endl;
 			result_register = source_register;
 			is_same_as_source = true;
 			load_needed = false;
 		}
 		else 
 		{
+			// cout << "came here" << endl;
 			result_register = machine_dscr_object.get_new_register();
 			is_a_new_register = true;
 			load_needed = true;
@@ -242,7 +264,8 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 	if (destination_register)
 		destination_symbol_entry->free_register(destination_register); 
 
-	destination_symbol_entry->update_register(result_register);
+	if(destination_symbol_entry)
+		destination_symbol_entry->update_register(result_register);
 }
 
 /******************************* Machine Description *****************************************/
