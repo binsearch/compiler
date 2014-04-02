@@ -1,0 +1,31 @@
+main()
+{
+	int a;
+	int b;
+	float c;
+	float d;
+<bb 2>:
+	a = 10;
+	b = 3;
+	c = 2.3;
+	d = 5.6;
+	if (a >= b != a)
+		goto <bb 3>;
+	else 
+		goto <bb 4>;
+<bb 3>:
+	a = a + 1;
+	goto <bb 6>;
+
+<bb 4>:
+	if (c >= b + c != a)
+		goto <bb 5>;
+	else
+		goto <bb 6>;
+
+<bb 5>:
+	a = a - 1;
+
+<bb 6>:
+	return;
+}

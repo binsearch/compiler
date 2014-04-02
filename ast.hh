@@ -204,4 +204,26 @@ public:
 
 };
 
+class Arithmetic_Expr_Ast:public Ast
+{
+	Ast * lhs;
+	Ast * rhs;
+	int op;
+
+public:
+	Arithmetic_Expr_Ast(Ast * temp_lhs,Ast* temp_rhs,int temp_op);
+	~Arithmetic_Expr_Ast();
+
+	Data_Type get_data_type();
+	bool check_ast();
+
+	void print(ostream & file_buffer);
+
+	Eval_Result & evaluate(Local_Environment & eval_env, ostream & file_buffer);
+	Code_For_Ast & compile();
+	Code_For_Ast & compile_and_optimize_ast(Lra_Outcome & lra);
+
+};
+
+
 #endif

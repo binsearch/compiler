@@ -1,0 +1,61 @@
+  Procedure: main
+  Intermediate Code Statements
+
+label2:    	
+	iLoad:    	v0 <- 2
+	store:    	a <- v0
+	iLoad:    	v0 <- 3
+	store:    	b <- v0
+	iLoad:    	v0 <- 4
+	store:    	c <- v0
+	iLoad:    	v0 <- 5
+	store:    	d <- v0
+	iLoad.d:    	f2 <- 2.30
+	store.d:    	e <- f2
+	iLoad.d:    	f2 <- 3.40
+	store.d:    	f <- f2
+	iLoad.d:    	f2 <- 4.50
+	store.d:    	g <- f2
+	iLoad.d:    	f2 <- 5.50
+	store.d:    	h <- f2
+	load:    	v0 <- a
+	mtc1:    	f2 <- v0
+	load.d:    	f4 <- e
+	load.d:    	f6 <- f
+	div.d:    	f8 <- f4 , f6
+	load:    	v0 <- d
+	mtc1:    	f4 <- v0
+	mul.d:    	f6 <- f8 , f4
+	add.d:    	f4 <- f2 , f6
+	mfc1:    	v0 <- f4
+	store:    	a <- v0
+	load:    	v0 <- b
+	mtc1:    	f2 <- v0
+	load:    	v0 <- d
+	mtc1:    	f4 <- v0
+	load.d:    	f6 <- g
+	load.d:    	f8 <- h
+	mul.d:    	f10 <- f6 , f8
+	load.d:    	f6 <- e
+	div.d:    	f8 <- f10 , f6
+	add.d:    	f6 <- f4 , f8
+	sle:    	v0 <- f2 , f6
+	load:    	t0 <- a
+	sne:    	t1 <- v0 , t0
+	bne:    	t1 , zero : goto label3
+	goto label4
+
+label3:    	
+	load:    	v0 <- a
+	iLoad:    	t0 <- 1
+	add:    	t1 <- v0 , t0
+	store:    	a <- t1
+	goto label5
+
+label4:    	
+	load.d:    	f2 <- e
+	iLoad.d:    	f4 <- 1.00
+	add.d:    	f6 <- f2 , f4
+	store.d:    	e <- f6
+
+label5:    	

@@ -1,8 +1,16 @@
 int a;
+float b;
+int c;
+float d;
+float e;
 main()
 {
-	int b = 4;
-	a = 3;
+	a = c = 2;
+	b = d = e = 3.4;
 
-	a = a > b;
+	int f = 3;
+	float t = 10;
+
+	a = t * f + e / c;
+	t = a * e / t / f;
 }

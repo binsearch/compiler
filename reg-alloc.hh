@@ -42,7 +42,8 @@ typedef enum
 	a0,	/* argument register */
 	a1, a2, a3,
 	t0,      /* temporary caller-save registers */
-	t1, t2, t3, t4, t5, t6, t7, t8, t9, 
+	t1, t2, t3, t4, t5, t6, t7, t8, t9,
+  f2, f4, f6, f8, f10, f12, f14, f16, f18, 
 	s0,	/* temporary callee-save registers */ 
 	s1, s2, s3, s4, s5, s6, s7,
 	gp,	/* global data pointer register */
@@ -53,7 +54,8 @@ typedef enum
 
 typedef enum 
 { 
-	int_num 
+	int_num,
+  float_num 
 } Register_Val_Type;
 
 typedef enum 
@@ -89,6 +91,7 @@ class Register_Descriptor
     void remove_symbol_entry_from_list(Symbol_Table_Entry & symbol_entry);
 
     Register_Use_Category get_use_category(); 
+    Register_Val_Type get_value_type();
     Spim_Register get_register();
 
     string get_name();
@@ -245,7 +248,7 @@ public:
 	void validate_init_local_register_mapping();
 	void clear_local_register_mappings();
 
-	Register_Descriptor * get_new_register();
+	Register_Descriptor * get_new_register(Register_Val_Type reg_type_param);
 };
 
 extern Machine_Description machine_dscr_object;

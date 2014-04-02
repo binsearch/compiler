@@ -29,7 +29,27 @@
 int		{
 			store_token_name("INTEGER");
 			return Parser::INTEGER; 
-		}
+}
+
+float {
+	store_token_name("FLOAT");
+	return Parser::FLOAT;
+}
+
+double {
+	store_token_name("DOUBLE");
+	return Parser::DOUBLE;
+}
+
+[-]?[[:digit:]]*\.[[:digit:]]+	{
+				store_token_name("FNUM");
+
+				ParserBase::STYPE__ * val = getSval();
+				val->float_value = atof(matched().c_str());
+
+				return Parser::FLOAT_NUMBER; 
+			}
+
 
 return		{ 
 			store_token_name("RETURN");
@@ -132,6 +152,12 @@ goto	{
 		store_token_name("ASSIGN_OP");
 		return Parser::ASSIGN;
 	}
+
+[-+*/] {
+	store_token_name("ARITHOP");
+	return matched()[0];
+}
+
 
 [:{}();]	{
 			store_token_name("META CHAR");

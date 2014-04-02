@@ -1,5 +1,9 @@
 
 	.data
+e:	.word 0
+d:	.word 0
+c:	.word 0
+b:	.word 0
 a:	.word 0
 
 	.text 			# The .text assembler directive indicates
@@ -10,22 +14,38 @@ main:				# .globl makes main know to the
 	sw $fp, 0($sp)		# Save the frame pointer
 	sub $fp, $sp, 4		# Update the frame pointer
 
-	sub $sp, $sp, 8		# Make space for the locals
+	sub $sp, $sp, 6		# Make space for the locals
 # Prologue ends
 
 
 label2:
-	li $v0, 4
-	sw $v0, 0($fp)
+	li $v0, 2
+	sw $v0, c
+	lw $v0, c
+	sw $v0, a
+	li $f2, 3.40
+	sw $f2, e
+	lw $f2, e
+	sw $f2, d
+	lw $f2, d
+	sw $f2, b
 	li $v0, 3
+	sw $v0, 2($fp)
+	li $f2, 10.00
+	sw $f2, 0($fp)
+	lw $v0, 2($fp)
+	lw $f4, 0($fp)
+	lw $f2, e
+	lw $v0, c
 	sw $v0, a
 	lw $v0, a
-	lw $t0, 0($fp)
-	sgt $t1, $v0, $t0
-	sw $t1, a
+	lw $f4, e
+	lw $f2, 0($fp)
+	lw $v0, 2($fp)
+	sw $f6, 0($fp)
 
 # Epilogue Begins
-	add $sp, $sp, 8
+	add $sp, $sp, 6
 	lw $fp, 0($sp)  
 	jr        $31		# Jump back to the operating system.
 # Epilogue Ends

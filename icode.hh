@@ -87,7 +87,14 @@ typedef enum
 	seq,
 	go_to,
 	if_stmt, 
-	nop 
+	nop,
+	div_op,
+	mul_op,
+	add_op,
+	sub_op,
+	uminus_op,
+	mtc1_op, 
+	mfc1_op
 } Tgt_Op;
 
 ///////////////////////// Instruction Descriptor ///////////////////////////////////

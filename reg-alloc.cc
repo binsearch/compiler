@@ -57,6 +57,9 @@ void Register_Descriptor::set_used(){
 void Register_Descriptor::reset_used(){
 	used_for_expr_result = false;
 }
+Register_Val_Type Register_Descriptor::get_value_type(){
+	return value_type;
+}
 int Register_Descriptor::getsize_symlist(){
 	// cout << "came to getsize\n";
 	// if(lra_symbol_list.empty())
@@ -205,7 +208,8 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 		}
 		else 
 		{
-			result_register = machine_dscr_object.get_new_register();
+			//need to change this.
+			result_register = machine_dscr_object.get_new_register(int_num);
 			is_a_new_register = true;
 			load_needed = true;
 		}
@@ -232,7 +236,8 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 		else 
 		{
 			// cout << "came here" << endl;
-			result_register = machine_dscr_object.get_new_register();
+			//need to change this.
+			result_register = machine_dscr_object.get_new_register(int_num);
 			is_a_new_register = true;
 			load_needed = true;
 		}
@@ -297,6 +302,16 @@ void Machine_Description::initialize_register_table()
 	spim_register_table[s5] = new Register_Descriptor(s5, "s5", int_num, gp_data);
 	spim_register_table[s6] = new Register_Descriptor(s6, "s6", int_num, gp_data);
 	spim_register_table[s7] = new Register_Descriptor(s7, "s7", int_num, gp_data);
+	spim_register_table[f2] = new Register_Descriptor(f2, "f2", float_num, gp_data);
+	spim_register_table[f4] = new Register_Descriptor(f4, "f4", float_num, gp_data);
+	spim_register_table[f6] = new Register_Descriptor(f6, "f6", float_num, gp_data);
+	spim_register_table[f8] = new Register_Descriptor(f8, "f8", float_num, gp_data);
+	spim_register_table[f10] = new Register_Descriptor(f10, "f10", float_num, gp_data);
+	spim_register_table[f12] = new Register_Descriptor(f12, "f12", float_num, gp_data);
+	spim_register_table[f14] = new Register_Descriptor(f14, "f14", float_num, gp_data);
+	spim_register_table[f16] = new Register_Descriptor(f16, "f16", float_num, gp_data);
+	spim_register_table[f18] = new Register_Descriptor(f18, "f18", float_num, gp_data);
+
 	spim_register_table[gp] = new Register_Descriptor(gp, "gp", int_num, pointer);
 	spim_register_table[sp] = new Register_Descriptor(sp, "sp", int_num, pointer);
 	spim_register_table[fp] = new Register_Descriptor(fp, "fp", int_num, pointer);
@@ -310,12 +325,19 @@ void Machine_Description::initialize_instruction_table()
 	spim_instruction_table[imm_load] = new Instruction_Descriptor(imm_load, "iLoad", "li", "", i_r_op_o1, a_op_r_o1);
 	spim_instruction_table[sgt] = new Instruction_Descriptor(sgt, "sgt", "sgt" , "", i_r_op_o1, a_op_r_o1);
 	spim_instruction_table[slt] = new Instruction_Descriptor(slt, "slt", "slt" , "", i_r_op_o1, a_op_r_o1);
-	spim_instruction_table[sge] = new Instruction_Descriptor(sgt, "sge", "sge" , "", i_r_op_o1, a_op_r_o1);
-	spim_instruction_table[sle] = new Instruction_Descriptor(sgt, "sle", "sle" , "", i_r_op_o1, a_op_r_o1);
-	spim_instruction_table[sne] = new Instruction_Descriptor(sgt, "sne", "sne" , "", i_r_op_o1, a_op_r_o1);
-	spim_instruction_table[seq] = new Instruction_Descriptor(sgt, "seq", "seq" , "", i_r_op_o1, a_op_r_o1);
+	spim_instruction_table[sge] = new Instruction_Descriptor(sge, "sge", "sge" , "", i_r_op_o1, a_op_r_o1);
+	spim_instruction_table[sle] = new Instruction_Descriptor(sle, "sle", "sle" , "", i_r_op_o1, a_op_r_o1);
+	spim_instruction_table[sne] = new Instruction_Descriptor(sne, "sne", "sne" , "", i_r_op_o1, a_op_r_o1);
+	spim_instruction_table[seq] = new Instruction_Descriptor(seq, "seq", "seq" , "", i_r_op_o1, a_op_r_o1);
 	spim_instruction_table[if_stmt] = new Instruction_Descriptor(if_stmt, "bne", "bne", "", i_r_op_o1, a_op_r_o1);
 	spim_instruction_table[go_to] = new Instruction_Descriptor(go_to, "bne", "bne" , "", i_op_o1, a_op_o1);
+	spim_instruction_table[div_op] = new Instruction_Descriptor(div_op, "div", "div", "", i_r_op_o1, a_op_r_o1);
+	spim_instruction_table[mul_op] = new Instruction_Descriptor(mul_op, "mul", "mul", "", i_r_op_o1, a_op_r_o1);
+	spim_instruction_table[add_op] = new Instruction_Descriptor(add_op, "add", "add", "", i_r_op_o1, a_op_r_o1);
+	spim_instruction_table[sub_op] = new Instruction_Descriptor(sub_op, "sub", "sub", "", i_r_op_o1, a_op_r_o1);
+	spim_instruction_table[uminus_op] = new Instruction_Descriptor(uminus_op, "uminus", "uminus", "", i_r_op_o1, a_op_r_o1);
+	spim_instruction_table[mtc1_op] = new Instruction_Descriptor(mtc1_op, "mtc1", "mtc1", "", i_op_o1, a_op_o1);	
+	spim_instruction_table[mfc1_op] = new Instruction_Descriptor(mfc1_op, "mfc1", "mfc1", "", i_op_o1, a_op_o1);	
 }
 
 void Machine_Description::validate_init_local_register_mapping()
@@ -349,7 +371,7 @@ void Machine_Description::clear_local_register_mappings()
 	*/
 }
 
-Register_Descriptor * Machine_Description::get_new_register()
+Register_Descriptor * Machine_Description::get_new_register(Register_Val_Type reg_type_param)
 {
 	Register_Descriptor * reg_desc;
 
@@ -359,7 +381,9 @@ Register_Descriptor * Machine_Description::get_new_register()
 		reg_desc = i->second;
 
 		if (reg_desc->is_free()){
-			return reg_desc;
+			if(reg_desc->get_value_type() == reg_type_param){
+				return reg_desc;
+			}
 		}
 	}
 

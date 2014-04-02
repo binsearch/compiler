@@ -1,0 +1,60 @@
+  Procedure: main
+  Intermediate Code Statements
+
+label2:    	
+	iLoad.d:    	f2 <- 3.23
+	store.d:    	a <- f2
+	iLoad.d:    	f2 <- 5.68
+	store.d:    	j <- f2
+	load.d:    	f2 <- j
+	uminus.d:    	f4 <- f2
+	load.d:    	f2 <- a
+	mul.d:    	f6 <- f4 , f2
+	load.d:    	f2 <- a
+	div.d:    	f4 <- f6 , f2
+	load.d:    	f2 <- j
+	sub.d:    	f6 <- f4 , f2
+	store.d:    	a <- f6
+	load.d:    	f2 <- j
+	uminus.d:    	f4 <- f2
+	load.d:    	f2 <- a
+	sle:    	v0 <- f4 , f2
+	iLoad:    	t0 <- 0
+	sne:    	t1 <- v0 , t0
+	bne:    	t1 , zero : goto label3
+	goto label4
+
+label3:    	
+	iLoad.d:    	f2 <- 1.00
+	store.d:    	iftmp0 <- f2
+	goto label5
+
+label4:    	
+	iLoad.d:    	f2 <- 0.00
+	store.d:    	iftmp0 <- f2
+
+label5:    	
+	load.d:    	f2 <- iftmp0
+	load.d:    	f4 <- a
+	uminus.d:    	f6 <- f4
+	slt:    	v0 <- f2 , f6
+	iLoad:    	t0 <- 0
+	sne:    	t1 <- v0 , t0
+	bne:    	t1 , zero : goto label6
+	goto label7
+
+label6:    	
+	load.d:    	f2 <- a
+	iLoad.d:    	f4 <- 1.00
+	add.d:    	f6 <- f2 , f4
+	store.d:    	a <- f6
+	goto label8
+
+label7:    	
+	load.d:    	f2 <- a
+	uminus.d:    	f4 <- f2
+	iLoad.d:    	f2 <- 1.00
+	sub.d:    	f6 <- f4 , f2
+	store.d:    	j <- f6
+
+label8:    	

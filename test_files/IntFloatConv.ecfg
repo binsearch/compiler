@@ -1,0 +1,10 @@
+main()
+{
+	int a;
+	float b;
+<bb 2>:
+	a = 2;
+	b = 2.3;
+	a = b;
+	return;
+}

@@ -20,7 +20,7 @@
 
 
 ***********************************************************************************************/
-
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -154,12 +154,15 @@ Const_Opd<DATA_TYPE> & Const_Opd<DATA_TYPE>::operator=(const Const_Opd<DATA_TYPE
 template <class DATA_TYPE>
 void Const_Opd<DATA_TYPE>::print_ics_opd(ostream & file_buffer) 
 {
+	file_buffer << fixed << setprecision(2);
 	file_buffer << num;
 }
 
 template <class DATA_TYPE>
 void Const_Opd<DATA_TYPE>::print_asm_opd(ostream & file_buffer) 
 {
+	file_buffer << fixed << setprecision(2);
+
 	file_buffer << num;
 }
 
@@ -239,7 +242,20 @@ void Move_IC_Stmt::print_icode(ostream & file_buffer)
 	switch (ic_format)
 	{
 	case i_r_op_o1: 
-			file_buffer << " " << operation_name << ":\t";
+			file_buffer << " " << operation_name;
+			if(opd1->get_opd_category() == register_addr) {
+		 		if((opd1->get_reg())->get_value_type() == float_num){
+		 			file_buffer << ".d";
+		 		}
+		 	}
+
+			if(result->get_opd_category() == register_addr) {
+		 		if((result->get_reg())->get_value_type() == float_num){
+		 			file_buffer << ".d";
+		 		}
+		 	}
+
+			file_buffer << ":\t";
 			result->print_ics_opd(file_buffer);
 			file_buffer << " <- ";
 			opd1->print_ics_opd(file_buffer);
@@ -301,25 +317,53 @@ Comp_IC_Stmt::Comp_IC_Stmt(Tgt_Op inst_op, Ics_Opd * temp_lhs, Ics_Opd * temp_rh
 void Comp_IC_Stmt::print_icode(ostream & file_buffer)
 {
 	CHECK_INVARIANT ((lhs != NULL), "lhs cannot be NULL for a Comparision IC Stmt");
-	CHECK_INVARIANT ((rhs != NULL), "rhs cannot be NULL for a Comparision IC Stmt");
+	// CHECK_INVARIANT ((rhs != NULL), "rhs cannot be NULL for a Comparision IC Stmt");
 	CHECK_INVARIANT((result != NULL), "result cannot be NULL for a Comparision IC Stmt");
 	string operation_name = op_desc.get_name();
 
 	Icode_Format ic_format = op_desc.get_ic_format();
 
+
 	switch (ic_format)
 	{
 	case i_r_op_o1: 
-			file_buffer << " " << operation_name << ": ";
+			file_buffer << " " << operation_name;
+			// if(lhs->get_opd_category() == register_addr) {
+			// 	if((lhs->get_reg())->get_value_type() == float_num){
+			// 		file_buffer << ".d";
+			// 	}
+			// }
+			// else if(rhs != NULL){
+			// 	if(rhs->get_opd_category() == register_addr){
+			// 		if((rhs->get_reg())->get_value_type() == float_num){
+			// 			file_buffer << ".d";
+			// 		}
+			// 	}
+			// }
+			if((result->get_opd_category() == register_addr) && ((result->get_reg())->get_value_type() == float_num)){  
+				file_buffer << ".d";
+			}
+			file_buffer << ": ";
 			result->print_ics_opd(file_buffer);
 			file_buffer << " <- ";
 			lhs->print_ics_opd(file_buffer);
-			file_buffer << " , ";
-			rhs->print_ics_opd(file_buffer);
+			if(operation_name != "uminus"){
+				file_buffer << " , ";
+				rhs->print_ics_opd(file_buffer);
+			}
 			file_buffer << "\n";
 
 			break; 
 
+	case i_op_o1:
+			file_buffer << " " << operation_name;
+			file_buffer << ": ";
+			result->print_ics_opd(file_buffer);
+			file_buffer << " <- ";
+			lhs->print_ics_opd(file_buffer);
+			file_buffer << "\n";
+
+			break;		
 	default: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, 
 				"Intermediate code format not supported");
 		break;
@@ -328,7 +372,7 @@ void Comp_IC_Stmt::print_icode(ostream & file_buffer)
 
 void Comp_IC_Stmt::print_assembly(ostream & file_buffer){
 	CHECK_INVARIANT ((lhs != NULL), "lhs cannot be NULL for a Comparision IC Stmt");
-	CHECK_INVARIANT ((rhs != NULL), "rhs cannot be NULL for a Comparision IC Stmt");
+	// CHECK_INVARIANT ((rhs != NULL), "rhs cannot be NULL for a Comparision IC Stmt");
 	CHECK_INVARIANT((result != NULL), "result cannot be NULL for a Comparision IC Stmt");
 
 	// string op_name = op_desc.get_mnemonic();
@@ -358,38 +402,38 @@ void Comp_IC_Stmt::print_assembly(ostream & file_buffer){
 	// 	break;
 	// }
 
-	string op_name = op_desc.get_mnemonic();
+	// string op_name = op_desc.get_mnemonic();
 
-	Assembly_Format assem_format = op_desc.get_assembly_format();
+	// Assembly_Format assem_format = op_desc.get_assembly_format();
 
-	switch (assem_format)
-	{
+	// switch (assem_format)
+	// {
 
-	case a_op_r_o1: 
-		file_buffer << "\t" << op_name << " ";
-		result->print_asm_opd(file_buffer);
-		file_buffer << ", ";
-		lhs->print_asm_opd(file_buffer);
-		file_buffer << ", ";
-		rhs->print_asm_opd(file_buffer);
-		file_buffer << "\n";
+	// case a_op_r_o1: 
+	// 	file_buffer << "\t" << op_name << " ";
+	// 	result->print_asm_opd(file_buffer);
+	// 	file_buffer << ", ";
+	// 	lhs->print_asm_opd(file_buffer);
+	// 	file_buffer << ", ";
+	// 	rhs->print_asm_opd(file_buffer);
+	// 	file_buffer << "\n";
 
-		break; 
+	// 	break; 
 
-	// case i_r_op_o1: 
-	// 		file_buffer << " " << operation_name << ": ";
-	// 		result->print_ics_opd(file_buffer);
-	// 		file_buffer << " <- ";
-	// 		lhs->print_ics_opd(file_buffer);
-	// 		file_buffer << " , ";
-	// 		rhs->print_ics_opd(file_buffer);
-	// 		file_buffer << "\n";
+	// // case i_r_op_o1: 
+	// // 		file_buffer << " " << operation_name << ": ";
+	// // 		result->print_ics_opd(file_buffer);
+	// // 		file_buffer << " <- ";
+	// // 		lhs->print_ics_opd(file_buffer);
+	// // 		file_buffer << " , ";
+	// // 		rhs->print_ics_opd(file_buffer);
+	// // 		file_buffer << "\n";
 
-	// 		break; 
-	default: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Intermediate code format not supported");
+	// // 		break; 
+	// default: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Intermediate code format not supported");
 
-	break;
-	}
+	// break;
+	// }
 
 }
 
@@ -549,3 +593,4 @@ Instruction_Descriptor::Instruction_Descriptor()
 }
 
 template class Const_Opd<int>;
+template class Const_Opd<float>;

@@ -1,0 +1,31 @@
+  Procedure: main
+  Intermediate Code Statements
+
+label2:    	
+	iLoad:    	v0 <- 2
+	store:    	a <- v0
+	iLoad:    	v0 <- 4
+	store:    	b <- v0
+	iLoad:    	v0 <- 10
+	store:    	d <- v0
+	load:    	v0 <- b
+	uminus:    	t0 <- v0
+	load:    	v0 <- a
+	sle:    	t1 <- t0 , v0
+	bne:    	t1 , zero : goto label3
+	goto label4
+
+label3:    	
+	load:    	v0 <- a
+	iLoad:    	t0 <- 1
+	add:    	t1 <- v0 , t0
+	store:    	a <- t1
+	goto label5
+
+label4:    	
+	load:    	v0 <- b
+	iLoad:    	t0 <- 1
+	add:    	t1 <- v0 , t0
+	store:    	b <- t1
+
+label5:    	

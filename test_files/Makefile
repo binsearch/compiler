@@ -1,4 +1,4 @@
 all:
 
 clean:
-	rm -f *.cfg *.ast *.toks *.eval cfgpp* Makefile.cfg plugin*.so
+	rm -f *.cfg a.out

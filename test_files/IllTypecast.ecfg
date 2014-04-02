@@ -1,0 +1,26 @@
+main()
+{
+	float f1;
+	float f2;
+	float f3;
+	float f4;
+	float f5;
+	int i1;
+	int i2;
+	int i3;
+	int i4;
+	int i5;
+<bb 2>:
+	f1 = 2;
+	f2 = 0;
+	f3 = 0.0;
+	f4 = 2.3;
+	f5 = 2.0;
+	i1 = 2;
+	i2 = 0;
+	i3 = 0.0;
+	i4 = 2.3;
+	i5 = 2.0;
+
+	return;
+}

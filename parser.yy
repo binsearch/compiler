@@ -29,6 +29,7 @@
 %union 
 {
 	int integer_value;
+	float float_value;
 	std::string * string_value;
 	pair<Data_Type, string> * decl;
 	list<Ast *> * ast_list;
@@ -43,13 +44,17 @@
 
 
 %token <integer_value> INTEGER_NUMBER BBNUM
+%token <float_value> FLOAT_NUMBER
 %token <string_value> NAME
 %token RETURN INTEGER 
+%token FLOAT DOUBLE
 %token IF ELSE 
 %token GOTO 
 %token ASSIGN 
 %left <string_value> NE EQ
 %left <string_value> LT LE  GT GE 
+%left '+' '-'
+%left '*' '/'
 
 
 %type <symbol_table> optional_variable_declaration_list
@@ -66,6 +71,7 @@
 %type <ast> comparision_expression
 %type <ast> if_block
 %type <ast> goto_statement
+%type <ast> arith_expression
 
 %start program
 
@@ -285,6 +291,42 @@ declaration:
 	}
 	#endif
 	}
+|
+	FLOAT NAME
+	{
+		#if 1
+		if (NOT_ONLY_PARSE)
+		{
+			CHECK_INVARIANT(($2 != NULL), "Name cannot be null");
+
+			string name = *$2;
+			Data_Type type = float_data_type;
+
+			pair<Data_Type, string> * declar = new pair<Data_Type, string>(type, name);
+
+			$$ = declar;
+		}
+		#endif
+	}
+|
+	DOUBLE NAME
+	{
+		#if 1
+		if (NOT_ONLY_PARSE)
+		{
+			CHECK_INVARIANT(($2 != NULL), "Name cannot be null");
+
+			string name = *$2;
+			Data_Type type = double_data_type;
+
+			pair<Data_Type, string> * declar = new pair<Data_Type, string>(type, name);
+
+			$$ = declar;
+		}
+
+		#endif
+	}
+
 ;
 
 basic_block_list:
@@ -491,38 +533,12 @@ goto_statement:
 
 comparision_expression:
 
-	'(' comparision_expression ')'
-	{
-		#if 1
-		if(NOT_ONLY_PARSE){
-			$$ = $2;
-		}
-		#endif 
-	}	
-|	
-	variable
-	{
-	#if 1
-		if(NOT_ONLY_PARSE){
-			$$ = $1;
-		}
-	#endif
-	}
-|
-	constant
-	{
-	#if 1
-		if(NOT_ONLY_PARSE){
-			$$ = $1;
-		}
-	#endif
-	}
-|
 	comparision_expression GT comparision_expression
 	{
 	#if 1
 		if(NOT_ONLY_PARSE){			
 			$$=new Relational_Expr_Ast($1,$3,*$2);
+
 		}
 	#endif
 	}
@@ -532,6 +548,7 @@ comparision_expression:
 	#if 1
 		if(NOT_ONLY_PARSE){
 			$$=new Relational_Expr_Ast($1,$3,*$2);
+
 		}
 	#endif
 	}
@@ -541,6 +558,7 @@ comparision_expression:
 	#if 1
 		if(NOT_ONLY_PARSE){
 			$$=new Relational_Expr_Ast($1,$3,*$2);
+
 		}
 	#endif
 	}
@@ -550,6 +568,7 @@ comparision_expression:
 	#if 1
 		if(NOT_ONLY_PARSE){
 			$$=new Relational_Expr_Ast($1,$3,*$2);
+
 		}
 	#endif
 	}
@@ -559,6 +578,7 @@ comparision_expression:
 	#if 1
 		if(NOT_ONLY_PARSE){
 			$$=new Relational_Expr_Ast($1,$3,*$2);
+
 		}
 	#endif
 	}
@@ -571,8 +591,216 @@ comparision_expression:
 		}
 	#endif
 	}
+|
+	arith_expression
+	{
+	#if 1
+		if(NOT_ONLY_PARSE){
+			$$ = $1;
+		}
+	#endif
+	}
 ;
 
+arith_expression:
+	
+	'-' variable
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($2,NULL,0);
+			$$->check_ast();
+
+		}
+		#endif
+	}
+|
+	'-' constant
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($2,NULL,0);
+			$$->check_ast();
+
+		}
+		#endif
+	}
+|
+	'-' '(' comparision_expression ')'
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($3,NULL,0);
+			$$->check_ast();
+
+		}
+		#endif
+	}
+|
+	'(' FLOAT ')' variable 
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($4,NULL,1);
+			$$->check_ast();
+
+		}
+		#endif
+	}
+|
+	'(' FLOAT ')' constant
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($4,NULL,1);
+			$$->check_ast();
+
+		}
+		#endif
+	}
+|
+	'(' FLOAT ')' '(' comparision_expression ')'
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($5,NULL,1);
+			$$->check_ast();
+		}
+		#endif
+	}
+|
+	'(' INTEGER ')' variable
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($4,NULL,2);
+			$$->check_ast();
+		}
+		#endif
+	}
+|
+	'(' INTEGER ')' constant
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($4,NULL,2);
+			$$->check_ast();
+		}
+		#endif
+	}
+|
+	'(' INTEGER ')' '(' comparision_expression ')'
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($5,NULL,2);
+			$$->check_ast();
+		}
+		#endif
+	}
+|
+	'(' DOUBLE ')' variable
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($4,NULL,1);
+			$$->check_ast();
+		}
+		#endif
+	}
+|
+	'(' DOUBLE ')' constant
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($4,NULL,1);
+			$$->check_ast();
+		}
+		#endif
+	}
+|
+	'(' DOUBLE ')' '(' comparision_expression ')'	
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($5,NULL,1);
+			$$->check_ast();
+		}
+		#endif
+	}
+|
+	'(' comparision_expression ')'
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=$2;
+		}
+		#endif
+	}
+
+|
+	variable
+	{	
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$ = $1;
+		}
+		#endif
+	}
+|
+	constant
+	{	
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$ = $1;
+		}
+		#endif
+	}
+|
+	arith_expression '*' arith_expression
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($1,$3,0);
+			$$->check_ast();
+		}
+		#endif
+	}
+
+| 
+	arith_expression '/' arith_expression
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($1,$3,1);
+			$$->check_ast();
+		}
+		#endif
+	}
+
+|
+	arith_expression '+' arith_expression
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($1,$3,2);
+			$$->check_ast();
+		}
+		#endif
+	}
+
+|
+	arith_expression '-' arith_expression
+	{
+		#if 1
+		if(NOT_ONLY_PARSE){
+			$$=new Arithmetic_Expr_Ast($1,$3, 3);
+			$$->check_ast();
+		}
+		#endif
+	}
+
+;
 
 variable:
 	NAME
@@ -616,5 +844,16 @@ constant:
 				$$ = num_ast;
 			}
 		#endif
+	}
+|
+	FLOAT_NUMBER
+	{
+		#if 1
+			if(NOT_ONLY_PARSE){
+				float num = $1;
+				Ast* num_ast = new Number_Ast<float>(num, float_data_type, get_line_number());
+				$$ = num_ast;
+			}
+		#endif	
 	}
 ;

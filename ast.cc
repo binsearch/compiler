@@ -352,8 +352,13 @@ Eval_Result & Name_Ast::evaluate(Local_Environment & eval_env, ostream & file_bu
 Code_For_Ast & Name_Ast::compile()
 {
 	Ics_Opd * opd = new Mem_Addr_Opd(*variable_symbol_entry);
-	Register_Descriptor * result_register = machine_dscr_object.get_new_register();
+	Register_Descriptor * result_register;
+	if(node_data_type == float_data_type)
+		result_register = machine_dscr_object.get_new_register(float_num);
+	else if(node_data_type == int_data_type)
+		result_register = machine_dscr_object.get_new_register(int_num);
 	Ics_Opd * register_opd = new Register_Addr_Opd(result_register);
+
 
 	Icode_Stmt * load_stmt = new Move_IC_Stmt(load, opd, register_opd);
 
@@ -457,10 +462,14 @@ Eval_Result & Number_Ast<DATA_TYPE>::evaluate(Local_Environment & eval_env, ostr
 template <class DATA_TYPE>
 Code_For_Ast & Number_Ast<DATA_TYPE>::compile()
 {
-	Register_Descriptor * result_register = machine_dscr_object.get_new_register();
+	Register_Descriptor * result_register;
+	if(node_data_type == float_data_type)
+		result_register = machine_dscr_object.get_new_register(float_num);
+	else if(node_data_type == int_data_type)
+		result_register = machine_dscr_object.get_new_register(int_num);
 	CHECK_INVARIANT((result_register != NULL), "Result register cannot be null");
 	Ics_Opd * load_register = new Register_Addr_Opd(result_register);
-	Ics_Opd * opd = new Const_Opd<int>(constant);
+	Ics_Opd * opd = new Const_Opd<DATA_TYPE>(constant);
 
 	Icode_Stmt * load_stmt = new Move_IC_Stmt(imm_load, opd, load_register);
 
@@ -526,6 +535,7 @@ Code_For_Ast & Return_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 }
 
 template class Number_Ast<int>;
+template class Number_Ast<float>;
 
 ///////////////////////////////////////////////////////////////////////////////
 Relational_Expr_Ast::Relational_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,string temp_op)
@@ -620,7 +630,7 @@ Code_For_Ast & Relational_Expr_Ast::compile()
 	Ics_Opd * lhs_opd = new Register_Addr_Opd(lhs_reg);
 
 	//target register
-	Register_Descriptor * result_register = machine_dscr_object.get_new_register();
+	Register_Descriptor * result_register = machine_dscr_object.get_new_register(int_num);
 	Ics_Opd * result_opd = new Register_Addr_Opd(result_register);	
 
 	//creating Comp_IC_stmt for the respective comp operator.
@@ -698,7 +708,7 @@ Code_For_Ast & Relational_Expr_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 	Ics_Opd * lhs_opd = new Register_Addr_Opd(lhs_reg);
 
 	//target register
-	Register_Descriptor * result_register = machine_dscr_object.get_new_register();
+	Register_Descriptor * result_register = machine_dscr_object.get_new_register(int_num);
 	Ics_Opd * result_opd = new Register_Addr_Opd(result_register);	
 
 	//creating Comp_IC_stmt for the respective comp operator.
@@ -926,4 +936,292 @@ Code_For_Ast & If_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 
 
 	return * if_icode;
+}
+
+Arithmetic_Expr_Ast::Arithmetic_Expr_Ast(Ast * temp_lhs, Ast * temp_rhs,int temp_op)
+{
+	lhs = temp_lhs;
+	rhs = temp_rhs;
+	// op='*';
+	op=temp_op;
+}
+
+Arithmetic_Expr_Ast::~Arithmetic_Expr_Ast()
+{
+	delete lhs;
+	delete rhs;
+	delete &op;
+}
+
+Data_Type Arithmetic_Expr_Ast::get_data_type()
+{
+	return node_data_type;
+}
+
+bool Arithmetic_Expr_Ast::check_ast()
+{
+	if(rhs==NULL) {
+		if(op==0)
+			node_data_type=lhs->get_data_type();
+		else if(op==1)
+			node_data_type=float_data_type;
+		else if(op==2)
+			node_data_type=int_data_type;
+		else
+			;
+		return true;
+	}
+	if (lhs->get_data_type() == rhs->get_data_type())
+	{
+		node_data_type = lhs->get_data_type();
+		return true;
+	}
+
+	cout << "Arithmetic Expression statement data type not compatible\n";
+	return false;
+}
+
+void Arithmetic_Expr_Ast::print(ostream & file_buffer)
+{
+	// if(rhs==NULL) {
+	// 	if(op==0) {
+	// 		file_buffer <<"\n"<< ARITH_SPACE << "Arith: UMINUS\n";
+	// 		file_buffer << ARITH_NODE_SPACE<<"LHS (";
+	// 		lhs->print_ast(file_buffer);
+	// 		file_buffer << ")";
+	// 	}
+	// 	else {
+	// 		lhs->print_ast(file_buffer);
+	// 	}
+	// }
+	// else {
+	// 	file_buffer <<"\n"<< ARITH_SPACE << "Arith: ";
+
+	// 	if(op==0)
+	// 		file_buffer<<"MULT";
+	// 	else if(op==2)
+	// 		file_buffer<<"PLUS";
+	// 	else if(op==3)
+	// 		file_buffer<<"MINUS";
+	// 	else if(op==1)
+	// 		file_buffer<<"DIV";
+	// 	else
+	// 		;
+	// 	file_buffer<<"\n";
+
+	// 	file_buffer << ARITH_NODE_SPACE<<"LHS (";
+	// 	lhs->print_ast(file_buffer);
+	// 	file_buffer << ")\n";
+
+	// 	file_buffer << ARITH_NODE_SPACE << "RHS (";
+	// 	rhs->print_ast(file_buffer);
+	// 	file_buffer << ")";
+	// }
+
+}
+
+Eval_Result & Arithmetic_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+	Eval_Result & result = *new Eval_Result_Value_Int();
+	return result;
+	// if(rhs==NULL) {
+	// 	if(op==0) {
+	// 		Eval_Result & result=lhs->evaluate(eval_env,file_buffer);
+
+	// 		if(result.get_result_enum()==int_result) {
+	// 			Eval_Result & result1=*new Eval_Result_Value_Int();
+	// 			result1.set_value(-result.get_value());
+	// 			return result1;
+	// 		}
+	// 		else if(result.get_result_enum()==float_result) {
+	// 			Eval_Result & result1=*new Eval_Result_Value_Float();
+	// 			result1.float_set_value(-result.float_get_value());
+	// 			return result1;
+	// 		}
+	// 		else
+	// 			;
+	// 		// return result;
+	// 	}
+	// 	if(op==1) {
+	// 		Eval_Result & result=lhs->evaluate(eval_env,file_buffer);
+	// 		if(result.get_result_enum()==float_result) {
+	// 			Eval_Result & result1=*new Eval_Result_Value_Float();
+	// 			result1.float_set_value(result.float_get_value()); 
+	// 			return result1;
+	// 		}
+	// 		else {
+	// 			Eval_Result & result1=* new Eval_Result_Value_Float();
+	// 			result1.float_set_value((float)result.get_value());
+	// 			return result1;
+	// 		}
+	// 	}
+	// 	if(op==2) {
+	// 		Eval_Result & result=lhs->evaluate(eval_env,file_buffer);
+			
+	// 		if(result.get_result_enum()==int_result) {
+	// 			Eval_Result & result1=* new Eval_Result_Value_Int();
+	// 			result1.set_value(result.get_value());
+	// 			return result1;
+	// 		}
+	// 		else {
+	// 			Eval_Result & result1=* new Eval_Result_Value_Int();
+	// 			result1.set_value((int)result.float_get_value());
+	// 			return result1;
+	// 		}
+	// 	}
+
+	// }
+	// else {
+	// 	Eval_Result & result1 = lhs->evaluate(eval_env, file_buffer);
+	// 	Eval_Result & result2 = rhs->evaluate(eval_env, file_buffer);
+	// 	Eval_Result & result = *new Eval_Result_Value_Int();
+		
+	// // 	if(result1.get_result_enum()==int_result && result2.get_result_enum()==int_result) {
+	// 		Eval_Result & result = *new Eval_Result_Value_Int();
+	// 		if(op==0)
+	// 			result.set_value(result1.get_value() * result2.get_value());
+	// 		else if(op==1)
+	// 			result.set_value(result1.get_value() / result2.get_value());
+	// 		else if(op==2)
+	// 			result.set_value(result1.get_value() + result2.get_value());
+	// 		else if(op==3)
+	// 			result.set_value(result1.get_value() - result2.get_value());
+	// 		else
+	// 			;
+	// 		return result;
+	// 	}
+	// 	else if(result1.get_result_enum()==float_result && result2.get_result_enum()==float_result) {
+	// 		Eval_Result & result = *new Eval_Result_Value_Float();
+	// 		if(op==0)
+	// 			result.float_set_value(result1.float_get_value() * result2.float_get_value());
+	// 		else if(op==1)
+	// 			result.float_set_value(result1.float_get_value() / result2.float_get_value());
+	// 		else if(op==2)
+	// 			result.float_set_value(result1.float_get_value() + result2.float_get_value());
+	// 		else if(op==3)
+	// 			result.float_set_value(result1.float_get_value() - result2.float_get_value());
+	// 		else
+	// 			;
+	// 		return result;
+	// 	}
+	// 	else {
+	// 		report_internal_error("The operands should be of the same type.");		
+	// 	}
+	// }
+
+
+	// // Print the result
+
+	// print_ast(file_buffer);
+
+	// lhs->print_value(eval_env, file_buffer);
+
+	// return result;
+}
+
+Code_For_Ast & Arithmetic_Expr_Ast::compile()
+{
+
+	// cout << "in rel compile" << endl;
+	CHECK_INVARIANT((lhs != NULL), "Lhs cannot be null");
+	// CHECK_INVARIANT((rhs != NULL), "Rhs cannot be null");
+	
+	//code for lhs computed and result register locked. 
+	Code_For_Ast & lhs_stmt = lhs->compile();
+	if(rhs == NULL){
+		if(op == 1){
+			if(lhs->get_data_type() == float_data_type || lhs->get_data_type() == double_data_type)
+				return lhs_stmt;
+		}
+		else if(op == 2){
+			if(lhs->get_data_type() == int_data_type)
+				return lhs_stmt;
+		}
+	}
+
+	Register_Descriptor * lhs_reg = lhs_stmt.get_reg();
+	lhs_reg->set_used();
+
+	//rhs compiled and result register locked.
+	Code_For_Ast rhs_stmt;
+	Ics_Opd * rhs_opd;
+	Register_Descriptor * rhs_reg;
+	if(rhs != NULL){
+		rhs_stmt = rhs->compile();
+		rhs_reg = rhs_stmt.get_reg();
+		rhs_reg->set_used();
+		rhs_opd = new Register_Addr_Opd(rhs_reg);
+	}
+
+	//Ics_opd for both sides of statement.
+	Ics_Opd * lhs_opd = new Register_Addr_Opd(lhs_reg);
+
+	//target register
+	Register_Descriptor * result_register;
+	if(node_data_type == float_data_type)
+		result_register = machine_dscr_object.get_new_register(float_num);
+	else if(node_data_type == int_data_type)
+		result_register = machine_dscr_object.get_new_register(int_num);
+
+	Ics_Opd * result_opd = new Register_Addr_Opd(result_register);	
+
+	//creating Comp_IC_stmt for the respective comp operator.
+	Icode_Stmt * comp_stmt;
+	if(rhs != NULL){
+		if(op == 0){
+			comp_stmt = new Comp_IC_Stmt(mul_op, lhs_opd, rhs_opd, result_opd);
+		}
+
+		if(op == 1){
+			comp_stmt = new Comp_IC_Stmt(div_op, lhs_opd, rhs_opd, result_opd);
+		}
+
+		if(op == 2){
+			comp_stmt = new Comp_IC_Stmt(add_op, lhs_opd, rhs_opd, result_opd);
+		}
+
+		if(op == 3){
+			comp_stmt = new Comp_IC_Stmt(sub_op, lhs_opd, rhs_opd, result_opd);
+		}
+	}
+
+	else{
+		if(op == 0){
+			comp_stmt = new Comp_IC_Stmt(uminus_op, lhs_opd, NULL, result_opd);
+		}
+		else if(op == 1){
+			comp_stmt = new Comp_IC_Stmt(mtc1_op, lhs_opd, NULL, result_opd);			
+		}
+		else if(op == 2){
+			comp_stmt = new Comp_IC_Stmt(mfc1_op, lhs_opd, NULL, result_opd);			
+		}
+
+	}
+	// Store the statement in ic_list
+
+	list<Icode_Stmt *> & ic_list = *new list<Icode_Stmt *>;
+
+	if (lhs_stmt.get_icode_list().empty() == false)
+		ic_list = lhs_stmt.get_icode_list();
+
+	if (rhs_stmt.get_icode_list().empty() == false)
+		ic_list.splice(ic_list.end(), rhs_stmt.get_icode_list());
+	ic_list.push_back(comp_stmt);
+
+	Code_For_Ast * comp_icode;
+	if (ic_list.empty() == false)
+		comp_icode = new Code_For_Ast(ic_list, result_register);
+
+	rhs_reg->reset_used();
+	lhs_reg->reset_used();
+
+
+	return *comp_icode;
+
+}
+
+Code_For_Ast & Arithmetic_Expr_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
+{
+	Code_For_Ast & ret_code = *new Code_For_Ast();
+	return ret_code;
 }
