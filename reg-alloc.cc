@@ -222,7 +222,7 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 	case mc_2r:
 		CHECK_INVARIANT(source_memory, "Sourse ast pointer cannot be NULL for m2r scenario in lra");
 		// cout << "in mc_2r" << endl;
-		if (typeid(*source_memory) != typeid(Number_Ast<int>) && typeid(*source_memory) != typeid(Number_Ast<float>) ){
+		if (typeid(*source_memory) == typeid(Name_Ast)) {
 			source_symbol_entry = &(source_memory->get_symbol_entry());
 			source_register = source_symbol_entry->get_register(); 
 		}

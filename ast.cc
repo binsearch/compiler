@@ -1212,7 +1212,7 @@ Code_For_Ast & Arithmetic_Expr_Ast::compile()
 	if (ic_list.empty() == false)
 		comp_icode = new Code_For_Ast(ic_list, result_register);
 
-	rhs_reg->reset_used();
+	if(rhs != NULL) rhs_reg->reset_used();
 	lhs_reg->reset_used();
 
 
@@ -1269,14 +1269,15 @@ Code_For_Ast & Arithmetic_Expr_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 	Register_Descriptor * result_register;
 	if(node_data_type == float_data_type)
 		result_register = machine_dscr_object.get_new_register(float_num);
-	else if(node_data_type == int_data_type)
+	if(node_data_type == int_data_type)
 		result_register = machine_dscr_object.get_new_register(int_num);
 
 	Ics_Opd * result_opd = new Register_Addr_Opd(result_register);	
 
 	//creating Comp_IC_stmt for the respective comp operator.
 	Icode_Stmt * comp_stmt;
-	if(rhs != NULL){
+	if(rhs != NULL)
+	{
 		if(op == 0){
 			comp_stmt = new Comp_IC_Stmt(mul_op, lhs_opd, rhs_opd, result_opd);
 		}
@@ -1294,7 +1295,8 @@ Code_For_Ast & Arithmetic_Expr_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 		}
 	}
 
-	else{
+	else
+	{
 		if(op == 0){
 			comp_stmt = new Comp_IC_Stmt(uminus_op, lhs_opd, NULL, result_opd);
 		}
@@ -1321,7 +1323,7 @@ Code_For_Ast & Arithmetic_Expr_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 	if (ic_list.empty() == false)
 		comp_icode = new Code_For_Ast(ic_list, result_register);
 
-	rhs_reg->reset_used();
+	if(rhs != NULL) rhs_reg->reset_used();
 	lhs_reg->reset_used();
 
 	// cout << "out of arith expression" << endl;
