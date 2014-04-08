@@ -14,12 +14,10 @@ main:				# .globl makes main know to the
 label2:    	
 	li $v0, 3
 	sw $v0, -8($fp)
-	lw $v0, -8($fp)
 	mtc1 $f2, $v0
 	s.d $f2, 0($fp)
-	l.d $f2, 0($fp)
-	mfc1 $v0, $f2
-	sw $v0, -8($fp)
+	mfc1 $t0, $f2
+	sw $t0, -8($fp)
 
 # Epilogue Begins
 	add $sp, $sp, 16

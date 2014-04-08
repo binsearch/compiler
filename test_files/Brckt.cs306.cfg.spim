@@ -14,15 +14,13 @@ main:				# .globl makes main know to the
 label2:
 	li $v0, 2
 	sw $v0, -8($fp)
-	li $v0, 3
-	sw $v0, -4($fp)
-	li $v0, 4
-	sw $v0, 0($fp)
-	lw $v0, 0($fp)
-	lw $t0, -4($fp)
-	mul $t1, $v0, $t0
-	neg $v0, $t1
-	sw $v0, -8($fp)
+	li $t0, 3
+	sw $t0, -4($fp)
+	li $t1, 4
+	sw $t1, 0($fp)
+	mul $t2, $t1, $t0
+	neg $t3, $t2
+	sw $t3, -8($fp)
 
 # Epilogue Begins
 	add $sp, $sp, 16

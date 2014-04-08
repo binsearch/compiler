@@ -535,11 +535,11 @@ void Comp_IC_Stmt::print_assembly(ostream & file_buffer){
 
 			break; 
 
-	case a_op_o1_r: 
+	case a_op_o1: 
 			file_buffer << "\t" << op_name << " ";
-			lhs->print_asm_opd(file_buffer);
-			file_buffer << ", ";
 			result->print_asm_opd(file_buffer);
+			file_buffer << ", ";
+			lhs->print_asm_opd(file_buffer);
 			file_buffer << "\n";
 
 			break; 

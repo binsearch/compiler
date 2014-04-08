@@ -14,8 +14,8 @@ main:				# .globl makes main know to the
 label2:    	
 	li.d $f2, -1.00
 	s.d $f2, -8($fp)
-	li.d $f2, 10.00
-	s.d $f2, 0($fp)
+	li.d $f4, 10.00
+	s.d $f4, 0($fp)
 
 # Epilogue Begins
 	add $sp, $sp, 20

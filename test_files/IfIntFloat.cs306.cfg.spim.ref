@@ -16,7 +16,6 @@ label2:
 	sw $v0, -8($fp)
 	li.d $f2, 2.30
 	s.d $f2, 0($fp)
-	lw $v0, -8($fp)
 	li $t0, 0
 	seq $t1, $v0, $t0
 	bne $t1, $zero, label3 

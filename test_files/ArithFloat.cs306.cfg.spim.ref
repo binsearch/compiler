@@ -14,14 +14,11 @@ main:				# .globl makes main know to the
 label2:    	
 	li.d $f2, 2.30
 	s.d $f2, -16($fp)
-	li.d $f2, 3.40
-	s.d $f2, -8($fp)
-	l.d $f2, -16($fp)
-	l.d $f4, -8($fp)
+	li.d $f4, 3.40
+	s.d $f4, -8($fp)
 	mul.d $f6, $f2, $f4
-	l.d $f2, -16($fp)
-	div.d $f4, $f6, $f2
-	s.d $f4, 0($fp)
+	div.d $f8, $f6, $f2
+	s.d $f8, 0($fp)
 
 # Epilogue Begins
 	add $sp, $sp, 28

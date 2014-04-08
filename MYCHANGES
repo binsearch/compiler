@@ -1,4 +1,5 @@
 Sai Krishna	   	110050059
 Rohith Kishan 	110050071
 
-Arithmetic_Expr_Ast added and type casting done.
+wrote compile_and_optimize for arithmetic_expr_ast and
+changed print_asm for statements.

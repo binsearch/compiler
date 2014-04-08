@@ -16,12 +16,10 @@ label2:
 	sw $v0, -24($fp)
 	li.d $f2, 2.30
 	s.d $f2, 0($fp)
-	lw $v0, -24($fp)
-	mtc1 $f2, $v0
-	l.d $f4, 0($fp)
-	div.d $f6, $f2, $f4
-	mfc1 $v0, $f6
-	sw $v0, -28($fp)
+	mtc1 $f4, $v0
+	div.d $f6, $f4, $f2
+	mfc1 $t0, $f6
+	sw $t0, -28($fp)
 
 # Epilogue Begins
 	add $sp, $sp, 36

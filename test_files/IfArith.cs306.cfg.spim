@@ -14,22 +14,17 @@ main:				# .globl makes main know to the
 label2:
 	li $v0, 3
 	sw $v0, -8($fp)
-	li $v0, 5
-	sw $v0, -4($fp)
-	li $v0, 10
-	sw $v0, 0($fp)
-	lw $v0, -4($fp)
-	lw $t0, 0($fp)
-	mul $t1, $v0, $t0
-	lw $v0, -8($fp)
-	div $t0, $t1, $v0
-	lw $v0, -4($fp)
-	div $t1, $t0, $v0
-	lw $v0, -8($fp)
-	add $t0, $t1, $v0
-	li $v0, 0
-	sne $t1, $t0, $v0
-	bne $t1, $zero, label3
+	li $t0, 5
+	sw $t0, -4($fp)
+	li $t1, 10
+	sw $t1, 0($fp)
+	mul $t2, $t0, $t1
+	div $t3, $t2, $v0
+	div $t2, $t3, $t0
+	add $t3, $t2, $v0
+	li $t2, 0
+	sne $t4, $t3, $t2
+	bne $t4, $zero, label3
  j label4
 
 label3:

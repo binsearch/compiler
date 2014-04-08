@@ -16,8 +16,8 @@ label2:
 	sw $v0, -16($fp)
 	li.d $f2, 2.40
 	s.d $f2, -8($fp)
-	li.d $f2, 3.00
-	s.d $f2, 0($fp)
+	li.d $f4, 3.00
+	s.d $f4, 0($fp)
 
 # Epilogue Begins
 	add $sp, $sp, 24
