@@ -6,7 +6,6 @@ label2:
 	store:    	a <- v0
 	iLoad.d:    	f2 <- 2.30
 	store.d:    	b <- f2
-	load:    	v0 <- a
 	iLoad:    	t0 <- 0
 	seq:    	t1 <- v0 , t0
 	bne:    	t1 , zero : goto label3

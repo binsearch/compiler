@@ -4,12 +4,10 @@
 label2:
  iLoad:	v0 <- 2
  store:	a <- v0
- iLoad:	v0 <- 3
- store:	b <- v0
- iLoad:	v0 <- 4
- store:	c <- v0
- load:	v0 <- c
- load:	t0 <- b
- mul: t1 <- v0 , t0
- uminus: v0 <- t1
- store:	a <- v0
+ iLoad:	t0 <- 3
+ store:	b <- t0
+ iLoad:	t1 <- 4
+ store:	c <- t1
+ mul: t2 <- t1 , t0
+ uminus: t3 <- t2
+ store:	a <- t3

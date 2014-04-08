@@ -4,12 +4,9 @@
 label2:    	
 	iLoad.d:    	f2 <- 2.30
 	store.d:    	a <- f2
-	iLoad.d:    	f2 <- 3.40
-	store.d:    	b <- f2
-	load.d:    	f2 <- a
-	load.d:    	f4 <- b
+	iLoad.d:    	f4 <- 3.40
+	store.d:    	b <- f4
 	mul.d:    	f6 <- f2 , f4
-	load.d:    	f2 <- a
 	sge:    	v0 <- f6 , f2
 	iLoad:    	t0 <- 0
 	sne:    	t1 <- v0 , t0

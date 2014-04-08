@@ -4,30 +4,23 @@
 label2:    	
 	iLoad:    	v0 <- 2
 	store:    	a <- v0
-	iLoad:    	v0 <- 4
-	store:    	b <- v0
-	iLoad:    	v0 <- 10
-	store:    	c <- v0
-	iLoad:    	v0 <- 3
-	store:    	d <- v0
-	iLoad:    	v0 <- 8
-	store:    	e <- v0
-	iLoad:    	v0 <- 7
-	store:    	f <- v0
-	load:    	v0 <- c
-	load:    	t0 <- d
-	div:    	t1 <- v0 , t0
-	load:    	v0 <- b
-	add:    	t0 <- t1 , v0
-	load:    	v0 <- a
-	sle:    	t1 <- t0 , v0
-	load:    	v0 <- e
-	load:    	t0 <- a
-	sub:    	t2 <- v0 , t0
-	slt:    	v0 <- t1 , t2
-	load:    	t0 <- f
-	sne:    	t1 <- v0 , t0
-	bne:    	t1 , zero : goto label3
+	iLoad:    	t0 <- 4
+	store:    	b <- t0
+	iLoad:    	t1 <- 10
+	store:    	c <- t1
+	iLoad:    	t2 <- 3
+	store:    	d <- t2
+	iLoad:    	t3 <- 8
+	store:    	e <- t3
+	iLoad:    	t4 <- 7
+	store:    	f <- t4
+	div:    	t5 <- t1 , t2
+	add:    	t6 <- t5 , t0
+	sle:    	t5 <- t6 , v0
+	sub:    	t6 <- t3 , v0
+	slt:    	t7 <- t5 , t6
+	sne:    	t5 <- t7 , t4
+	bne:    	t5 , zero : goto label3
 	goto label4
 
 label3:    	

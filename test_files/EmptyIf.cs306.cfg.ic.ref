@@ -4,5 +4,5 @@
 label2:    	
 	iLoad.d:    	f2 <- -1.00
 	store.d:    	f <- f2
-	iLoad.d:    	f2 <- 10.00
-	store.d:    	g <- f2
+	iLoad.d:    	f4 <- 10.00
+	store.d:    	g <- f4

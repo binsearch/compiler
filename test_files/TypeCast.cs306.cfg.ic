@@ -6,9 +6,7 @@ label2:
  store:	b <- v0
  iLoad.d:	f2 <- 2.30
  store.d:	c <- f2
- load:	v0 <- b
- mtc1: f2 <- v0
- load.d:	f4 <- c
- div.d: f6 <- f2 , f4
- mfc1: v0 <- f6
- store:	a <- v0
+ mtc1: f4 <- v0
+ div.d: f6 <- f4 , f2
+ mfc1: t0 <- f6
+ store:	a <- t0

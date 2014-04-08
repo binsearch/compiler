@@ -134,6 +134,12 @@ void Basic_Block::print_icode(ostream & file_buffer)
 	file_buffer<<"\n";
 	file_buffer<< "label" << id_number << ":\n"; 
 	list<Icode_Stmt *>::iterator i;
-	for (i = bb_icode_list.begin(); i != bb_icode_list.end(); i++)
-		(*i)->print_icode(file_buffer);
+	int j = 0;
+	cout << "in basic block print icode" << endl;
+	for (i = bb_icode_list.begin(); i != bb_icode_list.end(); i++){
+		cout << "printing " << ++j << " instruction\n";
+		// if(j == 3) continue;
+ 		(*i)->print_icode(file_buffer);
+	}
+	cout << "out of bb icode" << endl;
 }

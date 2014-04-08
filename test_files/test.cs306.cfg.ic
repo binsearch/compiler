@@ -6,5 +6,5 @@ label2:
  store:	a <- v0
  iLoad.d:	f2 <- 2.40
  store.d:	b <- f2
- iLoad.d:	f2 <- 3.00
- store.d:	c <- f2
+ iLoad.d:	f4 <- 3.00
+ store.d:	c <- f4

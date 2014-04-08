@@ -206,13 +206,13 @@ Code_For_Ast & Assignment_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 	CHECK_INVARIANT((rhs != NULL), "Rhs cannot be null");
 
 	// cout << "came to ast c&o\n";
-	if(typeid(*rhs) != typeid(Relational_Expr_Ast))
+	if(typeid(*rhs) == typeid(Name_Ast) || typeid(*rhs) == typeid(Number_Ast<int>) || typeid(*rhs) == typeid(Number_Ast<float>))
 		lra.optimize_lra(mc_2m, lhs, rhs);
 	
 	Code_For_Ast load_stmt = rhs->compile_and_optimize_ast(lra);
 	Register_Descriptor * result_register = load_stmt.get_reg();
 
-	if(typeid(*rhs) == typeid(Relational_Expr_Ast)){
+	if(typeid(*rhs) == typeid(Relational_Expr_Ast) || typeid(*rhs) == typeid(Arithmetic_Expr_Ast)){
 		Symbol_Table_Entry * destination_symbol_entry;
 		// cout << "came here" << endl;
 		destination_symbol_entry = &(lhs->get_symbol_entry());
@@ -486,7 +486,7 @@ Code_For_Ast & Number_Ast<DATA_TYPE>::compile_and_optimize_ast(Lra_Outcome & lra
 {
 	CHECK_INVARIANT((lra.get_register() != NULL), "Register assigned through optimize_lra cannot be null");
 	Ics_Opd * load_register = new Register_Addr_Opd(lra.get_register());
-	Ics_Opd * opd = new Const_Opd<int>(constant);
+	Ics_Opd * opd = new Const_Opd<DATA_TYPE>(constant);
 
 	Icode_Stmt * load_stmt = new Move_IC_Stmt(imm_load, opd, load_register);
 
@@ -688,7 +688,7 @@ Code_For_Ast & Relational_Expr_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 	CHECK_INVARIANT((rhs != NULL), "Rhs cannot be null");
 	// cout << "in rel c&o" << endl;
 	//code for lhs computed and result register locked. 
-	if(typeid(*lhs) == typeid(Number_Ast<int>) || typeid(*lhs) == typeid(Name_Ast)){
+	if(typeid(*lhs) == typeid(Number_Ast<int>) || typeid(*lhs) == typeid(Number_Ast<float>) || typeid(*lhs) == typeid(Name_Ast)){
 		lra.optimize_lra(mc_2r, NULL, lhs);
 	}
 	Code_For_Ast & lhs_stmt = lhs->compile_and_optimize_ast(lra);
@@ -696,7 +696,7 @@ Code_For_Ast & Relational_Expr_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 	lhs_reg->set_used();
 
 	//rhs compiled and result register locked.
-	if(typeid(*rhs) == typeid(Number_Ast<int>) || typeid(*rhs) == typeid(Name_Ast)){
+	if(typeid(*rhs) == typeid(Number_Ast<int>) || typeid(*rhs) == typeid(Number_Ast<float>) || typeid(*rhs) == typeid(Name_Ast)){
 		lra.optimize_lra(mc_2r, NULL, rhs);
 	}
 	Code_For_Ast & rhs_stmt = rhs->compile_and_optimize_ast(lra);
@@ -977,7 +977,7 @@ bool Arithmetic_Expr_Ast::check_ast()
 		return true;
 	}
 
-	cout << "Arithmetic Expression statement data type not compatible\n";
+	// cout << "Arithmetic Expression statement data type not compatible\n";
 	return false;
 }
 
@@ -1222,6 +1222,109 @@ Code_For_Ast & Arithmetic_Expr_Ast::compile()
 
 Code_For_Ast & Arithmetic_Expr_Ast::compile_and_optimize_ast(Lra_Outcome & lra)
 {
-	Code_For_Ast & ret_code = *new Code_For_Ast();
-	return ret_code;
+	// cout << "in rel compile " << endl;
+	CHECK_INVARIANT((lhs != NULL), "Lhs cannot be null");
+	// CHECK_INVARIANT((rhs != NULL), "Rhs cannot be null");
+	
+	//code for lhs computed and result register locked. 
+	Code_For_Ast & lhs_stmt = *new Code_For_Ast();
+	if(typeid(*lhs) == typeid(Name_Ast) || typeid(*lhs) == typeid(Number_Ast<int>) || typeid(*lhs) == typeid(Number_Ast<float>))
+		lra.optimize_lra(mc_2r, NULL, lhs);
+
+	lhs_stmt = lhs->compile_and_optimize_ast(lra);
+
+	if(rhs == NULL){
+		if(op == 1){
+			if(lhs->get_data_type() == float_data_type || lhs->get_data_type() == double_data_type)
+				return lhs_stmt;
+		}
+		if(op == 2){
+			if(lhs->get_data_type() == int_data_type)
+				return lhs_stmt;
+		}
+	}
+	// cout << "before arith expr get reg\n";
+	Register_Descriptor * lhs_reg = lhs_stmt.get_reg();
+	lhs_reg->set_used();
+	// cout << "in arith expression" << endl;
+	//Ics_opd for both sides of statement.
+	Ics_Opd * lhs_opd = new Register_Addr_Opd(lhs_reg);
+
+	// cout << "after arith expr get reg \n";
+	//rhs compiled and result register locked.
+	Code_For_Ast rhs_stmt;
+	Ics_Opd * rhs_opd;
+	Register_Descriptor * rhs_reg;
+	if(rhs != NULL){
+		if(typeid(*rhs) == typeid(Name_Ast) || typeid(*rhs) == typeid(Number_Ast<int>) || typeid(*rhs) == typeid(Number_Ast<float>))
+			lra.optimize_lra(mc_2r, NULL, rhs);
+
+		rhs_stmt = rhs->compile_and_optimize_ast(lra);
+		rhs_reg = rhs_stmt.get_reg();
+		rhs_reg->set_used();
+		rhs_opd = new Register_Addr_Opd(rhs_reg);
+	}
+
+	//target register
+	Register_Descriptor * result_register;
+	if(node_data_type == float_data_type)
+		result_register = machine_dscr_object.get_new_register(float_num);
+	else if(node_data_type == int_data_type)
+		result_register = machine_dscr_object.get_new_register(int_num);
+
+	Ics_Opd * result_opd = new Register_Addr_Opd(result_register);	
+
+	//creating Comp_IC_stmt for the respective comp operator.
+	Icode_Stmt * comp_stmt;
+	if(rhs != NULL){
+		if(op == 0){
+			comp_stmt = new Comp_IC_Stmt(mul_op, lhs_opd, rhs_opd, result_opd);
+		}
+
+		else if(op == 1){
+			comp_stmt = new Comp_IC_Stmt(div_op, lhs_opd, rhs_opd, result_opd);
+		}
+
+		else if(op == 2){
+			comp_stmt = new Comp_IC_Stmt(add_op, lhs_opd, rhs_opd, result_opd);
+		}
+
+		else{
+			comp_stmt = new Comp_IC_Stmt(sub_op, lhs_opd, rhs_opd, result_opd);
+		}
+	}
+
+	else{
+		if(op == 0){
+			comp_stmt = new Comp_IC_Stmt(uminus_op, lhs_opd, NULL, result_opd);
+		}
+		else if(op == 1){
+			comp_stmt = new Comp_IC_Stmt(mtc1_op, lhs_opd, NULL, result_opd);			
+		}
+		else{
+			comp_stmt = new Comp_IC_Stmt(mfc1_op, lhs_opd, NULL, result_opd);			
+		}
+
+	}
+	// Store the statement in ic_list
+
+	list<Icode_Stmt *> & ic_list = *new list<Icode_Stmt *>;
+
+	if (lhs_stmt.get_icode_list().empty() == false)
+		ic_list = lhs_stmt.get_icode_list();
+
+	if (rhs_stmt.get_icode_list().empty() == false)
+		ic_list.splice(ic_list.end(), rhs_stmt.get_icode_list());
+	ic_list.push_back(comp_stmt);
+
+	Code_For_Ast * comp_icode;
+	if (ic_list.empty() == false)
+		comp_icode = new Code_For_Ast(ic_list, result_register);
+
+	rhs_reg->reset_used();
+	lhs_reg->reset_used();
+
+	// cout << "out of arith expression" << endl;
+	return *comp_icode;
+
 }

@@ -6,22 +6,18 @@ label2:
 	store:    	a <- v0
 	iLoad.d:    	f2 <- 2.30
 	store.d:    	b <- f2
-	load.d:    	f2 <- b
 	iLoad.d:    	f4 <- 3.00
 	add.d:    	f6 <- f2 , f4
-	mfc1:    	v0 <- f6
+	mfc1:    	t0 <- f6
+	store:    	a <- t0
+	mtc1:    	f4 <- t0
+	iLoad.d:    	f6 <- 2.30
+	add.d:    	f8 <- f4 , f6
+	store.d:    	b <- f8
+	iLoad.d:    	f2 <- 4.30
+	add.d:    	f4 <- f8 , f2
+	mfc1:    	v0 <- f4
 	store:    	a <- v0
-	load:    	v0 <- a
-	mtc1:    	f2 <- v0
-	iLoad.d:    	f4 <- 2.30
-	add.d:    	f6 <- f2 , f4
-	store.d:    	b <- f6
-	load.d:    	f2 <- b
-	iLoad.d:    	f4 <- 4.30
-	add.d:    	f6 <- f2 , f4
-	mfc1:    	v0 <- f6
-	store:    	a <- v0
-	load:    	v0 <- a
 	iLoad:    	t0 <- 5
 	add:    	t1 <- v0 , t0
 	mtc1:    	f2 <- t1

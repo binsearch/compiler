@@ -232,6 +232,7 @@ Move_IC_Stmt& Move_IC_Stmt::operator=(const Move_IC_Stmt& rhs)
 
 void Move_IC_Stmt::print_icode(ostream & file_buffer)
 {
+	cout << "in print move \n";
 	CHECK_INVARIANT (opd1, "Opd1 cannot be NULL for a move IC Stmt");
 	CHECK_INVARIANT (result, "Result cannot be NULL for a move IC Stmt");
 
@@ -243,6 +244,7 @@ void Move_IC_Stmt::print_icode(ostream & file_buffer)
 	{
 	case i_r_op_o1: 
 			file_buffer << " " << operation_name;
+			cout << "before move ic get reg" << endl;
 			if(opd1->get_opd_category() == register_addr) {
 		 		if((opd1->get_reg())->get_value_type() == float_num){
 		 			file_buffer << ".d";
@@ -254,7 +256,7 @@ void Move_IC_Stmt::print_icode(ostream & file_buffer)
 		 			file_buffer << ".d";
 		 		}
 		 	}
-
+		 	cout << "after move ic get reg" << endl;
 			file_buffer << ":\t";
 			result->print_ics_opd(file_buffer);
 			file_buffer << " <- ";
@@ -267,6 +269,7 @@ void Move_IC_Stmt::print_icode(ostream & file_buffer)
 				"Intermediate code format not supported");
 		break;
 	}
+	cout << "out of print move" << endl;
 }
 
 void Move_IC_Stmt::print_assembly(ostream & file_buffer)
@@ -316,13 +319,13 @@ Comp_IC_Stmt::Comp_IC_Stmt(Tgt_Op inst_op, Ics_Opd * temp_lhs, Ics_Opd * temp_rh
 
 void Comp_IC_Stmt::print_icode(ostream & file_buffer)
 {
+	cout << "in comp print ic \n";
 	CHECK_INVARIANT ((lhs != NULL), "lhs cannot be NULL for a Comparision IC Stmt");
 	// CHECK_INVARIANT ((rhs != NULL), "rhs cannot be NULL for a Comparision IC Stmt");
 	CHECK_INVARIANT((result != NULL), "result cannot be NULL for a Comparision IC Stmt");
 	string operation_name = op_desc.get_name();
 
 	Icode_Format ic_format = op_desc.get_ic_format();
-
 
 	switch (ic_format)
 	{
@@ -340,9 +343,12 @@ void Comp_IC_Stmt::print_icode(ostream & file_buffer)
 			// 		}
 			// 	}
 			// }
+
+			// cout << "comp ic stmt get reg" << endl;
 			if((result->get_opd_category() == register_addr) && ((result->get_reg())->get_value_type() == float_num)){  
 				file_buffer << ".d";
 			}
+			// cout << "after comp ic stmt" << endl;
 			file_buffer << ": ";
 			result->print_ics_opd(file_buffer);
 			file_buffer << " <- ";
@@ -368,6 +374,7 @@ void Comp_IC_Stmt::print_icode(ostream & file_buffer)
 				"Intermediate code format not supported");
 		break;
 	}
+	cout << "after comp print ic\n"; 
 }
 
 void Comp_IC_Stmt::print_assembly(ostream & file_buffer){
@@ -456,7 +463,7 @@ Cflow_IC_Stmt::Cflow_IC_Stmt(Tgt_Op inst_op, int temp_true){
 
 
 void Cflow_IC_Stmt::print_icode(ostream & file_buffer){
-
+	cout << "in cflow icode" << endl;
 	string operation_name = op_desc.get_name();
 
 	Icode_Format ic_format = op_desc.get_ic_format();
@@ -478,6 +485,7 @@ void Cflow_IC_Stmt::print_icode(ostream & file_buffer){
 				"Intermediate code format not supported");
 		break;
 	}
+	cout << "out of cflow icode " << endl;
 }
 
 void Cflow_IC_Stmt::print_assembly(ostream & file_buffer){

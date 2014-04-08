@@ -4,21 +4,16 @@
 label2:    	
 	iLoad.d:    	f2 <- 2.34
 	store.d:    	a <- f2
-	iLoad.d:    	f2 <- 2.10
-	store.d:    	b <- f2
-	iLoad.d:    	f2 <- 8.30
-	store.d:    	c <- f2
-	load.d:    	f2 <- b
-	load.d:    	f4 <- c
-	div.d:    	f6 <- f2 , f4
-	load.d:    	f2 <- a
-	div.d:    	f4 <- f6 , f2
-	load.d:    	f2 <- b
-	mul.d:    	f6 <- f4 , f2
-	load.d:    	f2 <- a
-	add.d:    	f4 <- f6 , f2
-	iLoad.d:    	f2 <- 0.00
-	sne:    	v0 <- f4 , f2
+	iLoad.d:    	f4 <- 2.10
+	store.d:    	b <- f4
+	iLoad.d:    	f6 <- 8.30
+	store.d:    	c <- f6
+	div.d:    	f8 <- f4 , f6
+	div.d:    	f10 <- f8 , f2
+	mul.d:    	f8 <- f10 , f4
+	add.d:    	f10 <- f8 , f2
+	iLoad.d:    	f8 <- 0.00
+	sne:    	v0 <- f10 , f8
 	bne:    	v0 , zero : goto label3
 	goto label4
 

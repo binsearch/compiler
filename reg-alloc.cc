@@ -173,7 +173,7 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 			"Sourse ast pointer cannot be NULL for m2m scenario in lra");
 		// cout << "in mc_2m" << endl;
 		// cout << destination_memory << endl;
-		if (typeid(*destination_memory) == typeid(Number_Ast<int>))
+		if (typeid(*destination_memory) == typeid(Number_Ast<int>) || typeid(*destination_memory) == typeid(Number_Ast<float>))
 			destination_register = NULL;
 		else
 		{
@@ -186,7 +186,7 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 			// cout << "after check\n"; 
 		}
 
-		if (typeid(*source_memory) == typeid(Number_Ast<int>))
+		if (typeid(*source_memory) == typeid(Number_Ast<int>) || typeid(*source_memory) == typeid(Number_Ast<float>))
 			source_register = NULL;
 		else
 		{
@@ -209,7 +209,10 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 		else 
 		{
 			//need to change this.
-			result_register = machine_dscr_object.get_new_register(int_num);
+			if(source_memory->get_data_type() == int_data_type)
+				result_register = machine_dscr_object.get_new_register(int_num);
+			else
+				result_register = machine_dscr_object.get_new_register(float_num);
 			is_a_new_register = true;
 			load_needed = true;
 		}
@@ -219,7 +222,7 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 	case mc_2r:
 		CHECK_INVARIANT(source_memory, "Sourse ast pointer cannot be NULL for m2r scenario in lra");
 		// cout << "in mc_2r" << endl;
-		if (typeid(*source_memory) != typeid(Number_Ast<int>)){
+		if (typeid(*source_memory) != typeid(Number_Ast<int>) && typeid(*source_memory) != typeid(Number_Ast<float>) ){
 			source_symbol_entry = &(source_memory->get_symbol_entry());
 			source_register = source_symbol_entry->get_register(); 
 		}
@@ -237,7 +240,11 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 		{
 			// cout << "came here" << endl;
 			//need to change this.
-			result_register = machine_dscr_object.get_new_register(int_num);
+			if(source_memory->get_data_type() == int_data_type)
+				result_register = machine_dscr_object.get_new_register(int_num);
+			else
+				result_register = machine_dscr_object.get_new_register(float_num);
+
 			is_a_new_register = true;
 			load_needed = true;
 		}

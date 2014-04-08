@@ -4,36 +4,25 @@
 label2:
  iLoad:	v0 <- 2
  store:	c <- v0
- load:	v0 <- c
  store:	a <- v0
  iLoad.d:	f2 <- 3.40
  store.d:	e <- f2
- load.d:	f2 <- e
  store.d:	d <- f2
- load.d:	f2 <- d
  store.d:	b <- f2
- iLoad:	v0 <- 3
- store:	f <- v0
- iLoad.d:	f2 <- 10.00
- store.d:	t <- f2
- load:	v0 <- f
- mtc1: f2 <- v0
- load.d:	f4 <- t
- mul.d: f6 <- f2 , f4
- load.d:	f2 <- e
- load:	v0 <- c
- mtc1: f4 <- v0
- div.d: f8 <- f2 , f4
- add.d: f2 <- f6 , f8
- mfc1: v0 <- f2
- store:	a <- v0
- load:	v0 <- a
- mtc1: f2 <- v0
- load.d:	f4 <- e
- mul.d: f6 <- f2 , f4
- load.d:	f2 <- t
- div.d: f4 <- f6 , f2
- load:	v0 <- f
- mtc1: f2 <- v0
- div.d: f6 <- f4 , f2
- store.d:	t <- f6
+ iLoad:	t0 <- 3
+ store:	f <- t0
+ iLoad.d:	f4 <- 10.00
+ store.d:	t <- f4
+ mtc1: f6 <- t0
+ mul.d: f8 <- f6 , f4
+ mtc1: f6 <- v0
+ div.d: f10 <- f2 , f6
+ add.d: f6 <- f8 , f10
+ mfc1: t1 <- f6
+ store:	a <- t1
+ mtc1: f6 <- t1
+ mul.d: f8 <- f6 , f2
+ div.d: f6 <- f8 , f4
+ mtc1: f8 <- t0
+ div.d: f10 <- f6 , f8
+ store.d:	t <- f10
