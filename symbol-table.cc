@@ -144,7 +144,8 @@ void Symbol_Table::print(ostream & file_buffer)
 		switch(dt)
 		{
 		case int_data_type: file_buffer << " Type: INT"; break;
-		defualt: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Variable data type can only be int");
+		case float_data_type: file_buffer << " Type: FLOAT"; break;
+		default: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Variable data type can only be int");
 		} 
 
 		file_buffer << " Entity Type: VAR";
@@ -195,6 +196,7 @@ int Symbol_Table::get_size_of_value_type(Data_Type dt)
 	switch(dt)
 	{
 	case int_data_type: return -4; break;
+	case float_data_type: return -8; break;
 	case void_data_type: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Attempt to seek size of type void");
 	defualt: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Data type not supperted");
 	}

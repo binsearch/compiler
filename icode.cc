@@ -279,10 +279,57 @@ void Move_IC_Stmt::print_assembly(ostream & file_buffer)
 	string op_name = op_desc.get_mnemonic();
 
 	Assembly_Format assem_format = op_desc.get_assembly_format();
+	
+	bool ok=true;   // For some control flow problem
+	
 	switch (assem_format)
 	{
 	case a_op_r_o1: 
-			file_buffer << "\t" << op_name << " ";
+
+			file_buffer << "\t" ;
+
+			// if(op_name=="li")
+			// 	file_buffer<<"krish";
+			if(opd1->get_opd_category() == register_addr) {
+		 		if((opd1->get_reg())->get_value_type() == float_num){
+		 			if(op_name.compare("sw")==0) 
+		 				file_buffer<<"s";
+		 			else if(op_name.compare("lw")==0)
+		 				file_buffer<<"l";
+		 			else if(op_name.compare("uminus")==0)
+		 				file_buffer<<"neg";
+		 			else
+		 				file_buffer<<op_name;
+
+		 			file_buffer << ".d";
+		 			ok=false;
+		 		}
+		 	}
+
+			if(result->get_opd_category() == register_addr) {
+		 		if((result->get_reg())->get_value_type() == float_num){
+		 			if(op_name.compare("sw")==0) 
+		 				file_buffer<<"s";
+		 			else if(op_name.compare("lw")==0)
+		 				file_buffer<<"l";
+		 			else if(op_name.compare("uminus")==0)
+		 				file_buffer<<"neg";
+		 			else
+		 				file_buffer<<op_name;
+
+		 			file_buffer << ".d";
+		 			ok=false;
+		 		}
+		 	}
+
+		 	if(ok) {
+		 		if(op_name=="uminus")
+		 			file_buffer<<"neg";
+		 		else
+			 		file_buffer<<op_name;
+		 	}
+
+			file_buffer<< " ";
 			result->print_asm_opd(file_buffer);
 			file_buffer << ", ";
 			opd1->print_asm_opd(file_buffer);
@@ -291,7 +338,54 @@ void Move_IC_Stmt::print_assembly(ostream & file_buffer)
 			break; 
 
 	case a_op_o1_r: 
-			file_buffer << "\t" << op_name << " ";
+			file_buffer << "\t";
+
+			// if(op_name.compare("sw")==0)
+			// 	file_buffer<<"s" ;
+			// else
+			// 	file_buffer<<op_name;
+
+			 // op_name ;
+			if(opd1->get_opd_category() == register_addr) {
+		 		if((opd1->get_reg())->get_value_type() == float_num){
+		 			if(op_name.compare("sw")==0) 
+		 				file_buffer<<"s";
+		 			else if(op_name.compare("lw")==0)
+		 				file_buffer<<"l";
+		 			else if(op_name.compare("uminus")==0)
+		 				file_buffer<<"neg";
+		 			else
+		 				file_buffer<<op_name;
+
+		 			file_buffer << ".d";
+		 			ok=false;
+		 		}
+		 	}
+			
+			if(result->get_opd_category() == register_addr) {
+		 		if((result->get_reg())->get_value_type() == float_num){
+		 			if(op_name.compare("sw")==0) 
+		 				file_buffer<<"s";
+		 			else if(op_name.compare("lw")==0)
+		 				file_buffer<<"l";
+		 			else if(op_name.compare("uminus")==0)
+		 				file_buffer<<"neg";
+		 			else
+		 				file_buffer<<op_name;
+
+		 			file_buffer << ".d";
+		 			ok=false;
+		 		}
+		 	}
+		 	
+		 	if(ok) {
+		 		if(op_name=="uminus")
+			 		file_buffer<<"neg";
+			 	else
+			 		file_buffer<<op_name;
+		 	}
+
+			file_buffer<< " ";
 			opd1->print_asm_opd(file_buffer);
 			file_buffer << ", ";
 			result->print_asm_opd(file_buffer);
@@ -331,6 +425,8 @@ void Comp_IC_Stmt::print_icode(ostream & file_buffer)
 	{
 	case i_r_op_o1: 
 			file_buffer << " " << operation_name;
+
+
 			// if(lhs->get_opd_category() == register_addr) {
 			// 	if((lhs->get_reg())->get_value_type() == float_num){
 			// 		file_buffer << ".d";
@@ -382,32 +478,75 @@ void Comp_IC_Stmt::print_assembly(ostream & file_buffer){
 	// CHECK_INVARIANT ((rhs != NULL), "rhs cannot be NULL for a Comparision IC Stmt");
 	CHECK_INVARIANT((result != NULL), "result cannot be NULL for a Comparision IC Stmt");
 
-	// string op_name = op_desc.get_mnemonic();
+	string op_name = op_desc.get_mnemonic();
 
-	// Assembly_Format assem_format = op_desc.get_assembly_format();
-	// switch (assem_format)
-	// {
-	// case a_op_r_o1: 
-	// 		file_buffer << "\t" << op_name << " ";
-	// 		result->print_asm_opd(file_buffer);
-	// 		file_buffer << ", ";
-	// 		opd1->print_asm_opd(file_buffer);
-	// 		file_buffer << "\n";
+	Assembly_Format assem_format = op_desc.get_assembly_format();
+	switch (assem_format)
+	{
+	case a_op_r_o1: 
 
-	// 		break; 
+			file_buffer << "\t" ;
+			// if(op_name=="li")
+			// 	file_buffer<<"krish1";
 
-	// case a_op_o1_r: 
-	// 		file_buffer << "\t" << op_name << " ";
-	// 		opd1->print_asm_opd(file_buffer);
-	// 		file_buffer << ", ";
-	// 		result->print_asm_opd(file_buffer);
-	// 		file_buffer << "\n";
+			// // file_buffer<<op_name;
+			// if(op_name.compare("sw")==0)
+			// 	file_buffer<<"s" ;
+			// else
+			// 	file_buffer<<op_name;
 
-	// 		break; 
+			// file_buffer<< " ";
 
-	// default: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Intermediate code format not supported");
-	// 	break;
-	// }
+			if((result->get_opd_category() == register_addr) && ((result->get_reg())->get_value_type() == float_num)){  
+				if(op_name.compare("sw")==0) 
+					file_buffer<<"s";
+				else if(op_name.compare("lw")==0)
+					file_buffer<<"l";
+				else if(op_name.compare("uminus")==0)
+					file_buffer<<"neg";
+				else
+					file_buffer<<op_name;
+				file_buffer << ".d";
+			}
+			else {
+				if(op_name=="uminus")
+					file_buffer<<"neg";
+				else
+					file_buffer<<op_name;
+			}
+
+			// cout << "after comp ic stmt" << endl;
+			file_buffer << " ";
+			result->print_asm_opd(file_buffer);
+			file_buffer << ", ";
+			lhs->print_asm_opd(file_buffer);
+			if(op_name != "uminus"){
+				file_buffer << ", ";
+				rhs->print_asm_opd(file_buffer);
+			}
+			file_buffer << "\n";
+// // ----------------------------------------
+
+// 			file_buffer << "\t" << op_name << " ";
+// 			result->print_asm_opd(file_buffer);
+// 			file_buffer << ", ";
+// 			opd1->print_asm_opd(file_buffer);
+// 			file_buffer << "\n";
+
+			break; 
+
+	case a_op_o1_r: 
+			file_buffer << "\t" << op_name << " ";
+			lhs->print_asm_opd(file_buffer);
+			file_buffer << ", ";
+			result->print_asm_opd(file_buffer);
+			file_buffer << "\n";
+
+			break; 
+
+	default: CHECK_INVARIANT(CONTROL_SHOULD_NOT_REACH, "Intermediate code format not supported");
+		break;
+	}
 
 	// string op_name = op_desc.get_mnemonic();
 
@@ -490,23 +629,6 @@ void Cflow_IC_Stmt::print_icode(ostream & file_buffer){
 
 void Cflow_IC_Stmt::print_assembly(ostream & file_buffer){
 
-	// string op_name = op_desc.get_mnemonic();
-
-	// Assembly_Format assem_format = op_desc.get_assembly_format();
-
-	// switch (assem_format)
-	// {
-
-	// case a_op_r_o1: 
-	// 	file_buffer << "\t" << op_name << " ";
-	// 	result->print_asm_opd(file_buffer);
-	// 	file_buffer << ", ";
-	// 	lhs->print_asm_opd(file_buffer);
-	// 	file_buffer << ", ";
-	// 	rhs->print_asm_opd(file_buffer);
-	// 	file_buffer << "\n";
-
-	// 	break; 
 
 	string op_name = op_desc.get_mnemonic();
 
